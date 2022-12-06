@@ -1,0 +1,624 @@
+openapi : 3.0.0
+info:
+  title: WASAPhoto
+  description: |
+    This API allows people to keep up with their friend's life by watching and eventually liking their posted photos. Furthermore you have the chance to post your favorite moments and to get love from you most affectionate peolple through likes on your posting.
+  version: 0.0.1
+paths:
+  /login:
+    post:
+      tags: ["login"]
+      summary: Logs in the user
+      description: |-
+        If the user does not exist, it will be created,
+        and an identifier is returned.
+        If the user exists, the user identifier is returned.
+      operationId: doLogin
+      requestBody:
+        description: User details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/nameUser"
+        required: true
+      responses:
+        '201':
+          description: User log-in action successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: 
+                    $ref: "#/components/schemas/UserId"  
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  
+  /users/{userid}:
+    parameters:
+    -  $ref: "#/components/parameters/userid"
+    put:
+      tags: [User]
+      summary: Define Username
+      description: |
+        Using this command to set the username of a profile if not existing, otherwise,
+        the command updates it
+      operationId: setMyUserName
+      requestBody:
+        description: User Id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/UserId"
+        required: true
+      responses:
+        "201":
+          description: Username set
+        "400":
+          description: Already existing username
+    
+    
+
+      
+    delete:
+      tags: [User]
+      summary: Delete my profile
+      description: |
+        Using this command if a certain user wants to delete his/her own profile
+      operationId: deleteMyProfile
+      
+      responses:
+        "204":
+          description: User deleted
+        "403":
+          description: A certain user cannot delete other users' profile
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  
+  /users/{userid}/profile:
+    parameters:
+    -  $ref: "#/components/parameters/userid"
+    get:
+      tags: [User]
+      summary: Searches for a user
+      description: |
+        Using this command a certain user can look for another user using his/her id
+      operationId: getUserProfile
+      
+      responses:
+        "302":
+          description: |
+            The user has been found
+          content:
+
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numFollowers:
+                    type: integer
+                    format: int64
+                  numFollowedUsers:
+                    type: integer
+                    format: int64
+                  ArrayofPhotos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        idPhoto:
+                          $ref: "#/components/schemas/PhotoId"
+            
+        "404":
+          description: |
+            User not found
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+
+  /user/{userid}/mainstream:
+    parameters:
+    - $ref: "#/components/parameters/userid"
+    get:
+      tags: [User]
+      summary: get mainstream
+      description: |
+        Using this command you can receive in inverse chronological order,
+        all the post of your friends, where each photo presents all the likes and the comments related to it
+      operationId: getMyStream
+      responses:
+        "200":
+          description: |
+            The mainstream is avalable, the user can now see all the posts
+            of his friends in inverse chronological order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ArrayofPhotos:
+                    type: array
+                    items:
+                      
+                      $ref: "#/components/schemas/PhotoId"
+                      description: In inverse chronological order
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+                
+
+
+
+
+
+
+  /user/{userid}/banned/{BannedId}:
+    parameters:
+    - $ref: "#/components/parameters/userid"
+      
+    - $ref: "#/components/parameters/BannedId"
+      
+    put:
+      tags: [User]
+      summary: Ban another user
+      description: A certain user can always ban another user in order to not by visible by him/her
+      operationId: banUser
+      requestBody:
+        description: Id of the banned user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userid:
+                  $ref: "#/components/schemas/UserId"
+                
+      responses:
+        "201":
+          description: The user has been correctly banned
+        "404":
+          description: The Id selected has not been found
+        "409":
+          description: The Id has already been banned previously
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+    
+    delete:
+      tags: [User]
+      summary: Unban user
+      description: |
+        Delete a user from the list of the banned people
+      operationId: unbanUser
+      responses:
+        "204":
+          description: User correctly removed from banned list
+          
+        "404": 
+          description: User not found in the list
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+      
+
+  /user/{userid}/followed/{followedUserId}:
+    parameters:
+    - $ref: "#/components/parameters/userid"
+      
+    - $ref: "#/components/parameters/followedUserId"
+      
+
+    
+    put:
+      tags: [Follow]
+      summary: Add a user to the list of followed people
+      description: Using this command we can add this 
+        profile to the list of profiles a certain user is following
+      operationId: followUser
+      requestBody:
+        description: Id of followed user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  $ref: "#/components/schemas/UserId"
+      responses:
+        "201":
+          description: User correctly added to the list of followed users
+        "404":
+          description: UserName not found
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+    
+    delete:
+      tags: [Follow]
+      summary: Stop following a user
+      description: Using this command a user can stop following another user
+      operationId: unfollowUser
+      responses:
+        "200":
+          description: User correctly unfollowed
+        "404":
+          description: User Id not found
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+
+
+
+
+
+  
+  /users/{userid}/photos:
+    parameters:
+    -  $ref: "#/components/parameters/userid"
+    post:
+      tags: [Photo]
+      summary: Add a new photo to a certain profile
+      description: |
+        Using this command if a certain user wants to delete his/her own profile
+      operationId: uploadPhoto
+      requestBody:
+        description: Id of the added photo
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/PhotoId"
+      responses:
+        "201":
+          description: Photo added
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+    
+
+
+  /users/{userid}/photos/{photoid}:
+    parameters:
+    - $ref: "#/components/parameters/photoid"
+    - $ref: "#/components/parameters/userid"
+    delete:
+      tags: [Photo]
+      summary: Delete a Photo
+      description: |
+        With this command a certain user can delete one of his/her photo from 
+        the profile
+      operationId: deletePhoto
+      responses:
+        "204":
+          description: Photo deleted
+          
+        "403":
+          description: A user cannot delete other users' photos
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+    get:
+      tags: [Photo]    
+      summary: Get a photo from its Id
+      description: Using this command, we can get all the info about a photo  
+        and the photo itself from on its Id
+      operationId: getPhoto
+      responses: 
+        "302":
+          description: The operation went correctly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  photo:
+                    $ref: "#/components/schemas/Photo"
+        "404":
+          description: Photo not present anymore
+
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+    
+ 
+    
+    
+  /users/{userid}/photos/{photoid}/comments/{commentid}:
+    parameters:
+    - $ref: "#/components/parameters/photoid"
+    - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/commentid"
+    
+    put:
+      tags: [Photo]
+      summary: Add a comment to a photo
+      description: Use this command if there is the need to add a comment under 
+        someone's photo
+      operationId: commentPhoto
+      requestBody:
+        description: Id of the added comment
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/Comment"
+      responses:
+        "200":
+          description: Comment correctly added
+        "404":
+          description: Id of photo not found
+        "406":
+          description: Some  symbols used in to compose this comment
+            are not allowed 
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  
+    delete:
+      tags: [Photo]
+      summary: Delete a certain comment
+      description: A user can use this command to delete
+        one of the comments under his/her photo
+      operationId: uncommentPhoto
+      responses:
+        "200":
+          description: Comment correctly deleted
+        "403":
+          description: Only the user whom created 
+            the post has the authorization to delete the comment
+      
+
+  /user/{userid}/photos/{photoid}/like/{likeid}:
+    parameters:
+    - $ref: "#/components/parameters/photoid"
+    - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/likeid"
+
+    put:
+      tags: [Photo]
+      summary: Put like on a photo
+      description: Using this command, the user who made the login
+        can  put a like on a photo
+      
+      operationId: likePhoto
+      responses:
+        "200":
+          description: The photo has been liked
+          content:
+            application/json:
+              schema:
+                description: Array containing all the people who liked the picture
+                type: array
+                items:
+                  type: object
+                  properties:
+                    UserLike:
+                      $ref: "#/components/schemas/UserId"  
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+    delete:
+      tags: [Photo]
+      summary: Delete like from a photo
+      description: Using this command, the user who made the login
+        can  delete a like from a photo
+      operationId: unlikePhoto
+      responses:
+        "200":
+          description: The photo has been liked
+          content:
+            application/json:
+              schema:
+                description: |
+                  Array containing all the people who liked the picture,
+                  to check  if our Id has been deleted
+                type: array
+                items:
+                  type: object
+                  properties:
+                    UserLike:
+                      $ref: "#/components/schemas/UserId"  
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+
+
+
+components:
+  parameters:
+    userid: 
+      name: userid
+      in: path
+      description: Id of a user that made the login
+      required: true
+      schema:
+        type: string
+        example: Maria
+        pattern: 'ˆ.*?$'
+        minLength: 3
+        maxLength: 16
+    BannedId:
+      name: BannedId
+      in: path
+      description: The Id of the user that has been banned
+      required: true
+      schema:
+        type: string
+        example: Luca
+        pattern: 'ˆ.*?$'
+        minLength: 3
+        maxLength: 16
+    photoid:  
+      name: photoid
+      in: path
+      description: Id of the photo taken into consideration
+      required: true
+      schema:
+        type: number
+        format: int64
+    followedUserId:
+      name: followedUserId
+      in: path
+      description: Id of the follower taken int consideration
+      required: true
+      schema:
+        type: string
+        example: Luca
+        pattern: 'ˆ.*?$'
+        minLength: 3
+        maxLength: 16
+    commentid: 
+      name: commentid
+      in: path
+      description: Id of the comment that has been considered
+      required: true
+      schema:  
+        type: integer
+        format: int64
+    likeid:
+      name: likeid
+      in: path
+      description: Id of the like that has been considered 
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+
+
+      
+    
+  schemas:
+    User:
+      type: object 
+      properties:
+        userid: 
+          $ref: "#/components/schemas/UserId"
+        name:
+          $ref: "#/components/schemas/nameUser"
+        
+    UserId:
+      type: string
+      example: Maria
+      pattern: 'ˆ.*?$'
+      minLength: 3
+      maxLength: 16
+      description: Uniquely identifies the user
+    nameUser:
+      type: string
+      example: Maria
+      pattern: 'ˆ.*?$'
+      minLength: 3
+      maxLength: 16
+      description: Real name of the user
+    
+    PhotoId:
+      type: number
+      format: int64
+    Photo:
+      type: object
+      properties:
+        photo:
+          description: Logo image
+          type: string
+          format: binary
+        photoid:
+          $ref: "#/components/schemas/PhotoId"
+        
+        UserId:
+          $ref: "#/components/schemas/UserId"
+        numLikes:
+          type: integer
+          format: int64
+        numComments:
+          type: integer
+          format: int64
+        ArrayOfLike:
+          description: Array containing the IDs of all the users that liked the photo
+          type: array
+          items:
+            type: object
+            properties:
+              UserLike:
+                $ref: "#/components/schemas/UserId"
+        ArrayOfComments:
+          description: Array containing all comments relative to a certain photo
+          type: array
+          items:
+            type: object
+            properties:
+              UserComment:
+                $ref: "#/components/schemas/UserId"
+              CommentContent:
+                $ref: "#/components/schemas/CommentContent"
+              CommentId:
+                $ref: "#/components/schemas/CommentId"
+
+        datePost:
+          type: string
+          description: Date of photo posting
+          example: "2017-01-26"
+          format: "YYYY-MM-DD"
+          minLength: 0
+          maxLength: 10
+    CommentId:
+      type: integer
+      format: int64
+    CommentContent:
+      type: string
+      pattern: 'ˆ.*?$'
+      minLength: 1
+      maxLength: 200
+    Comment:
+      type: object
+      properties:
+        CommentId: 
+          $ref: "#/components/schemas/CommentId"
+        CommentContent:
+          $ref: "#/components/schemas/CommentContent"
+        PhotoId:
+          $ref: "#/components/schemas/PhotoId"
+        UserId: 
+          $ref: "#/components/schemas/UserId"
+    
+    Like: 
+      type: object
+      properties:
+        LikeId:
+          $ref: "#/components/schemas/LikeId"
+        UserId:
+          $ref: "#/components/schemas/UserId"
+    
+    LikeId:
+      type: integer
+      format: int64
+
+  securitySchemes:
+    basicAuthorization:
+      type: http
+      scheme: basic
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missing or invalid 
+      headers:
+        WW_Authenticate:
+          schema: 
+            type: string
+security:
+  - basicAuthorization: []
