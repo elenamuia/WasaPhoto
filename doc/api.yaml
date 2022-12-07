@@ -4,6 +4,21 @@ info:
   description: |
     This API allows people to keep up with their friend's life by watching and eventually liking their posted photos. Furthermore you have the chance to post your favorite moments and to get love from you most affectionate peolple through likes on your posting.
   version: 0.0.1
+
+
+tags:
+  - name: login
+    description: Login and/or registration instructions
+   
+  - name: User
+    description: Everything about Users
+    
+    
+  - name: Photo
+    description: Operations that are allowed on photos
+    
+  - name: Follow
+    description: How to manage followers
 paths:
   /login:
     post:
@@ -43,7 +58,7 @@ paths:
     -  $ref: "#/components/parameters/userid"
     put:
       tags: [User]
-      summary: Define Username
+      summary: Change Username
       description: |
         Using this command to set the username of a profile if not existing, otherwise,
         the command updates it
@@ -61,6 +76,14 @@ paths:
       responses:
         "201":
           description: Username set
+            
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: 
+                    $ref: "#/components/schemas/nameUser" 
         "400":
           description: Already existing username
     
@@ -147,10 +170,11 @@ paths:
                 properties:
                   ArrayofPhotos:
                     type: array
+                    minLength: 0
+                    maxLength: 1000 
                     items:
-                      
                       $ref: "#/components/schemas/PhotoId"
-                      description: In inverse chronological order
+                      
         "401":
           $ref: "#/components/responses/UnauthorizedError"
                 
@@ -184,6 +208,17 @@ paths:
       responses:
         "201":
           description: The user has been correctly banned
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    ArrayofPhotos:
+                      type: array
+                      minLength: 0
+                      maxLength: 1000 
+                      items:
+                        $ref: "#/components/schemas/UserId"
         "404":
           description: The Id selected has not been found
         "409":
@@ -235,6 +270,17 @@ paths:
       responses:
         "201":
           description: User correctly added to the list of followed users
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    ArrayofPhotos:
+                      type: array
+                      minLength: 0
+                      maxLength: 1000 
+                      items:
+                        $ref: "#/components/schemas/UserId"
         "404":
           description: UserName not found
         "401":
@@ -247,7 +293,7 @@ paths:
       description: Using this command a user can stop following another user
       operationId: unfollowUser
       responses:
-        "200":
+        "204":
           description: User correctly unfollowed
         "404":
           description: User Id not found
@@ -360,6 +406,13 @@ paths:
       responses:
         "200":
           description: Comment correctly added
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    name:
+                      $ref: "#/components/schemas/Comment"
         "404":
           description: Id of photo not found
         "406":
@@ -376,7 +429,7 @@ paths:
         one of the comments under his/her photo
       operationId: uncommentPhoto
       responses:
-        "200":
+        "204":
           description: Comment correctly deleted
         "403":
           description: Only the user whom created 
@@ -419,20 +472,9 @@ paths:
         can  delete a like from a photo
       operationId: unlikePhoto
       responses:
-        "200":
-          description: The photo has been liked
-          content:
-            application/json:
-              schema:
-                description: |
-                  Array containing all the people who liked the picture,
-                  to check  if our Id has been deleted
-                type: array
-                items:
-                  type: object
-                  properties:
-                    UserLike:
-                      $ref: "#/components/schemas/UserId"  
+        "204":
+          description: The photo has been correctly unliked
+          
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -506,7 +548,8 @@ components:
     
   schemas:
     User:
-      type: object 
+      type: object
+      description: ID and name of the user
       properties:
         userid: 
           $ref: "#/components/schemas/UserId"
@@ -529,24 +572,30 @@ components:
       description: Real name of the user
     
     PhotoId:
+      description: value identifying of a photo
       type: number
       format: int64
     Photo:
       type: object
       properties:
         photo:
-          description: Logo image
+          description: |
+            Photo puplished bu a user, which may have comments and likes linked to it
           type: string
+          pattern: 'ˆ.*?$'
           format: binary
         photoid:
           $ref: "#/components/schemas/PhotoId"
         
         UserId:
           $ref: "#/components/schemas/UserId"
+          
         numLikes:
+          description: number of likes linked to a photo
           type: integer
           format: int64
         numComments:
+          description: number of comments linked to a photo
           type: integer
           format: int64
         ArrayOfLike:
@@ -554,6 +603,8 @@ components:
           type: array
           items:
             type: object
+            minLength: 0
+            maxLength: 10000
             properties:
               UserLike:
                 $ref: "#/components/schemas/UserId"
@@ -562,6 +613,8 @@ components:
           type: array
           items:
             type: object
+            minLength: 0
+            maxLength: 1000
             properties:
               UserComment:
                 $ref: "#/components/schemas/UserId"
@@ -572,20 +625,24 @@ components:
 
         datePost:
           type: string
+          pattern: 'ˆ.*?$'
           description: Date of photo posting
           example: "2017-01-26"
           format: "YYYY-MM-DD"
           minLength: 0
           maxLength: 10
     CommentId:
+      description: number identifying the comment
       type: integer
       format: int64
     CommentContent:
+      description: text of the comment
       type: string
       pattern: 'ˆ.*?$'
       minLength: 1
       maxLength: 200
     Comment:
+      description: All values linked to the comment
       type: object
       properties:
         CommentId: 
@@ -597,18 +654,8 @@ components:
         UserId: 
           $ref: "#/components/schemas/UserId"
     
-    Like: 
-      type: object
-      properties:
-        LikeId:
-          $ref: "#/components/schemas/LikeId"
-        UserId:
-          $ref: "#/components/schemas/UserId"
     
-    LikeId:
-      type: integer
-      format: int64
-
+   
   securitySchemes:
     basicAuthorization:
       type: http
@@ -620,5 +667,6 @@ components:
         WW_Authenticate:
           schema: 
             type: string
+            pattern: 'ˆ.*?$'
 security:
   - basicAuthorization: []
