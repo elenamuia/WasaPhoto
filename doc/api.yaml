@@ -528,8 +528,7 @@ components:
       description: Id of the like that has been considered 
       required: true
       schema:
-        type: integer
-        format: int64
+        $ref: "#/components/schemas/UserId"
 
 
 

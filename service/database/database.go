@@ -36,6 +36,32 @@ import (
 	"fmt"
 )
 
+
+
+
+type User struct {
+	ID        string
+	Name      string
+	
+}
+
+type Photo struct {
+	ID int64
+	numLikes int64
+	numComm int64
+	
+}
+
+type Like struct{
+	UserID string
+}
+
+type Comment struct{
+	CommentID int64
+	CommMessage string
+}
+
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	GetName() (string, error)
