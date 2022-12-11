@@ -85,7 +85,7 @@ paths:
                   id: 
                     $ref: "#/components/schemas/nameUser" 
         "400":
-          description: Already existing username
+          $ref: "#/components/responses/BadRequest"
     
     
 
@@ -101,7 +101,7 @@ paths:
         "204":
           description: User deleted
         "403":
-          description: A certain user cannot delete other users' profile
+          $ref: "#/components/responses/Forbidden"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -141,8 +141,7 @@ paths:
                           $ref: "#/components/schemas/PhotoId"
             
         "404":
-          description: |
-            User not found
+          $ref: "#/components/responses/NotFound"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -220,9 +219,9 @@ paths:
                       items:
                         $ref: "#/components/schemas/UserId"
         "404":
-          description: The Id selected has not been found
+          $ref: "#/components/responses/NotFound"
         "409":
-          description: The Id has already been banned previously
+          $ref: "#/components/responses/Conflict"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -238,7 +237,7 @@ paths:
           description: User correctly removed from banned list
           
         "404": 
-          description: User not found in the list
+          $ref: "#/components/responses/NotFound"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -282,7 +281,7 @@ paths:
                       items:
                         $ref: "#/components/schemas/UserId"
         "404":
-          description: UserName not found
+          $ref: "#/components/responses/NotFound"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -296,7 +295,7 @@ paths:
         "204":
           description: User correctly unfollowed
         "404":
-          description: User Id not found
+          $ref: "#/components/responses/NotFound"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -351,7 +350,7 @@ paths:
           description: Photo deleted
           
         "403":
-          description: A user cannot delete other users' photos
+          $ref: "#/components/responses/Forbidden"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -363,8 +362,9 @@ paths:
         and the photo itself from on its Id
       operationId: getPhoto
       responses: 
-        "302":
-          description: The operation went correctly
+        "307":
+          description: The operation went correctly, you will now be redirected 
+            to the photo location
           content:
             application/json:
               schema:
@@ -373,8 +373,7 @@ paths:
                   photo:
                     $ref: "#/components/schemas/Photo"
         "404":
-          description: Photo not present anymore
-
+          $ref: "#/components/responses/NotFound"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -414,7 +413,7 @@ paths:
                     name:
                       $ref: "#/components/schemas/Comment"
         "404":
-          description: Id of photo not found
+          $ref: "#/components/responses/NotFound"
         "406":
           description: Some  symbols used in to compose this comment
             are not allowed 
@@ -432,8 +431,7 @@ paths:
         "204":
           description: Comment correctly deleted
         "403":
-          description: Only the user whom created 
-            the post has the authorization to delete the comment
+          $ref: "#/components/responses/Forbidden"
       
 
   /user/{userid}/photos/{photoid}/like/{likeid}:
@@ -654,6 +652,20 @@ components:
         UserId: 
           $ref: "#/components/schemas/UserId"
     
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: "ˆ.*?$"
+          description: code of the error
+        message: 
+          type: string
+          pattern: "ˆ.*?$"
+          description: message defining the type of error
+        required:
+        - code
+        - message
     
    
   securitySchemes:
@@ -663,10 +675,33 @@ components:
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid 
-      headers:
-        WW_Authenticate:
-          schema: 
-            type: string
-            pattern: 'ˆ.*?$'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The request conflicts with the current state of the server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request cannot be processed because the value already exists in the database
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Operation not allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
 security:
   - basicAuthorization: []
