@@ -32,6 +32,7 @@ package database
 
 import (
 	"database/sql"
+	"encoding/binary"
 	"errors"
 	"fmt"
 )
@@ -43,6 +44,7 @@ type User struct {
 
 type Photo struct {
 	ID             int64
+	Photo		   string
 	numLikes       int64
 	numComm        int64
 	ArrayofLike    []Like
@@ -63,9 +65,18 @@ type Comment struct {
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	GetName() (string, error)
-	SetName(name string) error
-
+	DeletePhoto(PhotoID int64, UserID string) error
+	AddComment(Comment) ([]Comment, error)
+	AddLike(Like) ([]Like, error)
+	BanUser(UserID string) ([]User, error)
+	DeleteComment(CommentID int64, PhotoID int64, UserID string) error
+	DeleteFollow(UserID string) ([]User, error)
+	DeleteLike(UserID string) error
+	DeleteProfile(UserID string, []PhotoID int64, []CommentID int64, []LikeID string) error
+	GetPhoto() (Photo, error)
+	GetProfile() (UserID string, []PhotoID int64, []NumFollower int64, []NumFollowed int64, error)
+	LoginUser(UserName string)(UserID string, error)
+	PostPhoto()
 	Ping() error
 }
 
