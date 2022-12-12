@@ -64,22 +64,22 @@ type Comment struct {
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	DeletePhoto(PhotoID int64, UserID string) error
+	DeletePhoto(PhotoID int64, UserID string) (err error)
 	AddComment(Comment) (ArrayofComment []Comment, err error)
 	AddLike(Like) (ArrayofLike []Like, err error)
 	BanUser(UserID string) (ArrayofUsers []User, err error)
-	DeleteComment(CommentID int64, PhotoID int64, UserID string) error
-	DeleteFollow(UserID string) (ArrayofUsers []User, err error)
-	DeleteLike(UserID string) error
-	DeleteProfile(ArrayPhotoID []int64, ArrayCommentID []int64, ArrayLikeID []int64) error
+	DeleteComment(CommentID int64, PhotoID int64, UserID string) (err error)
+	DeleteFollow(UserID string) (err error)
+	DeleteLike(UserID string) (err error)
+	DeleteProfile(ArrayPhotoID []int64, ArrayCommentID []int64, ArrayLikeID []int64) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserID []string, PhotoID []int64, NumFollower []int64, NumFollowed []int64, err error)
 	LoginUser(UserName string) (UserID string, err error)
 	PostPhoto(PhotoStructure string) (PhotoID int64, err error)
 	PutFollow(UserID string) (ArrayofUsers []User, NumFollower int64, err error)
 	UnbanUser(UserID string) error
-	GetmyMainstream(ArrayofPhotos []Photo) error
-	Updateusername(UserID string) error
+	GetmyMainstream(ArrayofPhotos []Photo) (err error)
+	Updateusername(UserID string) (err error)
 	Ping() error
 }
 
