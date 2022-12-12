@@ -54,11 +54,14 @@ type Photo struct {
 
 type Like struct{
 	UserID string
+	PhotoID int64
 }
 
 type Comment struct{
 	CommentID int64
 	CommMessage string
+	PhotoID int64
+	UserID string
 }
 
 
