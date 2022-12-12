@@ -77,7 +77,9 @@ type AppDatabase interface {
 	LoginUser(UserName string) (UserID string, err error)
 	PostPhoto(PhotoStructure string) (PhotoID int64, err error)
 	PutFollow(UserID string) (ArrayofUsers []User, NumFollower int64, err error)
-
+	UnbanUser(UserID string) error
+	GetmyMainstream(ArrayofPhotos []Photo) error
+	Updateusername(UserID string) error
 	Ping() error
 }
 
