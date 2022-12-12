@@ -32,7 +32,6 @@ package database
 
 import (
 	"database/sql"
-	"encoding/binary"
 	"errors"
 	"fmt"
 )
@@ -44,7 +43,7 @@ type User struct {
 
 type Photo struct {
 	ID             int64
-	Photo		   string
+	PhotoStructure string
 	numLikes       int64
 	numComm        int64
 	ArrayofLike    []Like
@@ -66,17 +65,19 @@ type Comment struct {
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	DeletePhoto(PhotoID int64, UserID string) error
-	AddComment(Comment) ([]Comment, error)
-	AddLike(Like) ([]Like, error)
-	BanUser(UserID string) ([]User, error)
+	AddComment(Comment) (ArrayofComment []Comment, err error)
+	AddLike(Like) (ArrayofLike []Like, err error)
+	BanUser(UserID string) (ArrayofUsers []User, err error)
 	DeleteComment(CommentID int64, PhotoID int64, UserID string) error
-	DeleteFollow(UserID string) ([]User, error)
+	DeleteFollow(UserID string) (ArrayofUsers []User, err error)
 	DeleteLike(UserID string) error
-	DeleteProfile(UserID string, []PhotoID int64, []CommentID int64, []LikeID string) error
+	DeleteProfile(ArrayPhotoID []int64, ArrayCommentID []int64, ArrayLikeID []int64) error
 	GetPhoto() (Photo, error)
-	GetProfile() (UserID string, []PhotoID int64, []NumFollower int64, []NumFollowed int64, error)
-	LoginUser(UserName string)(UserID string, error)
-	PostPhoto()
+	GetProfile() (UserID []string, PhotoID []int64, NumFollower []int64, NumFollowed []int64, err error)
+	LoginUser(UserName string) (UserID string, err error)
+	PostPhoto(PhotoStructure string) (PhotoID int64, err error)
+	PutFollow(UserID string) (ArrayofUsers []User, NumFollower int64, err error)
+
 	Ping() error
 }
 
