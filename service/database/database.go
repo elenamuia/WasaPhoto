@@ -36,34 +36,30 @@ import (
 	"fmt"
 )
 
-
-
-
 type User struct {
-	ID        string
-	Name      string
-	
+	ID   string
+	Name string
 }
 
 type Photo struct {
-	ID int64
-	numLikes int64
-	numComm int64
-	
+	ID             int64
+	numLikes       int64
+	numComm        int64
+	ArrayofLike    []Like
+	ArrayofComment []Comment
 }
 
-type Like struct{
-	UserID string
-	PhotoID int64
+type Like struct {
+	UserID  string
+	PhotoID Photo
 }
 
-type Comment struct{
-	CommentID int64
+type Comment struct {
+	CommentID   int64
 	CommMessage string
-	PhotoID int64
-	UserID string
+	PhotoID     int64
+	UserID      string
 }
-
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
