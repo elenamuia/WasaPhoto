@@ -117,7 +117,8 @@ paths:
       operationId: getUserProfile
       
       responses:
-        "302":
+        
+        "200":
           description: |
             The user has been found
           content:
