@@ -62,6 +62,10 @@ type Comment struct {
 	UserID      string
 }
 
+type Followers struct {
+	ListofUsers []string
+}
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	DeletePhoto(PhotoID int64, UserID string) (err error)
@@ -76,7 +80,7 @@ type AppDatabase interface {
 	GetProfile() (UserID []string, PhotoID []int64, NumFollower []int64, NumFollowed []int64, err error)
 	LoginUser(UserName string) (UserID string, err error)
 	PostPhoto(PhotoStructure string) (PhotoID int64, err error)
-	PutFollow(UserID string) (ArrayofUsers []User, NumFollower int64, err error)
+	PutFollow(u User) error
 	UnbanUser(UserID string) (err error)
 	GetmyMainstream(ArrayofPhotos []Photo) (err error)
 	Updateusername(UserID string) (err error)
