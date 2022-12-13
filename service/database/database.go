@@ -62,16 +62,12 @@ type Comment struct {
 	UserID      string
 }
 
-type Followers struct {
-	ListofUsers []string
-}
-
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	DeletePhoto(PhotoID int64, UserID string) (err error)
-	AddComment(Comment) (ArrayofComment []Comment, err error)
-	AddLike(Like) (ArrayofLike []Like, err error)
-	BanUser(UserID string) (ArrayofUsers []User, err error)
+	DeletePhoto(PhotoID int64, UserID string) error
+	AddComment(Comment) error
+	AddLike(Like) error
+	BanUser(UserID string) error
 	DeleteComment(CommentID int64, PhotoID int64, UserID string) (err error)
 	DeleteFollow(UserID string) (err error)
 	DeleteLike(UserID string) (err error)
@@ -82,7 +78,7 @@ type AppDatabase interface {
 	PostPhoto(PhotoStructure string) (PhotoID int64, err error)
 	PutFollow(u User) error
 	UnbanUser(UserID string) (err error)
-	GetmyMainstream(ArrayofPhotos []Photo) (err error)
+	GetMyMainstream(ArrayofPhotos []Photo) (err error)
 	Updateusername(UserID string) (err error)
 	Ping() error
 }
@@ -100,9 +96,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='example_table';`).Scan(&tableName)
+	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='fountains';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE example_table (id INTEGER NOT NULL PRIMARY KEY, name TEXT);`
+		sqlStmt := `CREATE TABLE fountains (
+    id INTEGER NOT NULL PRIMARY KEY,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
+    status TEXT NOT NULL
+);`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
