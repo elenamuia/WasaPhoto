@@ -558,6 +558,7 @@ components:
       format: int64
     Photo:
       type: object
+      description: All items describing a posted photo
       properties:
         photo:
           description: |
@@ -660,9 +661,10 @@ components:
         $ref: "#/components/schemas/PhotoId"
    
   securitySchemes:
-    basicAuthorization:
+    bearerAuth:            
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid 
@@ -701,4 +703,4 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
 security:
-  - basicAuthorization: []
+  - bearerAuth: []
