@@ -15,7 +15,7 @@ func (db *appdbimpl) PutFollow(u User) (err error) {
 		return err
 	}
 
-	u.ID = string(lastInsertID)
+	u.ID = lastInsertID
 	return nil
 
 }
