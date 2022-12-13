@@ -206,8 +206,8 @@ paths:
                   properties:
                     ArrayofPhotos:
                       type: array
-                      minLength: 0
-                      maxLength: 1000 
+                      minItems: 0
+                      maxItems: 1000 
                       items:
                         $ref: "#/components/schemas/UserId"
         "404":
@@ -268,8 +268,8 @@ paths:
                   properties:
                     ArrayofPhotos:
                       type: array
-                      minLength: 0
-                      maxLength: 1000 
+                      minItems: 0
+                      maxItems: 1000 
                       items:
                         $ref: "#/components/schemas/UserId"
         "404":
@@ -448,6 +448,8 @@ paths:
                 type: array
                 items:
                   type: object
+                  minItems: 0
+                  maxItems: 1000
                   properties:
                     UserLike:
                       $ref: "#/components/schemas/UserId"  
@@ -585,8 +587,8 @@ components:
           type: array
           items:
             type: object
-            minLength: 0
-            maxLength: 10000
+            minItems: 0
+            maxItems: 10000
             properties:
               UserLike:
                 $ref: "#/components/schemas/UserId"
@@ -595,8 +597,8 @@ components:
           type: array
           items:
             type: object
-            minLength: 0
-            maxLength: 1000
+            minItems: 0
+            maxItems: 1000
             properties:
               UserComment:
                 $ref: "#/components/schemas/UserId"
@@ -657,8 +659,8 @@ components:
     ArrayofPhotos:
       description: array of photo belonging to a certain user
       type: array
-      minLength: 0
-      maxLength: 1000 
+      minItems: 0
+      maxItems: 1000 
       items:
         $ref: "#/components/schemas/PhotoId"
    
