@@ -47,7 +47,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  userid: 
+                  UserId: 
                     $ref: "#/components/schemas/UserId"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
@@ -481,22 +481,16 @@ components:
       description: Id of a user that made the login
       required: true
       schema:
-        type: string
-        example: Maria
-        pattern: 'ˆ.*?$'
-        minLength: 3
-        maxLength: 16
+        type: number
+        format: int64
     BannedId:
       name: BannedId
       in: path
       description: The Id of the user that has been banned
       required: true
       schema:
-        type: string
-        example: Luca
-        pattern: 'ˆ.*?$'
-        minLength: 3
-        maxLength: 16
+        type: number
+        format: int64
     photoid:  
       name: photoid
       in: path
@@ -511,11 +505,8 @@ components:
       description: Id of the follower taken int consideration
       required: true
       schema:
-        type: string
-        example: Luca
-        pattern: 'ˆ.*?$'
-        minLength: 3
-        maxLength: 16
+        type: number
+        format: int64
     commentid: 
       name: commentid
       in: path
@@ -540,12 +531,8 @@ components:
    
         
     UserId:
-      type: string
-      example: Maria
-      pattern: 'ˆ.*?$'
-      minLength: 3
-      maxLength: 16
-      description: Uniquely identifies the user
+      type: number
+      format: int64
     nameUser:
       type: string
       example: Maria

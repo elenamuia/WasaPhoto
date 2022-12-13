@@ -37,7 +37,7 @@ import (
 )
 
 type User struct {
-	ID   string
+	ID   int64
 	Name string
 }
 
@@ -51,7 +51,7 @@ type Photo struct {
 }
 
 type Like struct {
-	UserID  string
+	UserID  int64
 	PhotoID Photo
 }
 
@@ -59,27 +59,27 @@ type Comment struct {
 	CommentID   int64
 	CommMessage string
 	PhotoID     int64
-	UserID      string
+	UserID      int64
 }
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	DeletePhoto(PhotoID int64, UserID string) error
+	DeletePhoto(PhotoID int64, UserID int64) error
 	AddComment(Comment) error
 	AddLike(Like) error
-	BanUser(UserID string) error
-	DeleteComment(CommentID int64, PhotoID int64, UserID string) (err error)
-	DeleteFollow(UserID string) (err error)
-	DeleteLike(UserID string) (err error)
+	BanUser(User) error
+	DeleteComment(CommentID int64, PhotoID int64, User) (err error)
+	DeleteFollow(User) (err error)
+	DeleteLike(User) (err error)
 	DeleteProfile(ArrayPhotoID []int64, ArrayCommentID []int64, ArrayLikeID []int64) (err error)
 	GetPhoto() (Photo, error)
-	GetProfile() (UserID []string, PhotoID []int64, NumFollower []int64, NumFollowed []int64, err error)
-	LoginUser(UserName string) (UserID string, err error)
+	GetProfile() (UserIDList []int64, PhotoID []int64, NumFollower []int64, NumFollowed []int64, err error)
+	LoginUser(UserName string) (User, err error)
 	PostPhoto(PhotoStructure string) (PhotoID int64, err error)
 	PutFollow(u User) error
-	UnbanUser(UserID string) (err error)
+	UnbanUser(User) (err error)
 	GetMyMainstream(ArrayofPhotos []Photo) (err error)
-	Updateusername(UserID string) (err error)
+	Updateusername(User) (err error)
 	Ping() error
 }
 
