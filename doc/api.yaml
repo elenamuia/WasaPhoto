@@ -638,6 +638,7 @@ components:
     
     Error:
       type: object
+      description: general error
       properties:
         code:
           type: string
@@ -654,6 +655,7 @@ components:
         - message
     
     ArrayofPhotos:
+      description: array of photo belonging to a certain user
       type: array
       minLength: 0
       maxLength: 1000 
@@ -661,7 +663,8 @@ components:
         $ref: "#/components/schemas/PhotoId"
    
   securitySchemes:
-    bearerAuth:            
+    bearerAuth:  
+      description: bearer authentication          
       type: http
       scheme: bearer
       bearerFormat: JWT
