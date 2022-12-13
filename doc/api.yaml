@@ -407,8 +407,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
         "406":
-          description: Some  symbols used in to compose this comment
-            are not allowed 
+          $ref: "#/components/responses/NotAcceptable"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -691,6 +690,12 @@ components:
             $ref: '#/components/schemas/Error'
     Forbidden:
       description: Operation not allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotAcceptable:
+      description: Operation not acceptable
       content:
         application/json:
           schema:
