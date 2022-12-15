@@ -78,7 +78,7 @@ type AppDatabase interface {
 	DeleteComment(comment Comment, photo Photo) (err error)
 	DeleteFollow(follower User, followed User) (err error)
 	DeleteLike(sendUser User, photo Photo) (err error)
-	DeleteProfile(ArrayPhotoID []int, ArrayCommentID []int, ArrayLikeID []int) (err error)
+	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
 	LoginUser(UserName string) (UserID int, err error)
