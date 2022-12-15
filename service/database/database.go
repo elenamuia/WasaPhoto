@@ -74,16 +74,16 @@ type AppDatabase interface {
 	DeletePhoto(PhotoID int, u User) error
 	AddComment(comment Comment, photo Photo, userrec User, usersend User) error
 	AddLike(like Like, photo Photo, userrec User) error
-	BanUser(User) error
+	BanUser(Banned User, Banning User) error
 	DeleteComment(comment Comment, photo Photo) (err error)
-	DeleteFollow(User) (err error)
+	DeleteFollow(follower User, followed User) (err error)
 	DeleteLike(sendUser User, photo Photo) (err error)
 	DeleteProfile(ArrayPhotoID []int, ArrayCommentID []int, ArrayLikeID []int) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
 	LoginUser(UserName string) (UserID int, err error)
 	PostPhoto(PhotoStructure string) (PhotoID int, err error)
-	PutFollow(u User) error
+	PutFollow(follower User, followed User) error
 	UnbanUser(User) (err error)
 	GetMyMainstream(ArrayofPhotos []Photo) (err error)
 	Updateusername(User) (err error)
