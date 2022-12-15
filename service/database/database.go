@@ -103,9 +103,96 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='example_table';`).Scan(&tableName)
+	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE example_table (id INTEGER NOT NULL PRIMARY KEY, name TEXT);`
+		sqlStmt := `CREATE TABLE Users (
+			UserID int PRIMARY KEY,
+			username string NOT NULL	
+			) WITHOUT ROWID;
+			
+			CREATE TABLE IF NOT EXISTS Follower (
+				FollowerID int ,
+				FollowedID int,
+				PRIMARY KEY(FollowerID, FOllowedID)
+				FOREIGN KEY (FollowerID) 
+				  REFERENCES Users (UserID) 
+					 ON DELETE CASCADE 
+					 ON UPDATE NO ACTION
+				FOREIGN KEY (FollowedID) 
+				  REFERENCES Users (UserID) 
+					 ON DELETE CASCADE 
+					 ON UPDATE NO ACTION
+			) WITHOUT ROWID;
+
+			CREATE TABLE IF NOT EXISTS Banned (
+				BannedID int,
+				BanningID int,
+				PRIMARY KEY (BannedID, BanningID)
+				FOREIGN KEY (BannedID) 
+				  REFERENCES Users (UserID) 
+					ON DELETE CASCADE 
+					ON UPDATE NO ACTION
+				FOREIGN KEY (BanningID) 
+				  REFERENCES Users (UserID) 
+					 ON DELETE CASCADE 
+					 ON UPDATE NO ACTION
+			) WITHOUT ROWID;
+
+
+			CREATE TABLE IF NOT EXISTS Photo (
+					PhotoID int,
+				    UserID int,
+				    Photo string NOT NULL,
+				    DataPost string NOT NULL,
+					PRIMARY KEY (PhotoID, UserID)
+				    FOREIGN KEY (UserID) 
+				      REFERENCES Users (UserID) 
+				        ON DELETE CASCADE 
+				         ON UPDATE NO ACTION
+				) WITHOUT ROWID;
+
+				CREATE TABLE IF NOT EXISTS Comment (
+						PhotoID int,
+					    UserIDReceiving int NOT NULL,
+					    CommentID int,
+					    UserIDSending int NOT NULL,
+					    DataPost string NOT NULL,
+						PRIMARY KEY (PhotoID, CommentID)
+					    FOREIGN KEY (UserIDReceiving) 
+					      REFERENCES Users (UserID) 
+					       ON DELETE CASCADE 
+					         ON UPDATE NO ACTION
+					    FOREIGN KEY (UserIDSending) 
+					      REFERENCES Users (UserID) 
+					       ON DELETE CASCADE 
+					         ON UPDATE NO ACTION
+					    FOREIGN KEY (PhotoID) 
+					      REFERENCES Users (UserID) 
+					       ON DELETE CASCADE 
+					         ON UPDATE NO ACTION
+					) WITHOUT ROWID;
+
+					 CREATE TABLE IF NOT EXISTS Like (
+ 
+						     UserIDPutting int,
+						     PhotoID string NOT NULL,
+						     UserIDReceiving int NOT NULL,
+						     DataPost string NOT NULL,
+						     PRIMARY KEY (PhotoID, UserIDPutting)
+						     FOREIGN KEY (UserIDReceiving) 
+						       REFERENCES Users (UserID) 
+					             ON DELETE CASCADE 
+					              ON UPDATE NO ACTION
+					         FOREIGN KEY (UserIDPutting) 
+					           REFERENCES Users (UserID) 
+					             ON DELETE CASCADE 
+					              ON UPDATE NO ACTION
+					         FOREIGN KEY (PhotoID) 
+					           REFERENCES Photo (PhotoID) 
+					             ON DELETE CASCADE 
+					              ON UPDATE NO ACTION
+					     ) WITHOUT ROWID;
+`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)

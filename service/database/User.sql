@@ -8,30 +8,35 @@
 
 --INSERT into Users(UserID, username) values (1, "valerio");
 
---DROP TABLE Follower;
+--DROP TABLE Banned;
 
-CREATE TABLE IF NOT EXISTS Follower (
-	FollowerID int ,
-    FollowedID int,
-    PRIMARY KEY(FollowerID, FOllowedID)
-	FOREIGN KEY (FollowerID) 
+--CREATE TABLE IF NOT EXISTS Follower (
+--	FollowerID int ,
+--    FollowedID int,
+--    PRIMARY KEY(FollowerID, FOllowedID)
+--	FOREIGN KEY (FollowerID) 
+--      REFERENCES Users (UserID) 
+--         ON DELETE CASCADE 
+--         ON UPDATE NO ACTION
+--    FOREIGN KEY (FollowedID) 
+--      REFERENCES Users (UserID) 
+--         ON DELETE CASCADE 
+--         ON UPDATE NO ACTION
+--) WITHOUT ROWID;
+
+CREATE TABLE IF NOT EXISTS Banned (
+	BannedID int,
+    BanningID int,
+    PRIMARY KEY (BannedID, BanningID)
+	FOREIGN KEY (BannedID) 
       REFERENCES Users (UserID) 
-         ON DELETE CASCADE 
-         ON UPDATE NO ACTION
-    FOREIGN KEY (FollowedID) 
+        ON DELETE CASCADE 
+        ON UPDATE NO ACTION
+    FOREIGN KEY (BanningID) 
       REFERENCES Users (UserID) 
          ON DELETE CASCADE 
          ON UPDATE NO ACTION
 ) WITHOUT ROWID;
-
---CREATE TABLE IF NOT EXISTS Banned (
---	BannedID int PRIMARY KEY,
-  
---	FOREIGN KEY (BannedID) 
- --     REFERENCES Users (UserID) 
- --        ON DELETE CASCADE 
---         ON UPDATE NO ACTION
---) WITHOUT ROWID;
 
 
 --CREATE TABLE IF NOT EXISTS Photo (
