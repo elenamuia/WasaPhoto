@@ -535,7 +535,6 @@ components:
       format: int64
     nameUser:
       type: string
-      example: Maria
       pattern: 'ˆ.*?$'
       minLength: 3
       maxLength: 16
@@ -598,7 +597,7 @@ components:
           type: string
           pattern: 'ˆ.*?$'
           description: Date of photo posting
-          example: "2017-01-26"
+          
           format: "YYYY-MM-DD"
           minLength: 0
           maxLength: 10
@@ -633,12 +632,12 @@ components:
           type: string
           description: The code of the error
           pattern: "ˆ.*?$"
-          example: "42"
+          
         message:
           type: string
           description: The message of the error explaining what is happening
           pattern: "ˆ.*?$"
-          example: "Element not found"
+          
       required:
         - code
         - message
