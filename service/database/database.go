@@ -71,7 +71,7 @@ var ErrLikeDoesNotExist = errors.New("Like does not exist")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	DeletePhoto(PhotoID int, u User) error
+	DeletePhoto(photo Photo, u User) error
 	AddComment(comment Comment, photo Photo, userrec User, usersend User) error
 	AddLike(like Like, photo Photo, userrec User) error
 	BanUser(Banned User, Banning User) error
