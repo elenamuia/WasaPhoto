@@ -1,8 +1,8 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) GetMyMainstream(user User) (ArrayofPhotos []Photo, err error) {
-	var ret []Photo
+func (db *appdbimpl) GetMyMainstream(user User) ([]Photo, error) {
+	var ArrayofPhotos []Photo
 
 	// Plain simple SELECT query
 	rows, err := db.c.Query(`SELECT PhotoID, UserID, Photo, NumComment, NumLike, DataPost FROM Photo WHERE UserID = ?`, user.ID)
@@ -19,11 +19,11 @@ func (db *appdbimpl) GetMyMainstream(user User) (ArrayofPhotos []Photo, err erro
 			return nil, err
 		}
 
-		ret = append(ret, photo)
+		ArrayofPhotos = append(ArrayofPhotos, photo)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return ret, nil
+	return ArrayofPhotos, nil
 }
