@@ -77,9 +77,9 @@ type AppDatabase interface {
 	AddComment(comment Comment, userrec User) error
 	AddLike(like Like, photo Photo, userrec User) error
 	BanUser(Banned User, Banning User) error
-	DeleteComment(comment Comment, photo Photo) (err error)
+	DeleteComment(comment Comment) (err error)
 	DeleteFollow(follower User, followed User) (err error)
-	DeleteLike(sendUser User, photo Photo) (err error)
+	DeleteLike(like Like) (err error)
 	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
