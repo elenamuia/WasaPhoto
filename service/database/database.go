@@ -66,7 +66,8 @@ type Comment struct {
 
 var ErrUserDoesNotExist = errors.New("User does not exist")
 var ErrPhotoDoesNotExist = errors.New("Photo does not exist")
-var ErrCommentDoesNotExist = errors.New("Photo does not exist")
+var ErrCommentDoesNotExist = errors.New("Comment does not exist")
+var ErrLikeDoesNotExist = errors.New("Like does not exist")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
@@ -76,7 +77,7 @@ type AppDatabase interface {
 	BanUser(User) error
 	DeleteComment(comment Comment, photo Photo) (err error)
 	DeleteFollow(User) (err error)
-	DeleteLike(User) (err error)
+	DeleteLike(sendUser User, photo Photo) (err error)
 	DeleteProfile(ArrayPhotoID []int, ArrayCommentID []int, ArrayLikeID []int) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
