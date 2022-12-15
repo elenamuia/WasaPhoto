@@ -51,8 +51,9 @@ type Photo struct {
 }
 
 type Like struct {
-	UserID  int
-	PhotoID Photo
+	LikeID   int
+	PhotoID  Photo
+	datapost string
 }
 
 type Comment struct {
@@ -67,7 +68,7 @@ type Comment struct {
 type AppDatabase interface {
 	DeletePhoto(PhotoID int, u User) error
 	AddComment(comment Comment, photo Photo, userrec User, usersend User) error
-	AddLike(Like) error
+	AddLike(like Like, photo Photo, userrec User) error
 	BanUser(User) error
 	DeleteComment(CommentID int, PhotoID int, User int) (err error)
 	DeleteFollow(User) (err error)
