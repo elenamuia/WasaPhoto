@@ -64,6 +64,8 @@ type Comment struct {
 	datapost    string
 }
 
+var ErrUserDoesNotExist = errors.New("User does not exist")
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	DeletePhoto(PhotoID int, u User) error
