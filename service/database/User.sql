@@ -8,7 +8,7 @@
 
 --INSERT into Users(UserID, username) values (1, "valerio");
 
---DROP TABLE Banned;
+DROP TABLE Comment;
 
 --CREATE TABLE IF NOT EXISTS Follower (
 --	FollowerID int ,
@@ -24,53 +24,55 @@
 --         ON UPDATE NO ACTION
 --) WITHOUT ROWID;
 
-CREATE TABLE IF NOT EXISTS Banned (
-	BannedID int,
-    BanningID int,
-    PRIMARY KEY (BannedID, BanningID)
-	FOREIGN KEY (BannedID) 
-      REFERENCES Users (UserID) 
-        ON DELETE CASCADE 
-        ON UPDATE NO ACTION
-    FOREIGN KEY (BanningID) 
-      REFERENCES Users (UserID) 
-         ON DELETE CASCADE 
-         ON UPDATE NO ACTION
-) WITHOUT ROWID;
+--CREATE TABLE IF NOT EXISTS Banned (
+--	BannedID int,
+--    BanningID int,
+--    PRIMARY KEY (BannedID, BanningID)
+--	FOREIGN KEY (BannedID) 
+--      REFERENCES Users (UserID) 
+--        ON DELETE CASCADE 
+--        ON UPDATE NO ACTION
+--    FOREIGN KEY (BanningID) 
+--      REFERENCES Users (UserID) 
+--         ON DELETE CASCADE 
+--         ON UPDATE NO ACTION
+--) WITHOUT ROWID;
 
 
 --CREATE TABLE IF NOT EXISTS Photo (
 --	PhotoID int,
 --    UserID int,
 --    Photo string NOT NULL,
+--    NumComment int NOT NULL,
+--    NumLike int NOT NULL,
 --    DataPost string NOT NULL,
 --	PRIMARY KEY (PhotoID, UserID)
 --    FOREIGN KEY (UserID) 
---      REFERENCES Users (UserID) 
---        ON DELETE CASCADE 
---         ON UPDATE NO ACTION
+     -- REFERENCES Users (UserID) 
+   --     ON DELETE CASCADE 
+ --        ON UPDATE NO ACTION
 --) WITHOUT ROWID;
 
---CREATE TABLE IF NOT EXISTS Comment (
---	PhotoID int,
---    UserIDReceiving int NOT NULL,
---    CommentID int,
---    UserIDSending int NOT NULL,
---    DataPost string NOT NULL,
---	PRIMARY KEY (PhotoID, CommentID)
---    FOREIGN KEY (UserIDReceiving) 
---      REFERENCES Users (UserID) 
---       ON DELETE CASCADE 
---         ON UPDATE NO ACTION
---    FOREIGN KEY (UserIDSending) 
---      REFERENCES Users (UserID) 
---       ON DELETE CASCADE 
---         ON UPDATE NO ACTION
---    FOREIGN KEY (PhotoID) 
---      REFERENCES Users (UserID) 
---       ON DELETE CASCADE 
---         ON UPDATE NO ACTION
---) WITHOUT ROWID;
+CREATE TABLE IF NOT EXISTS Comments (
+	PhotoID int,
+    UserIDReceiving int NOT NULL,
+    CommentID int,
+    UserIDSending int NOT NULL,
+    DataPost string NOT NULL,
+    PRIMARY KEY (PhotoID, CommentID)
+    FOREIGN KEY (UserIDReceiving) 
+      REFERENCES Users (UserID) 
+       ON DELETE CASCADE 
+         ON UPDATE NO ACTION
+    FOREIGN KEY (UserIDSending) 
+      REFERENCES Users (UserID) 
+       ON DELETE CASCADE 
+         ON UPDATE NO ACTION
+    FOREIGN KEY (PhotoID) 
+      REFERENCES Photo (PhotoID) 
+       ON DELETE CASCADE 
+         ON UPDATE NO ACTION
+) WITHOUT ROWID;
 
  -- CREATE TABLE IF NOT EXISTS Like (
  
@@ -94,3 +96,4 @@ CREATE TABLE IF NOT EXISTS Banned (
 --  ) WITHOUT ROWID;
 
 --ALTER TABLE Like DROP COLUMN LikeID;
+

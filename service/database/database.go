@@ -143,6 +143,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 					PhotoID int,
 				    UserID int,
 				    Photo string NOT NULL,
+					NumComment int NOT NULL,
+    				NumLike int NOT NULL,
 				    DataPost string NOT NULL,
 					PRIMARY KEY (PhotoID, UserID)
 				    FOREIGN KEY (UserID) 
@@ -151,7 +153,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				         ON UPDATE NO ACTION
 				) WITHOUT ROWID;
 
-				CREATE TABLE IF NOT EXISTS Comment (
+				CREATE TABLE IF NOT EXISTS Comments (
 						PhotoID int,
 					    UserIDReceiving int NOT NULL,
 					    CommentID int,
@@ -167,7 +169,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 					       ON DELETE CASCADE 
 					         ON UPDATE NO ACTION
 					    FOREIGN KEY (PhotoID) 
-					      REFERENCES Users (UserID) 
+					      REFERENCES Photo (PhotoID) 
 					       ON DELETE CASCADE 
 					         ON UPDATE NO ACTION
 					) WITHOUT ROWID;
