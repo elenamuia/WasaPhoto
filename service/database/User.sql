@@ -62,7 +62,7 @@
 --) WITHOUT ROWID;
 
  -- CREATE TABLE IF NOT EXISTS Like (
- --	  LikeID int NOT NULL,
+ 
  --     UserIDPutting int,
  --     PhotoID string NOT NULL,
  --     UserIDReceiving int NOT NULL,
@@ -81,3 +81,5 @@
 --          ON DELETE CASCADE 
 --           ON UPDATE NO ACTION
 --  ) WITHOUT ROWID;
+
+ALTER TABLE Like DROP COLUMN LikeID;

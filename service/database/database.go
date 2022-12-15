@@ -60,12 +60,13 @@ type Comment struct {
 	CommMessage string
 	PhotoID     int
 	UserID      int
+	datapost    string
 }
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	DeletePhoto(PhotoID int, u User) error
-	AddComment(Comment) error
+	AddComment(comment Comment, photo Photo, userrec User, usersend User) error
 	AddLike(Like) error
 	BanUser(User) error
 	DeleteComment(CommentID int, PhotoID int, User int) (err error)
