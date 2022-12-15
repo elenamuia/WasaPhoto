@@ -2,7 +2,7 @@ package database
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) PutFollow(u User) (err error) {
-	res, err := db.c.Exec(`INSERT INTO Followers(UserId) VALUES (?)`,
+	res, err := db.c.Exec(`INSERT INTO Follower(UserId) VALUES (?)`,
 		u.ID)
 
 	if err != nil {
@@ -15,7 +15,7 @@ func (db *appdbimpl) PutFollow(u User) (err error) {
 		return err
 	}
 
-	u.ID = lastInsertID
+	u.ID = int(lastInsertID)
 	return nil
 
 }
