@@ -13,7 +13,7 @@ func (db *appdbimpl) Updateusername(user User) (err error) {
 		return err
 	} else if affected == 0 {
 		// If we didn't delete any row, then the fountain didn't exist
-		//return ErrFountainDoesNotExist
+		return ErrUserDoesNotExist
 	}
 	return nil
 }
