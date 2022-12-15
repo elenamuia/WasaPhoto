@@ -10,13 +10,19 @@
 
 --DROP TABLE Follower;
 
---CREATE TABLE IF NOT EXISTS Follower (
---	FollowerID int PRIMARY KEY,
---	FOREIGN KEY (FollowerID) 
---      REFERENCES Users (UserID) 
---         ON DELETE CASCADE 
---         ON UPDATE NO ACTION
---) WITHOUT ROWID;
+CREATE TABLE IF NOT EXISTS Follower (
+	FollowerID int ,
+    FollowedID int,
+    PRIMARY KEY(FollowerID, FOllowedID)
+	FOREIGN KEY (FollowerID) 
+      REFERENCES Users (UserID) 
+         ON DELETE CASCADE 
+         ON UPDATE NO ACTION
+    FOREIGN KEY (FollowedID) 
+      REFERENCES Users (UserID) 
+         ON DELETE CASCADE 
+         ON UPDATE NO ACTION
+) WITHOUT ROWID;
 
 --CREATE TABLE IF NOT EXISTS Banned (
 --	BannedID int PRIMARY KEY,
@@ -82,4 +88,4 @@
 --           ON UPDATE NO ACTION
 --  ) WITHOUT ROWID;
 
-ALTER TABLE Like DROP COLUMN LikeID;
+--ALTER TABLE Like DROP COLUMN LikeID;
