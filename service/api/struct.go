@@ -19,9 +19,9 @@ func (b *Banned) FromDatabaseBanned(ban database.Banned) {
 }
 
 // ToDatabase returns the fountain in a database-compatible representation
-func (user *Banned) ToDatabaseBanned() database.Banned {
+func (b *Banned) ToDatabaseBanned() database.Banned {
 	return database.Banned{
-		BannedID:  user.BannedID,
-		BanningID: user.BanningID,
+		BannedID:  b.BannedID,
+		BanningID: b.BanningID,
 	}
 }
