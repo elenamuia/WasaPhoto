@@ -1,9 +1,9 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) PutFollow(follower User, followed User) (err error) {
+func (db *appdbimpl) PutFollow(follow Follow) (err error) {
 	_, err = db.c.Exec(`INSERT INTO Follower(FollowerID, FollowedID) VALUES (?,?)`,
-		follower.ID, followed.ID)
+		follow.FollowerID, follow.FollowedID)
 
 	if err != nil {
 		return err
