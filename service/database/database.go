@@ -72,6 +72,11 @@ type Banned struct {
 	BanningID int
 }
 
+type Follow struct {
+	FollowerID int
+	FollowedID int
+}
+
 var ErrUserDoesNotExist = errors.New("User does not exist")
 var ErrPhotoDoesNotExist = errors.New("Photo does not exist")
 var ErrCommentDoesNotExist = errors.New("Comment does not exist")
@@ -84,7 +89,7 @@ type AppDatabase interface {
 	AddLike(like Like) error
 	BanUser(ban Banned) error
 	DeleteComment(comment Comment) (err error)
-	DeleteFollow(follower User, followed User) (err error)
+	DeleteFollow(follow Follow) (err error)
 	DeleteLike(like Like) (err error)
 	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)

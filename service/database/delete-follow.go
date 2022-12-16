@@ -1,8 +1,8 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) DeleteFollow(follower User, followed User) (err error) {
-	res, err := db.c.Exec(`DELETE FROM Follower WHERE FollowerID=? AND FollowedID = ?`, follower.ID, followed.ID)
+func (db *appdbimpl) DeleteFollow(follow Follow) (err error) {
+	res, err := db.c.Exec(`DELETE FROM Follower WHERE FollowerID=? AND FollowedID = ?`, follow.FollowerID, follow.FollowedID)
 	if err != nil {
 		return err
 	}

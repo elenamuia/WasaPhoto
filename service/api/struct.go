@@ -28,6 +28,11 @@ type Like struct {
 	UserRec  int    `json:"UserRec"`
 }
 
+type Follow struct {
+	FollowerID int `json:"FollowerID"`
+	FollowedID int `json:"FollowedID"`
+}
+
 //func (b *Banned) FromDatabaseBanned(ban database.Banned) {
 //	b.BannedID = ban.BannedID
 //	b.BanningID = ban.BanningID
@@ -59,5 +64,12 @@ func (l *Like) ToDatabaseLike() database.Like {
 		PhotoID:  l.PhotoID,
 		DataPost: l.Datapost,
 		UserRec:  l.UserRec,
+	}
+}
+
+func (f *Follow) ToDatabaseFollow() database.Follow {
+	return database.Follow{
+		FollowerID: f.FollowerID,
+		FollowedID: f.FollowedID,
 	}
 }
