@@ -25,6 +25,10 @@ func (rt *_router) addComment(w http.ResponseWriter, r *http.Request, ps httprou
 		ctx.Logger.WithError(err).Error("can't comment the photo")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	} else if comment.UserIDPut == comment.UserIDRec {
+		ctx.Logger.WithError(err).Error("A user can't comment himself/herself")
+		w.WriteHeader(http.StatusForbidden)
+		return
 	}
 
 	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.

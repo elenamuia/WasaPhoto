@@ -22,8 +22,12 @@ func (rt *_router) follow(w http.ResponseWriter, r *http.Request, ps httprouter.
 	err = rt.db.PutFollow(follow.ToDatabaseFollow())
 	if err != nil {
 
-		ctx.Logger.WithError(err).Error("can't add follower")
+		ctx.Logger.WithError(err).Error("Can't add follower")
 		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else if follow.FollowedID == follow.FollowerID {
+		ctx.Logger.WithError(err).Error("A user can't follow himself/herself")
+		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 

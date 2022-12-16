@@ -97,7 +97,7 @@ type AppDatabase interface {
 	LoginUserExisting(user User) (err error)
 	LoginUserNonExisting(user User) (err error)
 	PostPhoto(photo Photo) (PhotoID int, err error)
-	PutFollow(follower User, followed User) error
+	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream(User) (ArrayofPhotos []Photo, err error)
 	Updateusername(User) (err error)
