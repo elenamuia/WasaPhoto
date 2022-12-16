@@ -14,7 +14,7 @@ func (db *appdbimpl) GetMyMainstream(user User) ([]Photo, error) {
 	// Here we read the resultset and we build the list to be returned
 	for rows.Next() {
 		var photo Photo
-		err = rows.Scan(&photo.ID, &photo.UserID, &photo.numComm, &photo.numLikes, &photo.datapost, &photo.PhotoStructure)
+		err = rows.Scan(&photo.ID, &photo.UserID, &photo.NumComm, &photo.NumLikes, &photo.Datapost, &photo.PhotoStructure)
 		if err != nil {
 			return nil, err
 		}
