@@ -1,9 +1,9 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) AddComment(comment Comment, userrec User) (err error) {
-	res, err := db.c.Exec(`INSERT INTO Comments(CommentID, PhotoID, UserIDReceiving, CommentID, UserIDSending, DataPost) VALUES (?,?,?,?,?,?)`,
-		comment.CommentID, comment.PhotoID, userrec.ID, comment.UserID, comment.datapost)
+func (db *appdbimpl) AddComment(comment Comment) (err error) {
+	res, err := db.c.Exec(`INSERT INTO Comments(CommentID, PhotoID, UserIDReceiving, CommentID, UserIDPutting, UserIDReceiving, DataPost) VALUES (?,?,?,?,?,?,?)`,
+		comment.CommentID, comment.PhotoID, comment.UserIDPut, comment.UserIDRec, comment.Datapost)
 
 	if err != nil {
 		return err

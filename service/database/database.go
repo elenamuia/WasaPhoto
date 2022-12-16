@@ -62,8 +62,9 @@ type Comment struct {
 	CommentID   int
 	CommMessage string
 	PhotoID     int
-	UserID      int
-	datapost    string
+	UserIDPut   int
+	UserIDRec   int
+	Datapost    string
 }
 type Banned struct {
 	BannedID  int
@@ -78,7 +79,7 @@ var ErrLikeDoesNotExist = errors.New("Like does not exist")
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	DeletePhoto(photo Photo, u User) error
-	AddComment(comment Comment, userrec User) error
+	AddComment(comment Comment) error
 	AddLike(like Like, photo Photo, userrec User) error
 	BanUser(ban Banned) error
 	DeleteComment(comment Comment) (err error)
@@ -164,14 +165,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 						PhotoID int,
 					    UserIDReceiving int NOT NULL,
 					    CommentID int,
-					    UserIDSending int NOT NULL,
+					    UserIDPutting int NOT NULL,
 					    DataPost string NOT NULL,
 						PRIMARY KEY (PhotoID, CommentID)
 					    FOREIGN KEY (UserIDReceiving) 
 					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
 					         ON UPDATE NO ACTION
-					    FOREIGN KEY (UserIDSending) 
+					    FOREIGN KEY (UserIDPutting) 
 					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
 					         ON UPDATE NO ACTION
