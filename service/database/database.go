@@ -65,6 +65,10 @@ type Comment struct {
 	UserID      int
 	datapost    string
 }
+type Banned struct {
+	BannedID  int
+	BanningID int
+}
 
 var ErrUserDoesNotExist = errors.New("User does not exist")
 var ErrPhotoDoesNotExist = errors.New("Photo does not exist")
@@ -76,7 +80,7 @@ type AppDatabase interface {
 	DeletePhoto(photo Photo, u User) error
 	AddComment(comment Comment, userrec User) error
 	AddLike(like Like, photo Photo, userrec User) error
-	BanUser(Banned User, Banning User) error
+	BanUser(banned Banned, banning Banned) error
 	DeleteComment(comment Comment) (err error)
 	DeleteFollow(follower User, followed User) (err error)
 	DeleteLike(like Like) (err error)
@@ -87,7 +91,7 @@ type AppDatabase interface {
 	LoginUserNonExisting(user User) (err error)
 	PostPhoto(photo Photo) (PhotoID int, err error)
 	PutFollow(follower User, followed User) error
-	UnbanUser(banningUser User, bannedUser User) (err error)
+	UnbanUser(banned Banned, banning Banned) (err error)
 	GetMyMainstream(User) (ArrayofPhotos []Photo, err error)
 	Updateusername(User) (err error)
 	Ping() error
