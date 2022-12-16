@@ -83,7 +83,8 @@ type AppDatabase interface {
 	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
-	LoginUser(UserName string) (UserID int, err error)
+	LoginUserExisting(user User) (err error)
+	LoginUserNonExisting(user User) (err error)
 	PostPhoto(photo Photo) (PhotoID int, err error)
 	PutFollow(follower User, followed User) error
 	UnbanUser(banningUser User, bannedUser User) (err error)
