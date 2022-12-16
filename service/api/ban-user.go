@@ -29,6 +29,9 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		ctx.Logger.WithError(err).Error("can't ban the user")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	} else if bannedUser.BannedID != bannedUser.BanningID {
+		ctx.Logger.WithError(err).WithField("BannedID", bannedUser).Error("Not Authorized")
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
