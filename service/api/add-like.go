@@ -31,7 +31,7 @@ func (rt *_router) addLike(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-	//bannedUser.FromDatabaseBanned(dbban)
+	// bannedUser.FromDatabaseBanned(dbban)
 
 	// Send the output to the user.
 	w.Header().Set("Content-Type", "application/json")
