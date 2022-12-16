@@ -97,3 +97,10 @@ func (p *Photo) ToDatabasePhoto() database.Photo {
 		UserID:         p.UserID,
 	}
 }
+
+func (u *Users) ToDatabaseUser() database.User {
+	return database.User{
+		ID:   u.ID,
+		Name: u.Username,
+	}
+}
