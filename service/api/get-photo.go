@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
@@ -8,4 +9,28 @@ import (
 )
 
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+	var photo Photo
+
+	err := json.NewDecoder(r.Body).Decode(&photo)
+	if err != nil {
+
+		w.WriteHeader(http.StatusBadRequest)
+		return
+
+	}
+
+	err = rt.db.PostPhoto(photo.ToDatabasePhoto())
+	if err != nil {
+
+		ctx.Logger.WithError(err).Error("Can't post photo")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
+	// bannedUser.FromDatabaseBanned(dbban)
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(photo)
+
 }
