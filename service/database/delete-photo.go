@@ -1,8 +1,8 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) DeletePhoto(photo Photo, u User) (err error) {
-	res, err := db.c.Exec(`DELETE FROM Photo WHERE PhotoID=? AND UserID = ?`, photo.ID, u.ID)
+func (db *appdbimpl) DeletePhoto(photo Photo) (err error) {
+	res, err := db.c.Exec(`DELETE FROM Photo WHERE PhotoID=? AND UserID = ?`, photo.ID, photo.UserID)
 	if err != nil {
 		return err
 	}

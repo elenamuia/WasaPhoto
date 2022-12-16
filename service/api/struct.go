@@ -33,6 +33,17 @@ type Follow struct {
 	FollowedID int `json:"FollowedID"`
 }
 
+type Photo struct {
+	ID             int       `json:"PhotoID"`
+	PhotoStructure string    `json:"PhotoStructure"`
+	NumLikes       int       `json:"numLikes"`
+	NumComm        int       `json:"numComm"`
+	ArrayofLike    []Like    `json:"ArrayofLike"`
+	ArrayofComment []Comment `json:"ArrayofComment"`
+	Datapost       string    `json:"DataPost"`
+	UserID         int       `json:"UserID"`
+}
+
 //func (b *Banned) FromDatabaseBanned(ban database.Banned) {
 //	b.BannedID = ban.BannedID
 //	b.BanningID = ban.BanningID
@@ -71,5 +82,18 @@ func (f *Follow) ToDatabaseFollow() database.Follow {
 	return database.Follow{
 		FollowerID: f.FollowerID,
 		FollowedID: f.FollowedID,
+	}
+}
+
+func (p *Photo) ToDatabasePhoto() database.Photo {
+	return database.Photo{
+		ID:             p.ID,
+		PhotoStructure: p.PhotoStructure,
+		NumLikes:       p.NumLikes,
+		NumComm:        p.NumComm,
+		ArrayofLike:    p.ToDatabasePhoto().ArrayofLike,
+		ArrayofComment: p.ToDatabasePhoto().ArrayofComment,
+		Datapost:       p.Datapost,
+		UserID:         p.UserID,
 	}
 }
