@@ -54,8 +54,9 @@ type Photo struct {
 
 type Like struct {
 	LikeID   int
-	PhotoID  Photo
-	datapost string
+	PhotoID  int
+	DataPost string
+	UserRec  int
 }
 
 type Comment struct {
@@ -80,7 +81,7 @@ var ErrLikeDoesNotExist = errors.New("Like does not exist")
 type AppDatabase interface {
 	DeletePhoto(photo Photo, u User) error
 	AddComment(comment Comment) error
-	AddLike(like Like, photo Photo, userrec User) error
+	AddLike(like Like) error
 	BanUser(ban Banned) error
 	DeleteComment(comment Comment) (err error)
 	DeleteFollow(follower User, followed User) (err error)

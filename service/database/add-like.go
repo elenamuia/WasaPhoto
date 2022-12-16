@@ -1,9 +1,9 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) AddLike(like Like, photo Photo, userrec User) (err error) {
+func (db *appdbimpl) AddLike(like Like) (err error) {
 	res, err := db.c.Exec(`INSERT INTO LIKE(UserIdPutting, PhotoID, UserIDReceiving, Datapost) VALUES (?,?,?,?)`,
-		like.LikeID, photo.ID, userrec.ID, like.datapost)
+		like.LikeID, like.PhotoID, like.UserRec, like.DataPost)
 
 	if err != nil {
 		return err

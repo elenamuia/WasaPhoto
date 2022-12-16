@@ -3,8 +3,8 @@ package api
 import "git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
 
 type Users struct {
-	ID       int    `json:"id"`
-	username string `json:"username"`
+	ID       int    `json:"UserID"`
+	Username string `json:"Username"`
 }
 
 type Banned struct {
@@ -19,6 +19,13 @@ type Comment struct {
 	UserIDPut      int    `json:"UserIDPut"`
 	DataPost       string `json:"datapost"`
 	UserIDRec      int    `json:"UserIDRec"`
+}
+
+type Like struct {
+	LikeID   int    `json:"LikeID"`
+	PhotoID  int    `json:"PhotoID"`
+	Datapost string `json:"Datapost"`
+	UserRec  int    `json:"UserRec"`
 }
 
 //func (b *Banned) FromDatabaseBanned(ban database.Banned) {
@@ -43,5 +50,14 @@ func (c *Comment) ToDatabaseComment() database.Comment {
 		PhotoID:     c.PhotoID,
 		Datapost:    c.DataPost,
 		UserIDRec:   c.UserIDRec,
+	}
+}
+
+func (l *Like) ToDatabaseLike() database.Like {
+	return database.Like{
+		LikeID:   l.LikeID,
+		PhotoID:  l.PhotoID,
+		DataPost: l.Datapost,
+		UserRec:  l.UserRec,
 	}
 }
