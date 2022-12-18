@@ -44,6 +44,11 @@ type Photo struct {
 	UserID         int       `json:"UserID"`
 }
 
+type Login struct {
+	LoginID   int    `json:"LoginID"`
+	LoginName string `json:"LoginName"`
+}
+
 //func (b *Banned) FromDatabaseBanned(ban database.Banned) {
 //	b.BannedID = ban.BannedID
 //	b.BanningID = ban.BanningID
@@ -102,5 +107,12 @@ func (u *Users) ToDatabaseUser() database.User {
 	return database.User{
 		ID:   u.ID,
 		Name: u.Username,
+	}
+}
+
+func (log *Login) ToDatabaseLogin() database.User {
+	return database.User{
+		ID:   log.LoginID,
+		Name: log.LoginName,
 	}
 }
