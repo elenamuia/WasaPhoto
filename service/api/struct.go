@@ -49,6 +49,13 @@ type Login struct {
 	LoginName string `json:"LoginName"`
 }
 
+type Profile struct {
+	UserID   int   `json:"UserID"`
+	Photos   []int `json:"Photos"`
+	Follower []int `json:"Follower"`
+	Followed []int `json:"Followed"`
+}
+
 //func (b *Banned) FromDatabaseBanned(ban database.Banned) {
 //	b.BannedID = ban.BannedID
 //	b.BanningID = ban.BanningID

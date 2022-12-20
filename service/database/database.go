@@ -81,6 +81,12 @@ type Login struct {
 	IDlog       int
 	UsernameLog string
 }
+type Profile struct {
+	UserID   int
+	Photos   []int
+	Follower []int
+	Followed []int
+}
 
 var ErrUserDoesNotExist = errors.New("User does not exist")
 var ErrPhotoDoesNotExist = errors.New("Photo does not exist")
@@ -98,7 +104,7 @@ type AppDatabase interface {
 	DeleteLike(like Like) (err error)
 	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)
-	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
+	GetProfile(userid int) (p Profile, err error)
 	LoginUser(l Login) (UserID int, err error)
 
 	PostPhoto(photo Photo) (err error)
