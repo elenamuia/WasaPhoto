@@ -19,7 +19,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 
 	}
 
-	err = rt.db.PostPhoto(photo.ToDatabasePhoto())
+	photos, err := rt.db.GetPhoto()
 	if err != nil {
 
 		ctx.Logger.WithError(err).Error("Can't post photo")
@@ -31,6 +31,6 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	// bannedUser.FromDatabaseBanned(dbban)
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(photo)
+	_ = json.NewEncoder(w).Encode(photos)
 
 }
