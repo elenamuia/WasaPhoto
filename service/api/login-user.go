@@ -20,17 +20,17 @@ func (rt *_router) loginUser(w http.ResponseWriter, r *http.Request, ps httprout
 
 	}
 
-	err = rt.db.LoginUserExisting(login.ToDatabaseLogin())
+	id, err := rt.db.LoginUser(login.ToDatabaseLogin())
 	if err != nil {
 
 		ctx.Logger.WithError(err).Error("Can't login")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-	
 
-	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-	// bannedUser.FromDatabaseBanned(dbban)
+		// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
+		// bannedUser.FromDatabaseBanned(dbban)
 
-	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(login)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(id)
+	}
 }

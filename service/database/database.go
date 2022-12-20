@@ -77,6 +77,11 @@ type Follow struct {
 	FollowedID int
 }
 
+type Login struct {
+	IDlog       int
+	UsernameLog string
+}
+
 var ErrUserDoesNotExist = errors.New("User does not exist")
 var ErrPhotoDoesNotExist = errors.New("Photo does not exist")
 var ErrCommentDoesNotExist = errors.New("Comment does not exist")
@@ -94,7 +99,7 @@ type AppDatabase interface {
 	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile() (UserList []User, PhotoID []int, NumFollower []int, NumFollowed []int, err error)
-	LoginUser(UserName string) (UserID int, err error)
+	LoginUser(l Login) (UserID int, err error)
 
 	PostPhoto(photo Photo) (err error)
 	PutFollow(follow Follow) error

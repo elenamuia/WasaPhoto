@@ -110,9 +110,9 @@ func (u *Users) ToDatabaseUser() database.User {
 	}
 }
 
-func (log *Login) ToDatabaseLogin() database.User {
-	return database.User{
-		ID:   log.LoginID,
-		Name: log.LoginName,
+func (log *Login) ToDatabaseLogin() database.Login {
+	return database.Login{
+		IDlog:       log.LoginID,
+		UsernameLog: log.LoginName,
 	}
 }
