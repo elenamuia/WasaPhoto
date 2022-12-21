@@ -20,7 +20,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/user/:id/photos/:id/comment/:id/", rt.wrap(rt.addComment))
 	rt.router.DELETE("/user/:id/photos/:id/comment/:id/", rt.wrap(rt.deleteComment))
 	rt.router.PUT("/user/:id/photos/:id/like/:id/", rt.wrap(rt.addLike))
-	rt.router.DELETE("/user/:id/photos/:id/comment/:id/", rt.wrap(rt.deleteLike))
+	rt.router.DELETE("/user/:id/photos/:id/like/:id/", rt.wrap(rt.deleteLike))
 	rt.router.PUT("/user/:id/photos/:id/followed/:id/", rt.wrap(rt.follow))
 	rt.router.DELETE("/user/:id/photos/:id/followed/:id/", rt.wrap(rt.unfollow))
 
