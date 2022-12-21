@@ -130,7 +130,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 	var tableName string
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE Users (
+		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
 			UserID int PRIMARY KEY,
 			username string NOT NULL	
 			) WITHOUT ROWID;
