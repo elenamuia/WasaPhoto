@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -12,24 +13,34 @@ import (
 
 func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedLike Like
+	id, err := strconv.Atoi("id")
+	authToken := r.Header.Get("authToken")
 
-	err := json.NewDecoder(r.Body).Decode(&deletedLike)
-	if err != nil {
+	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-		return
-	}
+	if bool == true {
+		err := json.NewDecoder(r.Body).Decode(&deletedLike)
+		if err != nil {
 
-	err = rt.db.DeleteLike(deletedLike.ToDatabaseLike())
-	if errors.Is(err, database.ErrLikeDoesNotExist) {
+			return
+		}
 
-		w.WriteHeader(http.StatusNotFound)
-		return
-	} else if err != nil {
+		err = rt.db.DeleteLike(deletedLike.ToDatabaseLike())
+		if errors.Is(err, database.ErrLikeDoesNotExist) {
 
-		ctx.Logger.WithError(err).WithField("LikeID", deletedLike).Error("can't unlike")
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
+
+			ctx.Logger.WithError(err).WithField("LikeID", deletedLike).Error("can't unlike")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+	} else {
+		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	w.WriteHeader(http.StatusNoContent)
 }
