@@ -25,7 +25,7 @@ func (rt *_router) loginUser(w http.ResponseWriter, r *http.Request, ps httprout
 
 		}
 
-		id, err := rt.db.LoginUser(login.ToDatabaseLogin())
+		idlog, err := rt.db.LoginUser(login.ToDatabaseLogin())
 		if err != nil {
 
 			ctx.Logger.WithError(err).Error("Can't login")
@@ -37,7 +37,7 @@ func (rt *_router) loginUser(w http.ResponseWriter, r *http.Request, ps httprout
 		// bannedUser.FromDatabaseBanned(dbban)
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(id)
+		_ = json.NewEncoder(w).Encode(idlog)
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
