@@ -5,7 +5,7 @@ func (db *appdbimpl) GetMyMainstream() ([]Photo, error) {
 	var ArrayofPhotos []Photo
 
 	// Plain simple SELECT query
-	rows, err := db.c.Query(`SELECT PhotoID, UserID, Photo, NumComment, NumLike, DataPost FROM Photo `)
+	rows, err := db.c.Query(`SELECT PhotoID, UserID, Photo, NumComment, NumLike, DataPost FROM Photo ORDER BY DataPost DESC `)
 	if err != nil {
 		return nil, err
 	}
@@ -25,5 +25,5 @@ func (db *appdbimpl) GetMyMainstream() ([]Photo, error) {
 		return nil, err
 	}
 
-	return ArrayofPhotos, nil
+	return (ArrayofPhotos), nil
 }
