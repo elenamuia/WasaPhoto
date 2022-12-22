@@ -7,8 +7,9 @@ import (
 )
 
 type Users struct {
-	ID       int    `json:"UserID"`
-	Username string `json:"Username"`
+	ID        int    `json:"UserID"`
+	Username  string `json:"Username"`
+	AuthToken string `json:"AuthToken"`
 }
 
 type Banned struct {
@@ -116,8 +117,9 @@ func (p *Photo) ToDatabasePhoto() database.Photo {
 
 func (u *Users) ToDatabaseUser() database.User {
 	return database.User{
-		ID:   u.ID,
-		Name: u.Username,
+		ID:        u.ID,
+		Name:      u.Username,
+		AuthToken: u.AuthToken,
 	}
 }
 
