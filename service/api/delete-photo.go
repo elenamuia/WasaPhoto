@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -12,26 +13,36 @@ import (
 
 func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedPhoto Photo
+	id, err := strconv.Atoi("id")
+	authToken := r.Header.Get("authToken")
 
-	err := json.NewDecoder(r.Body).Decode(&deletedPhoto)
-	if err != nil {
+	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-		return
-	}
+	if bool == true {
+		err := json.NewDecoder(r.Body).Decode(&deletedPhoto)
+		if err != nil {
 
-	err = rt.db.DeletePhoto(deletedPhoto.ToDatabasePhoto())
-	if errors.Is(err, database.ErrPhotoDoesNotExist) {
+			return
+		}
 
-		w.WriteHeader(http.StatusNotFound)
-		return
-	} else if err != nil {
+		err = rt.db.DeletePhoto(deletedPhoto.ToDatabasePhoto())
+		if errors.Is(err, database.ErrPhotoDoesNotExist) {
 
-		ctx.Logger.WithError(err).WithField("PhotoID", deletedPhoto).Error("can't delete photo")
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
+
+			ctx.Logger.WithError(err).WithField("PhotoID", deletedPhoto).Error("can't delete photo")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+
+	} else {
+		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-
 	}
-
-	w.WriteHeader(http.StatusNoContent)
-
 }
