@@ -21,5 +21,8 @@ func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
 		}
 		id = u.ID
 	}
+	if err = res.Err(); err != nil {
+		return 0, err
+	}
 	return id, nil
 }
