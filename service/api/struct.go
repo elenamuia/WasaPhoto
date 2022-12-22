@@ -1,6 +1,10 @@
 package api
 
-import "git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
+import (
+	"time"
+
+	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
+)
 
 type Users struct {
 	ID       int    `json:"UserID"`
@@ -13,19 +17,19 @@ type Banned struct {
 }
 
 type Comment struct {
-	CommentID      int    `json:"CommentID"`
-	CommentContent string `json:"CommentContent"`
-	PhotoID        int    `json:"PhotoID"`
-	UserIDPut      int    `json:"UserIDPut"`
-	DataPost       string `json:"datapost"`
-	UserIDRec      int    `json:"UserIDRec"`
+	CommentID      int       `json:"CommentID"`
+	CommentContent string    `json:"CommentContent"`
+	PhotoID        int       `json:"PhotoID"`
+	UserIDPut      int       `json:"UserIDPut"`
+	DataPost       time.Time `json:"datapost"`
+	UserIDRec      int       `json:"UserIDRec"`
 }
 
 type Like struct {
-	LikeID   int    `json:"LikeID"`
-	PhotoID  int    `json:"PhotoID"`
-	Datapost string `json:"Datapost"`
-	UserRec  int    `json:"UserRec"`
+	LikeID   int       `json:"LikeID"`
+	PhotoID  int       `json:"PhotoID"`
+	Datapost time.Time `json:"Datapost"`
+	UserRec  int       `json:"UserRec"`
 }
 
 type Follow struct {
@@ -40,7 +44,7 @@ type Photo struct {
 	NumComm        int       `json:"numComm"`
 	ArrayofLike    []Like    `json:"ArrayofLike"`
 	ArrayofComment []Comment `json:"ArrayofComment"`
-	Datapost       string    `json:"DataPost"`
+	Datapost       time.Time `json:"DataPost"`
 	UserID         int       `json:"UserID"`
 }
 

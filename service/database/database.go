@@ -34,6 +34,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
 
 type User struct {
@@ -48,14 +49,14 @@ type Photo struct {
 	NumComm        int
 	ArrayofLike    []Like
 	ArrayofComment []Comment
-	Datapost       string
+	Datapost       time.Time
 	UserID         int
 }
 
 type Like struct {
 	LikeID   int
 	PhotoID  int
-	DataPost string
+	DataPost time.Time
 	UserRec  int
 }
 
@@ -65,7 +66,7 @@ type Comment struct {
 	PhotoID     int
 	UserIDPut   int
 	UserIDRec   int
-	Datapost    string
+	Datapost    time.Time
 }
 type Banned struct {
 	BannedID  int
