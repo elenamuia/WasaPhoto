@@ -31,8 +31,6 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-		// bannedUser.FromDatabaseBanned(dbban)
 
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(photo)
