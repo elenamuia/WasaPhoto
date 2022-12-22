@@ -134,8 +134,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
 			UserID int PRIMARY KEY,
-			username string NOT NULL
-			authToken string NOT NULL	
+			username string NOT NULL,
+			AuthToken string NOT NULL	
 			) WITHOUT ROWID;
 			
 			CREATE TABLE IF NOT EXISTS Follower (
