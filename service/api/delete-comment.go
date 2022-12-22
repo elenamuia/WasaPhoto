@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -12,28 +13,39 @@ import (
 
 func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedComment Comment
+	id, err := strconv.Atoi("id")
 
-	err := json.NewDecoder(r.Body).Decode(&deletedComment)
-	if err != nil {
+	authToken := r.Header.Get("authToken")
 
-		return
-	}
+	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-	err = rt.db.DeleteComment(deletedComment.ToDatabaseComment())
-	if errors.Is(err, database.ErrCommentDoesNotExist) {
+	if bool == true {
+		err = json.NewDecoder(r.Body).Decode(&deletedComment)
+		if err != nil {
 
-		w.WriteHeader(http.StatusNotFound)
-		return
-	} else if err != nil {
+			return
+		}
 
-		ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("can't delete the comment")
+		err = rt.db.DeleteComment(deletedComment.ToDatabaseComment())
+		if errors.Is(err, database.ErrCommentDoesNotExist) {
+
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
+
+			ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("can't delete the comment")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		} else if deletedComment.UserIDPut != deletedComment.UserIDRec {
+			ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("Not Authorized")
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+
+	} else {
+		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-	} else if deletedComment.UserIDPut != deletedComment.UserIDRec {
-		ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("Not Authorized")
-		w.WriteHeader(http.StatusInternalServerError)
 	}
-
-	w.WriteHeader(http.StatusNoContent)
-
 }
