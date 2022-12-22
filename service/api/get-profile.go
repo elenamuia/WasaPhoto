@@ -13,27 +13,36 @@ import (
 // handler accepts a reqcontext.RequestContext (see httpRouterHandler).
 func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	idget, err := strconv.Atoi("id")
 	id, err := strconv.Atoi("id")
+	authToken := r.Header.Get("authToken")
 
-	if err != nil {
+	bool, err := rt.db.CheckAuthToken(id, authToken)
+	if bool == true {
+		if err != nil {
 
-		w.WriteHeader(http.StatusBadRequest)
-		return
+			w.WriteHeader(http.StatusBadRequest)
+			return
 
-	}
+		}
 
-	profile, err := rt.db.GetProfile(id)
-	if err != nil {
+		profile, err := rt.db.GetProfile(idget)
+		if err != nil {
 
-		ctx.Logger.WithError(err).Error("Can't get profile")
+			ctx.Logger.WithError(err).Error("Can't get profile")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
+		// bannedUser.FromDatabaseBanned(dbban)
+
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(profile)
+
+	} else {
+		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-	// bannedUser.FromDatabaseBanned(dbban)
-
-	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(profile)
-
 }
