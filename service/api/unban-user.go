@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -12,28 +13,37 @@ import (
 
 func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var unban Banned
+	id, err := strconv.Atoi("id")
+	authToken := r.Header.Get("authToken")
 
-	err := json.NewDecoder(r.Body).Decode(&unban)
-	if err != nil {
+	bool, err := rt.db.CheckAuthToken(id, authToken)
+	if bool == true {
+		err := json.NewDecoder(r.Body).Decode(&unban)
+		if err != nil {
 
-		return
-	}
+			return
+		}
 
-	err = rt.db.UnbanUser(unban.ToDatabaseBanned())
-	if errors.Is(err, database.ErrPhotoDoesNotExist) {
+		err = rt.db.UnbanUser(unban.ToDatabaseBanned())
+		if errors.Is(err, database.ErrPhotoDoesNotExist) {
 
-		w.WriteHeader(http.StatusNotFound)
-		return
-	} else if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else if err != nil {
 
-		ctx.Logger.WithError(err).WithField("BannedID", unban).Error("can't unban user")
+			ctx.Logger.WithError(err).WithField("BannedID", unban).Error("can't unban user")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+
+		} else if unban.BannedID == unban.BanningID {
+			ctx.Logger.WithError(err).WithField("BannedID", unban).Error("Not Authorized")
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+	} else {
+		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-
-	} else if unban.BannedID == unban.BanningID {
-		ctx.Logger.WithError(err).WithField("BannedID", unban).Error("Not Authorized")
-		w.WriteHeader(http.StatusInternalServerError)
 	}
-
-	w.WriteHeader(http.StatusNoContent)
 }
