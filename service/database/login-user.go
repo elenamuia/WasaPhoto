@@ -2,12 +2,12 @@ package database
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
-	_, err = db.c.Exec(`INSERT OR IGNORE into Users(UserID, username) ((select max(id) from Users)+1,?)`,
+	_, err = db.c.Exec(`INSERT OR IGNORE into Users(UserID, username) VALUES ((select max(id) from Users)+1,?)`,
 		l.UsernameLog)
 	if err != nil {
 		return 0, err
 	}
-	rows, err := db.c.Query(`select * from Users where username = ?`, l.UsernameLog)
+	rows, err := db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
 	if err != nil {
 		return 0, err
 	}
