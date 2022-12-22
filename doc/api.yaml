@@ -575,8 +575,8 @@ components:
             type: array
             minItems: 0
             maxItems: 10000
-            properties:
-              UserLike:
+            items:
+              
                 $ref: "#/components/schemas/UserId"
         ArrayOfComments:
           description: Array containing all comments relative to a certain photo
@@ -585,13 +585,11 @@ components:
             type: array
             minItems: 0
             maxItems: 1000
-            properties:
-              UserComment:
-                $ref: "#/components/schemas/UserId"
-              CommentContent:
-                $ref: "#/components/schemas/CommentContent"
-              CommentId:
-                $ref: "#/components/schemas/CommentId"
+            items:
+              allOf:
+              - $ref: "#/components/schemas/UserId"
+              - $ref: "#/components/schemas/CommentContent"
+              - $ref: "#/components/schemas/CommentId"
 
         datePost:
           type: string
