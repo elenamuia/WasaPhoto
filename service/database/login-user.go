@@ -1,27 +1,26 @@
 package database
 
+import "math/rand"
+
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
-	_, err = db.c.Exec(`INSERT OR IGNORE into Users(UserID, username) VALUES ((select max(id) from Users)+1,?)`,
-		l.UsernameLog)
+	var AuthToken int = rand.Int()
+
+	res, err := db.c.Exec(`INSERT OR IGNORE into Users(UserID, username, AuthToken) ((select max(id) from Users)+1,?, ?)`,
+		l.UsernameLog, AuthToken)
 	if err != nil {
 		return 0, err
 	}
-	rows, err := db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
+	_, err = db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
 	if err != nil {
 		return 0, err
 	}
-	var id int
-	for rows.Next() {
-		var u User
-		err = rows.Scan(&u.ID, &u.Name)
-		if err != nil {
-			return 0, err
-		}
-		id = u.ID
-	}
-	if err = rows.Err(); err != nil {
+	lastInsertID, err := res.LastInsertId()
+	if err != nil {
 		return 0, err
 	}
-	return id, nil
+
+	UserID = int(lastInsertID)
+
+	return UserID, nil
 }
