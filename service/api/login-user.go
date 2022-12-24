@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -11,10 +10,10 @@ import (
 
 func (rt *_router) loginUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var login Login
-	id, err := strconv.Atoi("id")
+
 	authToken := r.Header.Get("authToken")
 
-	err = json.NewDecoder(r.Body).Decode(&login)
+	err := json.NewDecoder(r.Body).Decode(&login)
 	defer r.Body.Close()
 	if err != nil {
 
@@ -23,7 +22,7 @@ func (rt *_router) loginUser(w http.ResponseWriter, r *http.Request, ps httprout
 
 	}
 
-	id, err = rt.db.LoginUser(login.ToDatabaseLogin())
+	id, err := rt.db.LoginUser(login.ToDatabaseLogin())
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 	if err != nil {
 

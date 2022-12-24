@@ -6,21 +6,24 @@ import "math/rand"
 func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
 	var AuthToken int = rand.Int()
 
-	res, err := db.c.Exec(`INSERT OR IGNORE into Users(UserID, username, AuthToken) ((select max(id) from Users)+1,?, ?)`,
-		l.UsernameLog, AuthToken)
+	_, err = db.c.Exec(`INSERT OR IGNORE into Users(UserID, username, AuthToken) ?, ?, ?)`,
+		l.IDlog, l.UsernameLog, AuthToken)
 	if err != nil {
 		return 0, err
 	}
-	_, err = db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
+	rows, err := db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
 	if err != nil {
 		return 0, err
 	}
-	lastInsertID, err := res.LastInsertId()
-	if err != nil {
-		return 0, err
+	var id int
+	for rows.Next() {
+		var u User
+		err = rows.Scan(&u.ID, &u.Name, &u.AuthToken)
+		if err != nil {
+			return 0, err
+		}
+		id = u.ID
 	}
 
-	UserID = int(lastInsertID)
-
-	return UserID, nil
+	return id, nil
 }
