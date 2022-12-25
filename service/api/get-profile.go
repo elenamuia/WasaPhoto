@@ -11,7 +11,7 @@ import (
 
 // getContextReply is an example of HTTP endpoint that returns "Hello World!" as a plain text. The signature of this
 // handler accepts a reqcontext.RequestContext (see httpRouterHandler).
-func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	idget, err := strconv.Atoi("id")
 	id, err := strconv.Atoi("id")
