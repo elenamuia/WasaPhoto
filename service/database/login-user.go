@@ -6,7 +6,7 @@ import "math/rand"
 func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
 	var AuthToken int = rand.Int()
 
-	_, err = db.c.Exec(`INSERT OR IGNORE into Users(UserID, username, AuthToken) ?, ?, ?)`,
+	_, err = db.c.Exec(`INSERT OR IGNORE into Users (UserID, username, AuthToken) VALUES (?, ?, ?))`,
 		l.IDlog, l.UsernameLog, AuthToken)
 	if err != nil {
 		return 0, err
@@ -15,15 +15,15 @@ func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
 	if err != nil {
 		return 0, err
 	}
-	var id int
+
 	for rows.Next() {
 		var u User
 		err = rows.Scan(&u.ID, &u.Name, &u.AuthToken)
 		if err != nil {
 			return 0, err
 		}
-		id = u.ID
+		UserID = u.ID
 	}
 
-	return id, nil
+	return UserID, nil
 }
