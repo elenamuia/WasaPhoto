@@ -12,7 +12,11 @@ import (
 func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	var bannedUser Banned
-	id, err := strconv.Atoi("id")
+	id, err1 := strconv.Atoi("id")
+	if err1 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	authToken := r.Header.Get("authToken")
 

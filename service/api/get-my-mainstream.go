@@ -13,9 +13,13 @@ import (
 // getContextReply is an example of HTTP endpoint that returns "Hello World!" as a plain text. The signature of this
 // handler accepts a reqcontext.RequestContext (see httpRouterHandler).
 func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	var err error
+
 	var photo []database.Photo
-	id, err := strconv.Atoi("id")
+	id, err1 := strconv.Atoi("id")
+	if err1 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)

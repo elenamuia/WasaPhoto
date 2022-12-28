@@ -14,7 +14,11 @@ import (
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	// The Fountain ID in the path is a 64-bit unsigned integer. Let's parse it.
 
-	id, err := strconv.Atoi("id")
+	id, err1 := strconv.Atoi("id")
+	if err1 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)

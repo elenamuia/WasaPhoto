@@ -13,8 +13,16 @@ import (
 // handler accepts a reqcontext.RequestContext (see httpRouterHandler).
 func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	idget, err := strconv.Atoi("id")
-	id, err := strconv.Atoi("id")
+	idget, err1 := strconv.Atoi("id")
+	if err1 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	id, err2 := strconv.Atoi("id")
+	if err2 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)

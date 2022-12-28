@@ -39,14 +39,14 @@ type Follow struct {
 }
 
 type Photo struct {
-	ID             int       `json:"PhotoID"`
-	PhotoStructure string    `json:"PhotoStructure"`
-	NumLikes       int       `json:"numLikes"`
-	NumComm        int       `json:"numComm"`
-	ArrayofLike    []Like    `json:"ArrayofLike"`
-	ArrayofComment []Comment `json:"ArrayofComment"`
-	Datapost       time.Time `json:"DataPost"`
-	UserID         int       `json:"UserID"`
+	ID             int                `json:"PhotoID"`
+	PhotoStructure string             `json:"PhotoStructure"`
+	NumLikes       int                `json:"numLikes"`
+	NumComm        int                `json:"numComm"`
+	Arrayoflike    []database.Like    `json:"Arrayoflike"`
+	Arrayofcomment []database.Comment `json:"Arrayofcomment"`
+	Datapost       time.Time          `json:"DataPost"`
+	UserID         int                `json:"UserID"`
 }
 
 type Login struct {
@@ -107,8 +107,8 @@ func (p *Photo) ToDatabasePhoto() database.Photo {
 		PhotoStructure: p.PhotoStructure,
 		NumLikes:       p.NumLikes,
 		NumComm:        p.NumComm,
-		ArrayofLike:    p.ToDatabasePhoto().ArrayofLike,
-		ArrayofComment: p.ToDatabasePhoto().ArrayofComment,
+		ArrayofLike:    p.Arrayoflike,
+		ArrayofComment: p.Arrayofcomment,
 		Datapost:       p.Datapost,
 		UserID:         p.UserID,
 	}

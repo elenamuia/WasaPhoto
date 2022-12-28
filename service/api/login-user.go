@@ -13,16 +13,20 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	authToken := r.Header.Get("authToken")
 
-	err := json.NewDecoder(r.Body).Decode(&login)
+	err1 := json.NewDecoder(r.Body).Decode(&login)
 	defer r.Body.Close()
-	if err != nil {
+	if err1 != nil {
 
 		w.WriteHeader(http.StatusBadRequest)
 		return
 
 	}
 
-	id, err := rt.db.LoginUser(login.ToDatabaseLogin())
+	id, err2 := rt.db.LoginUser(login.ToDatabaseLogin())
+	if err2 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 	if err != nil {
 
