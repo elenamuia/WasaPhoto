@@ -22,18 +22,21 @@ func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
 	if err != nil {
 		return 0, err
 	}
-	rows, err := db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
-	if err != nil {
+	rows, err1 := db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
+	if err1 != nil {
 		return 0, err
 	}
 
 	for rows.Next() {
 		var u User
-		err = rows.Scan(&u.ID, &u.Name, &u.AuthToken)
-		if err != nil {
+		err3 := rows.Scan(&u.ID, &u.Name, &u.AuthToken)
+		if err3 != nil {
 			return 0, err
 		}
 		UserID = u.ID
+	}
+	if err = rows.Err(); err != nil {
+		return 0, err
 	}
 
 	return UserID, nil

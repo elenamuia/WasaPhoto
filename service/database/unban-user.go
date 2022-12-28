@@ -1,10 +1,10 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) UnbanUser(ban Banned) (err error) {
-	res, err := db.c.Exec(`DELETE FROM Banned WHERE BannedID=? AND BanningID = ?`, ban.BannedID, ban.BanningID)
-	if err != nil {
-		return err
+func (db *appdbimpl) UnbanUser(ban Banned) error {
+	res, err1 := db.c.Exec(`DELETE FROM Banned WHERE BannedID=? AND BanningID = ?`, ban.BannedID, ban.BanningID)
+	if err1 != nil {
+		return err1
 	}
 
 	affected, err := res.RowsAffected()

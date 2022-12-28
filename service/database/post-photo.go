@@ -3,12 +3,12 @@ package database
 import "time"
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) PostPhoto(photo Photo) (err error) {
+func (db *appdbimpl) PostPhoto(photo Photo) error {
 
-	res, err := db.c.Exec(`INSERT INTO Photo (PhotoID, UserID, Photo, NumComment, NumLike, DataPost) VALUES (?, ?, ?, ?,?,?)`,
+	res, err1 := db.c.Exec(`INSERT INTO Photo (PhotoID, UserID, Photo, NumComment, NumLike, DataPost) VALUES (?, ?, ?, ?,?,?)`,
 		photo.ID, photo.UserID, photo.PhotoStructure, photo.NumComm, photo.NumLikes, time.Now())
-	if err != nil {
-		return err
+	if err1 != nil {
+		return err1
 	}
 	lastInsertID, err := res.LastInsertId()
 	if err != nil {

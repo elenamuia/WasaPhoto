@@ -1,10 +1,10 @@
 package database
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) DeleteProfile(user User) (err error) {
-	res, err := db.c.Exec(`DELETE FROM Users WHERE UserID = ?`, user.ID)
-	if err != nil {
-		return err
+func (db *appdbimpl) DeleteProfile(user User) error {
+	res, err1 := db.c.Exec(`DELETE FROM Users WHERE UserID = ?`, user.ID)
+	if err1 != nil {
+		return err1
 	}
 
 	affected, err := res.RowsAffected()
