@@ -17,7 +17,7 @@ func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps ht
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 		err := json.NewDecoder(r.Body).Decode(&deletedUser)
 		if err != nil {
 

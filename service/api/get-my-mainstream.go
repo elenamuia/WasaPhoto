@@ -19,7 +19,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 
 		photo, err = rt.db.GetMyMainstream()
 

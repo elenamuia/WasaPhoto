@@ -18,7 +18,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-	if bool == true {
+	if bool {
 
 		err = json.NewDecoder(r.Body).Decode(&bannedUser)
 		if err != nil {

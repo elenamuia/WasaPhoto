@@ -18,7 +18,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 		if err != nil {
 			// The value was not uint64, reject the action indicating an error on the client side.
 			w.WriteHeader(http.StatusBadRequest)

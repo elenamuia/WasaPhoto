@@ -16,7 +16,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-	if bool == true {
+	if bool {
 		err = json.NewDecoder(r.Body).Decode(&comment)
 		if err != nil {
 

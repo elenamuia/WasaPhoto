@@ -16,7 +16,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 		err = json.NewDecoder(r.Body).Decode(&like)
 		if err != nil {
 			// The body was not a parseable JSON, reject it

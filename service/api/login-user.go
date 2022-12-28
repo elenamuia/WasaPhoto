@@ -29,7 +29,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		ctx.Logger.WithError(err).Error("Can't login")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-	} else if bool != true {
+	} else if !bool {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return

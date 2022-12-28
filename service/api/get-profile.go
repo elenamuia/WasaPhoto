@@ -18,7 +18,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 		if err != nil {
 
 			w.WriteHeader(http.StatusBadRequest)

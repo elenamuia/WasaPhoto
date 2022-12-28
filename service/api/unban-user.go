@@ -17,7 +17,7 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 		err := json.NewDecoder(r.Body).Decode(&unban)
 		if err != nil {
 

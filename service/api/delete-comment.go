@@ -19,7 +19,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-	if bool == true {
+	if bool {
 		err = json.NewDecoder(r.Body).Decode(&deletedComment)
 		if err != nil {
 

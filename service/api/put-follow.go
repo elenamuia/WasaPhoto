@@ -15,7 +15,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if bool == true {
+	if bool {
 		err := json.NewDecoder(r.Body).Decode(&follow)
 		if err != nil {
 

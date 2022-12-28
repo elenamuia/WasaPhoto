@@ -18,7 +18,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 
-	if bool == true {
+	if bool {
 		err := json.NewDecoder(r.Body).Decode(&deletedPhoto)
 		if err != nil {
 
