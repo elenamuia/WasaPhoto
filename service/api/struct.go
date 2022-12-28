@@ -61,11 +61,11 @@ type Profile struct {
 	Followed []int `json:"Followed"`
 }
 
-//func (b *Banned) FromDatabaseBanned(ban database.Banned) {
+// func (b *Banned) FromDatabaseBanned(ban database.Banned) {
 //	b.BannedID = ban.BannedID
 //	b.BanningID = ban.BanningID
 
-//}
+// }
 
 // ToDatabase returns the fountain in a database-compatible representation
 func (b *Banned) ToDatabaseBanned() database.Banned {
