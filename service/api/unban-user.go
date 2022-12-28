@@ -24,7 +24,7 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 			return
 		}
 
-		err = rt.db.UnbanUser(unban.ToDatabaseBanned())
+		err = rt.db.UnbanUser(unban.ToDatabase())
 		if errors.Is(err, database.ErrPhotoDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)

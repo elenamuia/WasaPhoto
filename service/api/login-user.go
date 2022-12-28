@@ -35,10 +35,9 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-	// bannedUser.FromDatabaseBanned(dbban)
+	login.FromDatabase(id)
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(id)
+	_ = json.NewEncoder(w).Encode(login)
 
 }

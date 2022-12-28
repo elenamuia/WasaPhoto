@@ -61,21 +61,20 @@ type Profile struct {
 	Followed []int `json:"Followed"`
 }
 
-// func (b *Banned) FromDatabaseBanned(ban database.Banned) {
-//	b.BannedID = ban.BannedID
-//	b.BanningID = ban.BanningID
+func (l *Login) FromDatabase(log int) {
+	l.LoginID = log
 
-// }
+}
 
 // ToDatabase returns the fountain in a database-compatible representation
-func (b *Banned) ToDatabaseBanned() database.Banned {
+func (b *Banned) ToDatabase() database.Banned {
 	return database.Banned{
 		BannedID:  b.BannedID,
 		BanningID: b.BanningID,
 	}
 }
 
-func (c *Comment) ToDatabaseComment() database.Comment {
+func (c *Comment) ToDatabase() database.Comment {
 	return database.Comment{
 		CommentID:   c.CommentID,
 		CommMessage: c.CommentContent,
@@ -86,7 +85,7 @@ func (c *Comment) ToDatabaseComment() database.Comment {
 	}
 }
 
-func (l *Like) ToDatabaseLike() database.Like {
+func (l *Like) ToDatabase() database.Like {
 	return database.Like{
 		LikeID:   l.LikeID,
 		PhotoID:  l.PhotoID,

@@ -27,7 +27,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 		// Create the fountain in the database. Note that this function will return a new instance of the fountain with the
 		// same information, plus the ID.
-		err = rt.db.AddLike(like.ToDatabaseLike())
+		err = rt.db.AddLike(like.ToDatabase())
 		if err != nil {
 
 			ctx.Logger.WithError(err).Error("can't comment the photo")

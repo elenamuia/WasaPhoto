@@ -25,7 +25,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 
 		}
 
-		err = rt.db.AddComment(comment.ToDatabaseComment())
+		err = rt.db.AddComment(comment.ToDatabase())
 		if err != nil {
 
 			ctx.Logger.WithError(err).Error("can't comment the photo")
