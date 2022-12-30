@@ -14,34 +14,37 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	authToken := r.Header.Get("authToken")
 
 	err1 := json.NewDecoder(r.Body).Decode(&login)
-	defer r.Body.Close()
-	if err1 != nil {
 
+	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
-
 	}
 
-	id, err2 := rt.db.LoginUser(login.ToDatabaseLogin())
+	id, isNew, err2 := rt.db.LoginUser(login.ToDatabaseLogin())
+
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	bool, err := rt.db.CheckAuthToken(id, authToken)
-	if err != nil {
 
-		ctx.Logger.WithError(err).Error("Can't login")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	} else if !bool {
-		ctx.Logger.WithError(err).Error("Uncorrect token")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+	if !isNew {
+		bool, err := rt.db.CheckAuthToken(id, authToken)
+		if err != nil {
+			ctx.Logger.WithError(err).Error("Can't login")
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode("Can't login")
+			return
+		} else if !bool {
+			ctx.Logger.WithError(err).Error("Uncorrect token")
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode("Uncorrect token")
+			return
+		}
 	}
 
-	login.FromDatabase(id)
-
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(login)
+	_ = json.NewEncoder(w).Encode(id)
 
 }

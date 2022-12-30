@@ -107,7 +107,7 @@ type AppDatabase interface {
 	DeleteProfile(user User) (err error)
 	GetPhoto() (Photo, error)
 	GetProfile(userid int) (p Profile, err error)
-	LoginUser(l Login) (UserID int, err error)
+	LoginUser(l Login) (UserID int, isNew bool, err error)
 	CheckAuthToken(userId int, AuthToken string) (bool, error)
 	PostPhoto(photo Photo) (err error)
 	PutFollow(follow Follow) error

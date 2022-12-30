@@ -1,6 +1,8 @@
 package database
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -13,31 +15,36 @@ func RandStringBytes(n int) string {
 }
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) LoginUser(l Login) (UserID int, err error) {
+func (db *appdbimpl) LoginUser(l Login) (UserID int, isNew bool, err error) {
 
 	var AuthToken = RandStringBytes(15)
 
-	_, err = db.c.Exec(`INSERT OR IGNORE into Users (UserID, username, AuthToken) VALUES (?, ?, ?))`,
-		l.IDlog, l.UsernameLog, AuthToken)
-	if err != nil {
-		return 0, err
-	}
-	rows, err1 := db.c.Query(`SELECT * from Users where username = ?`, l.UsernameLog)
+	rows, err1 := db.c.Query(`SELECT * from Users where UserID = ?`, l.IDlog)
+
 	if err1 != nil {
-		return 0, err
+		return 0, false, err
 	}
 
-	for rows.Next() {
-		var u User
-		err3 := rows.Scan(&u.ID, &u.Name, &u.AuthToken)
-		if err3 != nil {
-			return 0, err
-		}
-		UserID = u.ID
-	}
 	if err = rows.Err(); err != nil {
-		return 0, err
+		return 0, false, err
 	}
 
-	return UserID, nil
+	if !rows.Next() {
+		_, err = db.c.Exec(`INSERT into Users (UserID, username, AuthToken) VALUES (?, ?, ?)`,
+			l.IDlog, l.UsernameLog, AuthToken)
+		if err != nil {
+			return 0, true, err
+		}
+		return l.IDlog, true, nil
+	}
+	/*
+		var u User
+		err2 := rows.Scan(&u.ID, &u.Name, &u.AuthToken)
+		if err2 != nil {
+			return 0, false, err
+		}
+		fmt.Println(u.ID)
+	*/
+	return l.IDlog, false, nil
+
 }
