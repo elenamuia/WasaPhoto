@@ -1,6 +1,5 @@
 package database
 
-// GetName is an example that shows you how to query data
 func (db *appdbimpl) Updateusername(user User) (string, error) {
 	var username string
 	res, err1 := db.c.Exec(`UPDATE Users SET username = ? WHERE UserID=?`,
@@ -13,7 +12,7 @@ func (db *appdbimpl) Updateusername(user User) (string, error) {
 	if err != nil {
 		return username, err
 	} else if affected == 0 {
-		// If we didn't delete any row, then the fountain didn't exist
+
 		return "", ErrUserDoesNotExist
 	}
 	username = user.Name

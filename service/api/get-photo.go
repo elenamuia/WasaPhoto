@@ -36,9 +36,6 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 			return
 		}
 
-		// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-		// bannedUser.FromDatabaseBanned(dbban)
-
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(photos)
 

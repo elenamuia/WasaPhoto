@@ -1,6 +1,5 @@
 package database
 
-// GetName is an example that shows you how to query data
 func (db *appdbimpl) BanUser(ban Banned) (err error) {
 	_, err = db.c.Exec(`INSERT INTO Banned(BannedID, BanningID) VALUES (?,?)`,
 		ban.BannedID, ban.BanningID)

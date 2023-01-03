@@ -2,7 +2,6 @@ package database
 
 import "time"
 
-// GetName is an example that shows you how to query data
 func (db *appdbimpl) PostPhoto(photo Photo) error {
 
 	res, err1 := db.c.Exec(`INSERT INTO Photo (PhotoID, UserID, Photo, NumComment, NumLike, DataPost) VALUES (?, ?, ?, ?,?,?)`,

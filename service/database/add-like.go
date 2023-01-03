@@ -2,7 +2,6 @@ package database
 
 import "time"
 
-// GetName is an example that shows you how to query data
 func (db *appdbimpl) AddLike(like Like) error {
 	res, err1 := db.c.Exec(`INSERT INTO LIKE(UserIdPutting, PhotoID, UserIDReceiving, Datapost) VALUES (?,?,?,?)`,
 		like.LikeID, like.PhotoID, like.UserRec, time.Now())

@@ -1,6 +1,5 @@
 package database
 
-// GetName is an example that shows you how to query data
 func (db *appdbimpl) GetProfile(userid int) (p Profile, err error) {
 
 	rows, err1 := db.c.Query("SELECT p.PhotoID, p.UserID, count(f.FollowerID) as NumFollowed,  count(f.FollowedID) as NumFollower FROM Photo as p, Follower as f WHERE UserID=  ? ", userid)

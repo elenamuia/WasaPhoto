@@ -44,9 +44,6 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 			return
 		}
 
-		// Here we can re-use `fountain` as FromDatabase is overwriting every variabile in the structure.
-		// bannedUser.FromDatabaseBanned(dbban)
-
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(follow)
 	} else {

@@ -14,7 +14,6 @@ func RandStringBytes(n int) string {
 	return string(b)
 }
 
-// GetName is an example that shows you how to query data
 func (db *appdbimpl) LoginUser(l Login) (UserID int, isNew bool, err error) {
 
 	var AuthToken = RandStringBytes(15)
@@ -37,14 +36,7 @@ func (db *appdbimpl) LoginUser(l Login) (UserID int, isNew bool, err error) {
 		}
 		return l.IDlog, true, nil
 	}
-	/*
-		var u User
-		err2 := rows.Scan(&u.ID, &u.Name, &u.AuthToken)
-		if err2 != nil {
-			return 0, false, err
-		}
-		fmt.Println(u.ID)
-	*/
+
 	return l.IDlog, false, nil
 
 }
