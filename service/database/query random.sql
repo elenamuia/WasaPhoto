@@ -1,2 +1,3 @@
 -- SQLite
-select * from Users;
+--delete  from Follower where FollowedID = 1234;
+select * from Follower
