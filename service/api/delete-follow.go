@@ -13,7 +13,7 @@ import (
 
 func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedFollow Follow
-	id, err1 := strconv.Atoi("id")
+	id, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
