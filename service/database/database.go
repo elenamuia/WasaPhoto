@@ -113,7 +113,7 @@ type AppDatabase interface {
 	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream() (ArrayofPhotos []Photo, err error)
-	Updateusername(User) (err error)
+	Updateusername(User) (string, error)
 	Ping() error
 }
 

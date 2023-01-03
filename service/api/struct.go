@@ -122,6 +122,10 @@ func (u *Users) ToDatabaseUser() database.User {
 	}
 }
 
+func (u *Users) FromDatabase(username string) {
+	u.Username = username
+}
+
 func (log *Login) ToDatabaseLogin() database.Login {
 	return database.Login{
 		IDlog:       log.LoginID,
