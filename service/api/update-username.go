@@ -32,8 +32,8 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		}
 
 		// Read the new content for the fountain from the request body.
-		var updatedUsername Users
-		err = json.NewDecoder(r.Body).Decode(&updatedUsername)
+		var updatedUser Users
+		err = json.NewDecoder(r.Body).Decode(&updatedUser)
 		if err != nil {
 			// The body was not a parseable JSON, reject it
 			fmt.Print("Message2")
@@ -43,10 +43,10 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 		// The client is not supposed to send us the ID in the body, as the fountain ID is already specified in the path,
 		// and it's immutable. So, here we overwrite the ID in the JSON with the `id` variable (that comes from the URL).
-		updatedUsername.ID = id
+		updatedUser.ID = id
 
 		// Update the fountain in the database.
-		username, err2 := rt.db.Updateusername(updatedUsername.ToDatabaseUser())
+		username, err2 := rt.db.Updateusername(updatedUser.ToDatabaseUser())
 		fmt.Println(username)
 		if errors.Is(err, database.ErrUserDoesNotExist) {
 			// The fountain (indicated by `id`) does not exist, reject the action indicating an error on the client side.
@@ -62,9 +62,10 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 
 		}
-		updatedUsername.Username = username
+		updatedUser.Username = username
+		updatedUser.AuthToken = authToken
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(username)
+		_ = json.NewEncoder(w).Encode(updatedUser)
 
 		w.WriteHeader(http.StatusNoContent)
 	} else {
