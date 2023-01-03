@@ -17,7 +17,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 	id, err1 := strconv.Atoi(ps.ByName("id"))
 	if err1 != nil {
-		fmt.Print("Message3", err1)
+
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -26,7 +26,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 	if bool {
 		if err != nil {
-			fmt.Print("Message1")
+
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -36,7 +36,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		err = json.NewDecoder(r.Body).Decode(&updatedUser)
 		if err != nil {
 			// The body was not a parseable JSON, reject it
-			fmt.Print("Message2")
+
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}

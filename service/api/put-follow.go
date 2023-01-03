@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,18 +12,21 @@ import (
 
 func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var follow Follow
-	id, err1 := strconv.Atoi("id")
+
+	userid, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
+		fmt.Print("Message1")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(userid, authToken)
 	if bool {
 		err := json.NewDecoder(r.Body).Decode(&follow)
 		if err != nil {
-
+			fmt.Print("Message2")
 			w.WriteHeader(http.StatusBadRequest)
 			return
 
