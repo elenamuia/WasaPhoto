@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,8 +13,9 @@ import (
 func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	var bannedUser Banned
-	id, err1 := strconv.Atoi("id")
+	id, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
+		fmt.Println("message1")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -25,6 +27,10 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	if bool {
 
 		err = json.NewDecoder(r.Body).Decode(&bannedUser)
+		if bannedUser.BannedID == bannedUser.BanningID {
+			ctx.Logger.WithError(err).WithField("BannedID", bannedUser).Error("A user cannot ban himself/herself")
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		if err != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
@@ -33,14 +39,12 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		}
 
 		err = rt.db.BanUser(bannedUser.ToDatabase())
+		fmt.Println(bannedUser.BannedID)
 		if err != nil {
-
+			fmt.Println("message2")
 			ctx.Logger.WithError(err).Error("can't ban the user")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
-		} else if bannedUser.BannedID != bannedUser.BanningID {
-			ctx.Logger.WithError(err).WithField("BannedID", bannedUser).Error("Not Authorized")
-			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 		w.Header().Set("Content-Type", "application/json")

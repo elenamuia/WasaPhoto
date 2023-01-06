@@ -13,8 +13,8 @@ type Users struct {
 }
 
 type Banned struct {
-	BannedID  int `json:"BannedID"`
 	BanningID int `json:"BanningID"`
+	BannedID  int `json:"BannedID"`
 }
 
 type Comment struct {
@@ -69,8 +69,9 @@ func (l *Login) FromDatabase(log int) {
 // ToDatabase returns the fountain in a database-compatible representation
 func (b *Banned) ToDatabase() database.Banned {
 	return database.Banned{
-		BannedID:  b.BannedID,
+
 		BanningID: b.BanningID,
+		BannedID:  b.BannedID,
 	}
 }
 
