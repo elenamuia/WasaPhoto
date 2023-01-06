@@ -7,14 +7,14 @@ import (
 // Handler returns an instance of httprouter.Router that handle APIs registered here
 func (rt *_router) Handler() http.Handler {
 	// Register routes
-	rt.router.POST("/login", rt.wrap(rt.doLogin))
+	rt.router.POST("/login/", rt.wrap(rt.doLogin))
 	rt.router.PUT("/users/:userid", rt.wrap(rt.setMyUserName))
 	rt.router.DELETE("/users/:userid", rt.wrap(rt.deleteMyProfile))
-	rt.router.GET("/users/:userid/profile", rt.wrap(rt.getUserProfile))
-	rt.router.GET("/users/:userid/mainstream", rt.wrap(rt.getMyStream))
+	rt.router.GET("/users/:userid/profile/", rt.wrap(rt.getUserProfile))
+	rt.router.GET("/users/:userid/mainstream/", rt.wrap(rt.getMyStream))
 	rt.router.PUT("/users/:userid/banned/:BannedId", rt.wrap(rt.banUser))
 	rt.router.DELETE("/users/:userid/banned/:BannedId", rt.wrap(rt.unbanUser))
-	rt.router.POST("/users/:userid/photos", rt.wrap(rt.uploadPhoto))
+	rt.router.POST("/users/:userid/photos/", rt.wrap(rt.uploadPhoto))
 	rt.router.DELETE("/users/:userid/photos/:photoid", rt.wrap(rt.deletePhoto))
 	rt.router.GET("/users/:userid/photos/:photoid", rt.wrap(rt.getPhoto))
 	rt.router.PUT("/users/:userid/photos/:photoid/comments/:commentid", rt.wrap(rt.commentPhoto))
