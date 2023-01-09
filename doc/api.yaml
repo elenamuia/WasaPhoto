@@ -143,7 +143,7 @@ paths:
 
 
 
-  /user/{userid}/mainstream/:
+  /users/{userid}/mainstream/:
     parameters:
     - $ref: "#/components/parameters/userid"
     get:
@@ -175,7 +175,7 @@ paths:
 
 
 
-  /user/{userid}/banned/{BannedId}:
+  /users/{userid}/banned/{BannedId}:
     parameters:
     - $ref: "#/components/parameters/userid"
       
@@ -235,7 +235,7 @@ paths:
 
       
 
-  /user/{userid}/followed/{followedUserId}:
+  /users/{userid}/followed/{followedUserId}:
     parameters:
     - $ref: "#/components/parameters/userid"
       
@@ -425,7 +425,7 @@ paths:
           $ref: "#/components/responses/Forbidden"
       
 
-  /user/{userid}/photos/{photoid}/like/{likeid}:
+  /users/{userid}/photos/{photoid}/like/{likeid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
     - $ref: "#/components/parameters/userid"
