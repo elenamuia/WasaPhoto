@@ -86,7 +86,7 @@ func run() error {
 	// sql.Open è il driver usato per implementare il protocollo usato
 	// per sviluppare la connessione col db
 
-	//cfg.DB.Filename dice come accedere al datastore sottostante
+	// cfg.DB.Filename dice come accedere al datastore sottostante
 	dbconn, err := sql.Open("sqlite3", cfg.DB.Filename)
 	if err != nil {
 		logger.WithError(err).Error("error opening SQLite DB")
