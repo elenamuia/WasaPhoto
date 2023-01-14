@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
+
 	"net/http"
 	"strconv"
 
@@ -15,7 +15,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 
 	userid, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
-		fmt.Print("Message1")
+
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -28,7 +28,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 		err := json.NewDecoder(r.Body).Decode(&follow)
 
 		if err != nil {
-			fmt.Print("Message2")
+
 			w.WriteHeader(http.StatusBadRequest)
 			return
 

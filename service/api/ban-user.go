@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
+
 	"net/http"
 	"strconv"
 
@@ -15,7 +15,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	var bannedUser Banned
 	id, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
-		fmt.Println("message1")
+
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -39,9 +39,9 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		}
 
 		err = rt.db.BanUser(bannedUser.ToDatabase())
-		fmt.Println(bannedUser.BannedID)
+
 		if err != nil {
-			fmt.Println("message2")
+
 			ctx.Logger.WithError(err).Error("can't ban the user")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
