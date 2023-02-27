@@ -3,13 +3,13 @@ package api
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
+	"github.com/julienschmidt/httprouter"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
-
-	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
-	"github.com/julienschmidt/httprouter"
 )
 
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
@@ -18,12 +18,14 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		fmt.Printf("err2")
 		return
 	}
 
 	userid, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		fmt.Printf("err1")
 		return
 	}
 
@@ -61,6 +63,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		if err != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
+			fmt.Printf("err")
 			return
 
 		}
