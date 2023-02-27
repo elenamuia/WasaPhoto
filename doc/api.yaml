@@ -293,11 +293,6 @@ paths:
 
 
 
-
-
-
-
-  
   /users/{userid}/photos/:
     parameters:
     -  $ref: "#/components/parameters/userid"
