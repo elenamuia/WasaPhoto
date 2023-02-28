@@ -13,14 +13,14 @@ import (
 
 func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedPhoto Photo
-	id, err1 := strconv.Atoi("id")
+	userid, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(userid, authToken)
 
 	if bool {
 		err := json.NewDecoder(r.Body).Decode(&deletedPhoto)
