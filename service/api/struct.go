@@ -108,8 +108,6 @@ func (p *Photo) ToDatabasePhoto(userid int, photoStruct []byte) database.Photo {
 		PhotoStructure: photoStruct,
 		NumLikes:       p.NumLikes,
 		NumComm:        p.NumComm,
-		ArrayofLike:    p.Arrayoflike,
-		ArrayofComment: p.Arrayofcomment,
 		Datapost:       p.Datapost,
 		UserID:         userid,
 	}

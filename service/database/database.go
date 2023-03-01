@@ -48,8 +48,6 @@ type Photo struct {
 	PhotoStructure []byte
 	NumLikes       int
 	NumComm        int
-	ArrayofLike    []Like
-	ArrayofComment []Comment
 	Datapost       time.Time
 	UserID         int
 }
@@ -105,7 +103,7 @@ type AppDatabase interface {
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(like Like) (err error)
 	DeleteProfile(user User) (err error)
-	GetPhoto() (Photo, error)
+	GetPhoto(int) (Photo, error)
 	GetProfile(userid int) (p Profile, err error)
 	LoginUser(l Login) (UserID int, isNew bool, err error)
 	CheckAuthToken(userId int, AuthToken string) (bool, error)

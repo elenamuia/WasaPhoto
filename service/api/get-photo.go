@@ -10,25 +10,18 @@ import (
 )
 
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	var photo Photo
-	id, err1 := strconv.Atoi("id")
+	userid, err1 := strconv.Atoi(ps.ByName("userid"))
+	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(userid, authToken)
 	if bool {
-		err := json.NewDecoder(r.Body).Decode(&photo)
-		if err != nil {
 
-			w.WriteHeader(http.StatusBadRequest)
-			return
-
-		}
-
-		photos, err := rt.db.GetPhoto()
+		photos, err := rt.db.GetPhoto(photoid)
 		if err != nil {
 
 			ctx.Logger.WithError(err).Error("Can't post photo")
