@@ -67,8 +67,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		//	fmt.Printf("err")
 		// 	return
 
-		err = rt.db.PostPhoto(photo.ToDatabasePhoto(userid, base64Encoding))
-		if err != nil {
+		photoRet, err4 := rt.db.PostPhoto(photo.ToDatabasePhoto(userid, bytes))
+		if err4 != nil {
 
 			ctx.Logger.WithError(err).Error("Can't post photo")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -76,7 +76,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(photo)
+		_ = json.NewEncoder(w).Encode(photoRet)
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)

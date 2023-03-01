@@ -4,20 +4,13 @@ import (
 	"time"
 )
 
-func (db *appdbimpl) PostPhoto(userid int, photoStruct string) error {
+func (db *appdbimpl) PostPhoto(photo Photo) (Photo, error) {
 
-	_, err1 := db.c.Exec(`INSERT INTO Photo (PhotoID, UserID, Photo, NumComment, NumLike, DataPost) VALUES ((SELECT MAX (PhotoID) from Photo) + 1, ?, ?, 0,0,?)`,
-		userid, photoStruct, time.Now())
+	_, err1 := db.c.Exec(`INSERT INTO Photo (UserID, Photo, NumComment, NumLike, DataPost) VALUES ( ?, ?, ?,?,?)`,
+		photo.UserID, photo.PhotoStructure, 0, 0, time.Now())
 	if err1 != nil {
-		return err1
+		return photo, err1
 	}
-	/*
-		lastInsertID, err := res.LastInsertId()
-		if err != nil {
-			return err
-		}
 
-		photo.ID = int(lastInsertID)
-	*/
-	return nil
+	return photo, nil
 }

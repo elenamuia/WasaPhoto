@@ -45,7 +45,7 @@ type User struct {
 
 type Photo struct {
 	ID             int
-	PhotoStructure string
+	PhotoStructure []byte
 	NumLikes       int
 	NumComm        int
 	ArrayofLike    []Like
@@ -97,7 +97,7 @@ var ErrLikeDoesNotExist = errors.New("Like does not exist")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	DeletePhoto(photo Photo) error
+	DeletePhoto(int) error
 	AddComment(comment Comment) error
 	AddLike(like Like) error
 	BanUser(ban Banned) error
@@ -109,7 +109,7 @@ type AppDatabase interface {
 	GetProfile(userid int) (p Profile, err error)
 	LoginUser(l Login) (UserID int, isNew bool, err error)
 	CheckAuthToken(userId int, AuthToken string) (bool, error)
-	PostPhoto(userid int, photoStruct string) (err error)
+	PostPhoto(photo Photo) (Photo, error)
 	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream() (ArrayofPhotos []Photo, err error)
@@ -135,6 +135,13 @@ func New(db *sql.DB) (AppDatabase, error) {
 		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
 			UserID int PRIMARY KEY,
 			username string NOT NULL,
+
+
+
+
+
+
+
 			AuthToken string NOT NULL	
 			) WITHOUT ROWID;
 			
@@ -159,7 +166,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				FOREIGN KEY (BannedID) 
 				  REFERENCES Users (UserID) 
 					ON DELETE CASCADE 
-					ON UPDATE NO ACTION
+					ON UPDATE CASCADE
 				FOREIGN KEY (BanningID) 
 				  REFERENCES Users (UserID) 
 					 ON DELETE CASCADE 
@@ -168,26 +175,24 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 
 			CREATE TABLE IF NOT EXISTS Photo (
-					PhotoID int NOT NULL AUTO_INCREMENT,
+					PhotoID INTEGER PRIMARY KEY AUTOINCREMENT,
 				    UserID int,
 				    Photo string NOT NULL,
 					NumComment int NOT NULL,
     				NumLike int NOT NULL,
 				    DataPost string NOT NULL,
-					PRIMARY KEY PhotoID
 				    FOREIGN KEY (UserID) 
 				      REFERENCES Users (UserID) 
 				        ON DELETE CASCADE 
 				         ON UPDATE CASCADE
-				) WITHOUT ROWID;
+				);
 
 				CREATE TABLE IF NOT EXISTS Comments (
 						PhotoID int,
 					    UserIDReceiving int NOT NULL,
-					    CommentID int,
+					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
 					    UserIDPutting int NOT NULL,
 					    DataPost string NOT NULL,
-						PRIMARY KEY (PhotoID, CommentID)
 					    FOREIGN KEY (UserIDReceiving) 
 					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
@@ -200,7 +205,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 					      REFERENCES Photo (PhotoID) 
 					       ON DELETE CASCADE 
 					         ON UPDATE CASCADE
-					) WITHOUT ROWID;
+					);
 
 					 CREATE TABLE IF NOT EXISTS Like (
  
