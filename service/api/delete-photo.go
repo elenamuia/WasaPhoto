@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -24,12 +23,6 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	bool, err := rt.db.CheckAuthToken(userid, authToken)
 
 	if bool {
-		err := json.NewDecoder(r.Body).Decode(&deletedPhoto)
-		if err != nil {
-
-			return
-		}
-
 		err = rt.db.DeletePhoto(photoid)
 		if errors.Is(err, database.ErrPhotoDoesNotExist) {
 
