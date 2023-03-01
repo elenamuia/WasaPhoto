@@ -132,14 +132,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
 			UserID int PRIMARY KEY,
-			username string NOT NULL,
-
-
-
-
-
-
-
+			username string NOT NULL UNIQUE,
 			AuthToken string NOT NULL	
 			) WITHOUT ROWID;
 			
@@ -150,7 +143,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				FOREIGN KEY (FollowerID) 
 				  REFERENCES Users (UserID) 
 					 ON DELETE CASCADE 
-					 ON UPDATE NO ACTION
+					 ON UPDATE CASCADE
 				FOREIGN KEY (FollowedID) 
 				  REFERENCES Users (UserID) 
 					 ON DELETE CASCADE 
@@ -187,13 +180,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 						PhotoID int,
 					    UserIDReceiving int NOT NULL,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
+						UsernamePutting string,
 					    DataPost string NOT NULL,
 					    FOREIGN KEY (UserIDReceiving) 
 					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
-					         ON UPDATE NO ACTION
-					    FOREIGN KEY (UserIDPutting) 
-					      REFERENCES Users (UserID) 
+					         ON UPDATE CASCADE
+					    FOREIGN KEY (UsernamePutting) 
+					      REFERENCES Users (username) 
 					       ON DELETE CASCADE 
 					         ON UPDATE CASCADE
 					    FOREIGN KEY (PhotoID) 
@@ -202,26 +196,26 @@ func New(db *sql.DB) (AppDatabase, error) {
 					         ON UPDATE CASCADE
 					);
 
-					 CREATE TABLE IF NOT EXISTS Like (
- 
-						     UserIDPutting int,
-						     PhotoID string NOT NULL,
-						     UserIDReceiving int NOT NULL,
-						     DataPost string NOT NULL,
-						     PRIMARY KEY (PhotoID, UserIDPutting)
-						     FOREIGN KEY (UserIDReceiving) 
-						       REFERENCES Users (UserID) 
-					             ON DELETE CASCADE 
-					              ON UPDATE CASCADE
-					         FOREIGN KEY (UserIDPutting) 
-					           REFERENCES Users (UserID) 
-					             ON DELETE CASCADE 
-					              ON UPDATE CASCADE
-					         FOREIGN KEY (PhotoID) 
-					           REFERENCES Photo (PhotoID) 
-					             ON DELETE CASCADE 
-					              ON UPDATE CASCADE
-					     ) WITHOUT ROWID;
+				CREATE TABLE IF NOT EXISTS Like (
+
+						UserIDPutting int,
+						PhotoID string NOT NULL,
+						UserIDReceiving int NOT NULL,
+						DataPost string NOT NULL,
+						PRIMARY KEY (PhotoID, UserIDPutting)
+						FOREIGN KEY (UserIDReceiving) 
+						REFERENCES Users (UserID) 
+							ON DELETE CASCADE 
+							ON UPDATE CASCADE
+						FOREIGN KEY (UserIDPutting) 
+						REFERENCES Users (UserID) 
+							ON DELETE CASCADE 
+							ON UPDATE CASCADE
+						FOREIGN KEY (PhotoID) 
+						REFERENCES Photo (PhotoID) 
+							ON DELETE CASCADE 
+							ON UPDATE CASCADE
+					);
 `
 		_, err = db.Exec(sqlStmt)
 		if err != nil {

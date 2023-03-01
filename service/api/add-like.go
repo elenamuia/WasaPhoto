@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -31,10 +30,6 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
-		// Send the output to the user.
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(like)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
