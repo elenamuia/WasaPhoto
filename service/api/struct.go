@@ -102,16 +102,16 @@ func (f *Follow) ToDatabaseFollow() database.Follow {
 	}
 }
 
-func (p *Photo) ToDatabasePhoto() database.Photo {
+func (p *Photo) ToDatabasePhoto(userid int, photoStruct string) database.Photo {
 	return database.Photo{
 		ID:             p.ID,
-		PhotoStructure: p.PhotoStructure,
-		NumLikes:       p.NumLikes,
-		NumComm:        p.NumComm,
+		PhotoStructure: photoStruct,
+		NumLikes:       0,
+		NumComm:        0,
 		ArrayofLike:    p.Arrayoflike,
 		ArrayofComment: p.Arrayofcomment,
 		Datapost:       p.Datapost,
-		UserID:         p.UserID,
+		UserID:         userid,
 	}
 }
 

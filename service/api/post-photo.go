@@ -67,7 +67,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		//	fmt.Printf("err")
 		// 	return
 
-		err = rt.db.PostPhoto(photo.ToDatabasePhoto())
+		err = rt.db.PostPhoto(photo.ToDatabasePhoto(userid, base64Encoding))
 		if err != nil {
 
 			ctx.Logger.WithError(err).Error("Can't post photo")

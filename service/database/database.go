@@ -109,7 +109,7 @@ type AppDatabase interface {
 	GetProfile(userid int) (p Profile, err error)
 	LoginUser(l Login) (UserID int, isNew bool, err error)
 	CheckAuthToken(userId int, AuthToken string) (bool, error)
-	PostPhoto(photo Photo) (err error)
+	PostPhoto(userid int, photoStruct string) (err error)
 	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream() (ArrayofPhotos []Photo, err error)
@@ -149,7 +149,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				FOREIGN KEY (FollowedID) 
 				  REFERENCES Users (UserID) 
 					 ON DELETE CASCADE 
-					 ON UPDATE NO ACTION
+					 ON UPDATE CASCADE
 			) WITHOUT ROWID;
 
 			CREATE TABLE IF NOT EXISTS Banned (
@@ -163,22 +163,22 @@ func New(db *sql.DB) (AppDatabase, error) {
 				FOREIGN KEY (BanningID) 
 				  REFERENCES Users (UserID) 
 					 ON DELETE CASCADE 
-					 ON UPDATE NO ACTION
+					 ON UPDATE CASCADE
 			) WITHOUT ROWID;
 
 
 			CREATE TABLE IF NOT EXISTS Photo (
-					PhotoID int,
+					PhotoID int NOT NULL AUTO_INCREMENT,
 				    UserID int,
 				    Photo string NOT NULL,
 					NumComment int NOT NULL,
     				NumLike int NOT NULL,
 				    DataPost string NOT NULL,
-					PRIMARY KEY (PhotoID, UserID)
+					PRIMARY KEY PhotoID
 				    FOREIGN KEY (UserID) 
 				      REFERENCES Users (UserID) 
 				        ON DELETE CASCADE 
-				         ON UPDATE NO ACTION
+				         ON UPDATE CASCADE
 				) WITHOUT ROWID;
 
 				CREATE TABLE IF NOT EXISTS Comments (
@@ -195,11 +195,11 @@ func New(db *sql.DB) (AppDatabase, error) {
 					    FOREIGN KEY (UserIDPutting) 
 					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
-					         ON UPDATE NO ACTION
+					         ON UPDATE CASCADE
 					    FOREIGN KEY (PhotoID) 
 					      REFERENCES Photo (PhotoID) 
 					       ON DELETE CASCADE 
-					         ON UPDATE NO ACTION
+					         ON UPDATE CASCADE
 					) WITHOUT ROWID;
 
 					 CREATE TABLE IF NOT EXISTS Like (
@@ -212,15 +212,15 @@ func New(db *sql.DB) (AppDatabase, error) {
 						     FOREIGN KEY (UserIDReceiving) 
 						       REFERENCES Users (UserID) 
 					             ON DELETE CASCADE 
-					              ON UPDATE NO ACTION
+					              ON UPDATE CASCADE
 					         FOREIGN KEY (UserIDPutting) 
 					           REFERENCES Users (UserID) 
 					             ON DELETE CASCADE 
-					              ON UPDATE NO ACTION
+					              ON UPDATE CASCADE
 					         FOREIGN KEY (PhotoID) 
 					           REFERENCES Photo (PhotoID) 
 					             ON DELETE CASCADE 
-					              ON UPDATE NO ACTION
+					              ON UPDATE CASCADE
 					     ) WITHOUT ROWID;
 `
 		_, err = db.Exec(sqlStmt)
