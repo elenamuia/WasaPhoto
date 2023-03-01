@@ -86,12 +86,12 @@ func (c *Comment) ToDatabase() database.Comment {
 	}
 }
 
-func (l *Like) ToDatabase() database.Like {
+func (l *Like) ToDatabaseLike(userrecid int, userputid int, photoid int) database.Like {
 	return database.Like{
-		LikeID:   l.LikeID,
-		PhotoID:  l.PhotoID,
+		LikeID:   userputid,
+		PhotoID:  photoid,
 		DataPost: l.Datapost,
-		UserRec:  l.UserRec,
+		UserRec:  userrecid,
 	}
 }
 

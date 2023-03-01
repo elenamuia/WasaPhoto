@@ -176,8 +176,6 @@ func New(db *sql.DB) (AppDatabase, error) {
 					PhotoID INTEGER PRIMARY KEY AUTOINCREMENT,
 				    UserID int,
 				    Photo string NOT NULL,
-					NumComment int NOT NULL,
-    				NumLike int NOT NULL,
 				    DataPost string NOT NULL,
 				    FOREIGN KEY (UserID) 
 				      REFERENCES Users (UserID) 
@@ -189,7 +187,6 @@ func New(db *sql.DB) (AppDatabase, error) {
 						PhotoID int,
 					    UserIDReceiving int NOT NULL,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
-					    UserIDPutting int NOT NULL,
 					    DataPost string NOT NULL,
 					    FOREIGN KEY (UserIDReceiving) 
 					      REFERENCES Users (UserID) 

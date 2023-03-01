@@ -12,26 +12,19 @@ import (
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var like Like
 
-	id, err1 := strconv.Atoi("id")
+	userrecid, err1 := strconv.Atoi(ps.ByName("userid"))
+	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
+	userputid, err1 := strconv.Atoi(ps.ByName("likeid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(userputid, authToken)
 	if bool {
-		err = json.NewDecoder(r.Body).Decode(&like)
-		if err != nil {
-			// The body was not a parseable JSON, reject it
-			w.WriteHeader(http.StatusBadRequest)
-			return
 
-		}
-
-		// Create the fountain in the database. Note that this function will return a new instance of the fountain with the
-		// same information, plus the ID.
-		err = rt.db.AddLike(like.ToDatabase())
+		err = rt.db.AddLike(like.ToDatabaseLike(userrecid, userputid, photoid))
 		if err != nil {
 
 			ctx.Logger.WithError(err).Error("can't comment the photo")
