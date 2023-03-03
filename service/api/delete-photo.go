@@ -23,12 +23,12 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
-		err = rt.db.DeletePhoto(photoid)
+		err1 := rt.db.DeletePhoto(photoid)
 		if errors.Is(err, database.ErrPhotoDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
-		} else if err != nil {
+		} else if err1 != nil {
 
 			ctx.Logger.WithError(err).WithField("PhotoID", deletedPhoto).Error("can't delete photo")
 			w.WriteHeader(http.StatusInternalServerError)

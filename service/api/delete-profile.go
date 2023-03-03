@@ -22,12 +22,12 @@ func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps ht
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		err = rt.db.DeleteProfile(id)
+		err2 := rt.db.DeleteProfile(id)
 		if errors.Is(err, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
-		} else if err != nil {
+		} else if err2 != nil {
 
 			ctx.Logger.WithError(err).WithField("UserID", deletedUser).Error("can't delete profile")
 			w.WriteHeader(http.StatusInternalServerError)

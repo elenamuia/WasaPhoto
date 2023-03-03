@@ -38,8 +38,8 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		useridput, _ = strconv.Atoi(elements[1])
 		userid, _ = strconv.Atoi(elements[2])
 
-		err = rt.db.AddComment(comment.ToDatabaseComment(userid, useridput, photoid, comment_cont))
-		if err != nil {
+		err5 := rt.db.AddComment(comment.ToDatabaseComment(userid, useridput, photoid, comment_cont))
+		if err5 != nil {
 
 			ctx.Logger.WithError(err).Error("can't comment the photo")
 			w.WriteHeader(http.StatusInternalServerError)

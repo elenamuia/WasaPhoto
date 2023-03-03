@@ -21,8 +21,8 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		photos, err := rt.db.GetPhoto(photoid)
-		if err != nil {
+		photos, err2 := rt.db.GetPhoto(photoid)
+		if err2 != nil {
 
 			ctx.Logger.WithError(err).Error("Can't post photo")
 			w.WriteHeader(http.StatusInternalServerError)

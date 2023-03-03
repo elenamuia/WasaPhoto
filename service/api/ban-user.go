@@ -19,12 +19,12 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	if bool {
 
-		err = json.NewDecoder(r.Body).Decode(&bannedUser)
+		err2 := json.NewDecoder(r.Body).Decode(&bannedUser)
 		if bannedUser.BannedID == bannedUser.BanningID {
 			ctx.Logger.WithError(err).WithField("BannedID", bannedUser).Error("A user cannot ban himself/herself")
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-		if err != nil {
+		if err2 != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
 			return

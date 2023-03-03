@@ -31,8 +31,8 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		}
 
 		var updatedUser Users
-		err = json.NewDecoder(r.Body).Decode(&updatedUser)
-		if err != nil {
+		err2 := json.NewDecoder(r.Body).Decode(&updatedUser)
+		if err2 != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
 			return

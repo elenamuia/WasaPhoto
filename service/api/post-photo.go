@@ -3,11 +3,9 @@ package api
 import (
 	"encoding/base64"
 	"encoding/json"
-	"strconv"
-	// "fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -16,13 +14,9 @@ import (
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var photo Photo
 	file, _, err2 := r.FormFile("photo")
-	fileid, _, err2 := r.FormFile("userid")
-	useridbyte, err6 := ioutil.ReadAll(fileid)
-	if err6 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	userid, _ := strconv.Atoi(string(useridbyte))
+
+	userid := ("userid")
+	photo.UserID = userid
 
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -33,7 +27,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	bytes, err3 := ioutil.ReadAll(file)
 	if err3 != nil {
-		log.Fatal(err3)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	var base64Encoding string

@@ -17,18 +17,18 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-		err := json.NewDecoder(r.Body).Decode(&unban)
-		if err != nil {
+		err2 := json.NewDecoder(r.Body).Decode(&unban)
+		if err2 != nil {
 
 			return
 		}
 
-		err = rt.db.UnbanUser(unban.ToDatabase())
+		err3 := rt.db.UnbanUser(unban.ToDatabase())
 		if errors.Is(err, database.ErrPhotoDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
-		} else if err != nil {
+		} else if err3 != nil {
 
 			ctx.Logger.WithError(err).WithField("BannedID", unban).Error("can't unban user")
 			w.WriteHeader(http.StatusInternalServerError)

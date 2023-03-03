@@ -17,9 +17,9 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		err := json.NewDecoder(r.Body).Decode(&follow)
+		err1 := json.NewDecoder(r.Body).Decode(&follow)
 
-		if err != nil {
+		if err1 != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
 			return
@@ -30,8 +30,8 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 			w.WriteHeader(http.StatusForbidden)
 			return
 		}
-		err = rt.db.PutFollow(follow.ToDatabaseFollow())
-		if err != nil {
+		err2 := rt.db.PutFollow(follow.ToDatabaseFollow())
+		if err2 != nil {
 
 			ctx.Logger.WithError(err).Error("Can't add follower")
 			w.WriteHeader(http.StatusInternalServerError)

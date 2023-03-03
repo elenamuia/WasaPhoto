@@ -5,22 +5,20 @@ import (
 	"net/http"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
-	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
+
 	"github.com/julienschmidt/httprouter"
 )
 
 func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-
-	var photo []database.Photo
 
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		photo, err = rt.db.GetMyMainstream()
+		photoRes, err1 := rt.db.GetMyMainstream()
 
-		if err != nil {
+		if err1 != nil {
 
 			ctx.Logger.WithError(err).Error("can't load mainstream")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -28,7 +26,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(photo)
+		_ = json.NewEncoder(w).Encode(photoRes)
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)

@@ -25,12 +25,12 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 	if bool {
 
-		err = rt.db.DeleteComment(commentid)
+		err3 := rt.db.DeleteComment(commentid)
 		if errors.Is(err, database.ErrCommentDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
-		} else if err != nil {
+		} else if err3 != nil {
 
 			ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("can't delete the comment")
 			w.WriteHeader(http.StatusInternalServerError)

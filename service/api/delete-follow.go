@@ -18,18 +18,18 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
-		err = json.NewDecoder(r.Body).Decode(&deletedFollow)
-		if err != nil {
+		err1 := json.NewDecoder(r.Body).Decode(&deletedFollow)
+		if err1 != nil {
 
 			return
 		}
 
-		err = rt.db.DeleteFollow(deletedFollow.ToDatabaseFollow())
+		err2 := rt.db.DeleteFollow(deletedFollow.ToDatabaseFollow())
 		if errors.Is(err, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
-		} else if err != nil {
+		} else if err2 != nil {
 
 			ctx.Logger.WithError(err).WithField("FollowerID", deletedFollow).Error("can't unfollow")
 			w.WriteHeader(http.StatusInternalServerError)

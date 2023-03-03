@@ -40,8 +40,8 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 			return
 		}
 
-		profile, err := rt.db.GetProfile(idget)
-		if err != nil {
+		profile, err4 := rt.db.GetProfile(idget)
+		if err4 != nil {
 
 			ctx.Logger.WithError(err).Error("Can't get profile")
 			w.WriteHeader(http.StatusInternalServerError)
