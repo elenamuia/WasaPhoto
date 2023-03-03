@@ -20,7 +20,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(userputid, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
 		err = rt.db.AddLike(like.ToDatabaseLike(userrecid, userputid, photoid))

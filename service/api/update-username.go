@@ -22,7 +22,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 		if err != nil {
 

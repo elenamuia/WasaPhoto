@@ -13,7 +13,6 @@ import (
 func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedComment Comment
 	commentid, err1 := strconv.Atoi(ps.ByName("commentid"))
-	userid, err1 := strconv.Atoi(ps.ByName("userid"))
 
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -22,7 +21,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(userid, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
 

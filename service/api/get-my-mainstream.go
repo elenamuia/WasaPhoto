@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -13,14 +12,10 @@ import (
 func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	var photo []database.Photo
-	id, err1 := strconv.Atoi("id")
-	if err1 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
 		photo, err = rt.db.GetMyMainstream()

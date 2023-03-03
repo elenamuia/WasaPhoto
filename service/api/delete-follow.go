@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -13,14 +12,10 @@ import (
 
 func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedFollow Follow
-	id, err1 := strconv.Atoi(ps.ByName("userid"))
-	if err1 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
 		err = json.NewDecoder(r.Body).Decode(&deletedFollow)

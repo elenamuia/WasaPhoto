@@ -23,7 +23,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(userput, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
 		var comment_cont string

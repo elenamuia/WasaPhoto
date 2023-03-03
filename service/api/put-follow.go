@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -13,16 +12,9 @@ import (
 func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var follow Follow
 
-	userid, err1 := strconv.Atoi(ps.ByName("userid"))
-	if err1 != nil {
-
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(userid, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
 		err := json.NewDecoder(r.Body).Decode(&follow)

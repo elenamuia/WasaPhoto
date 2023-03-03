@@ -1,7 +1,7 @@
 package database
 
-func (db *appdbimpl) DeleteProfile(user User) error {
-	res, err1 := db.c.Exec(`DELETE FROM Users WHERE UserID = ?`, user.ID)
+func (db *appdbimpl) DeleteProfile(id int) error {
+	res, err1 := db.c.Exec(`DELETE FROM Users WHERE UserID = ?`, id)
 	if err1 != nil {
 		return err1
 	}

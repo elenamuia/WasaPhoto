@@ -109,7 +109,7 @@ func (p *Photo) ToDatabasePhoto(userid int, photoStruct []byte) database.Photo {
 		NumLikes:       p.NumLikes,
 		NumComm:        p.NumComm,
 		Datapost:       p.Datapost,
-		UserID:         userid,
+		UserID:         p.UserID,
 	}
 }
 

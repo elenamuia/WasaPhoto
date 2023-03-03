@@ -10,7 +10,7 @@ import (
 )
 
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	userid, err1 := strconv.Atoi(ps.ByName("userid"))
+
 	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -18,7 +18,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(userid, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
 		photos, err := rt.db.GetPhoto(photoid)

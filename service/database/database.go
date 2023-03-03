@@ -102,11 +102,11 @@ type AppDatabase interface {
 	DeleteComment(int) (err error)
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(like Like) (err error)
-	DeleteProfile(user User) (err error)
+	DeleteProfile(int) (err error)
 	GetPhoto(int) (Photo, error)
 	GetProfile(userid int) (p Profile, err error)
 	LoginUser(l Login) (UserID int, isNew bool, err error)
-	CheckAuthToken(userId int, AuthToken string) (bool, error)
+	CheckAuthToken(AuthToken string) (bool, error)
 	PostPhoto(photo Photo) (Photo, error)
 	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)

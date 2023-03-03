@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -13,22 +12,17 @@ import (
 
 func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedUser Users
-	id, err1 := strconv.Atoi("id")
+	id, err1 := strconv.Atoi(ps.ByName("userid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-		err := json.NewDecoder(r.Body).Decode(&deletedUser)
-		if err != nil {
 
-			return
-		}
-
-		err = rt.db.DeleteProfile(deletedUser.ToDatabaseUser())
+		err = rt.db.DeleteProfile(id)
 		if errors.Is(err, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)

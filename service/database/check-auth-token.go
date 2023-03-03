@@ -1,15 +1,14 @@
 package database
 
-func (db *appdbimpl) CheckAuthToken(userId int, AuthToken string) (bool, error) {
+func (db *appdbimpl) CheckAuthToken(AuthToken string) (bool, error) {
 
-	var newAuthToken string
-	err := db.c.QueryRow(`SELECT AuthToken FROM Users WHERE UserID=  ? `, userId).Scan(&newAuthToken)
+	rows, err := db.c.Query(`SELECT AuthToken FROM Users WHERE AuthToken = ? `, AuthToken)
 	if err != nil {
 		return false, err
 
 	}
 
-	if newAuthToken != AuthToken {
+	if !rows.Next() {
 		return false, nil
 	}
 	return true, nil

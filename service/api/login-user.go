@@ -28,7 +28,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	if !isNew {
-		bool, err := rt.db.CheckAuthToken(id, authToken)
+		bool, err := rt.db.CheckAuthToken(authToken)
 		if err != nil {
 			ctx.Logger.WithError(err).Error("Can't login")
 			w.WriteHeader(http.StatusUnauthorized)
