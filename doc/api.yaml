@@ -293,9 +293,8 @@ paths:
 
 
 
-  /users/{userid}/photos/:
-    parameters:
-    -  $ref: "#/components/parameters/userid"
+  /photos/:
+    
     post:
       tags: [Photo]
       summary: Add a new photo to a certain profile
@@ -321,10 +320,10 @@ paths:
     
 
 
-  /users/{userid}/photos/{photoid}:
+  /photos/{photoid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
-    - $ref: "#/components/parameters/userid"
+    
     delete:
       tags: [Photo]
       summary: Delete a Photo
@@ -368,13 +367,12 @@ paths:
  
     
     
-  /users/{userid}/photos/{photoid}/comments/{useridputting}:
+  /photos/{photoid}/comments/:
     parameters:
     - $ref: "#/components/parameters/photoid"
-    - $ref: "#/components/parameters/userid"
-  
     
-    put:
+    
+    post:
       tags: [Photo]
       summary: Add a comment to a photo
       description: Use this command if there is the need to add a comment under 
@@ -406,7 +404,7 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
-  
+  /photos/{photoid}/comments/{commentid}:
     delete:
       tags: [Photo]
       summary: Delete a certain comment
@@ -420,10 +418,10 @@ paths:
           $ref: "#/components/responses/Forbidden"
       
 
-  /users/{userid}/photos/{photoid}/like/{likeid}:
+  /photos/{photoid}/like/{likeid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
-    - $ref: "#/components/parameters/userid"
+    
     - $ref: "#/components/parameters/likeid"
 
     put:
