@@ -368,11 +368,11 @@ paths:
  
     
     
-  /users/{userid}/photos/{photoid}/comments/{commentid}:
+  /users/{userid}/photos/{photoid}/comments/{useridputting}:
     parameters:
     - $ref: "#/components/parameters/photoid"
     - $ref: "#/components/parameters/userid"
-    - $ref: "#/components/parameters/commentid"
+  
     
     put:
       tags: [Photo]
@@ -477,7 +477,7 @@ components:
       required: true
       schema:
         type: number
-        format: int64
+        format: int
     BannedId:
       name: BannedId
       in: path
@@ -485,7 +485,7 @@ components:
       required: true
       schema:
         type: number
-        format: int64
+        format: int
     photoid:  
       name: photoid
       in: path
@@ -493,7 +493,7 @@ components:
       required: true
       schema:
         type: number
-        format: int64
+        format: int
     followedUserId:
       name: followedUserId
       in: path
@@ -501,7 +501,7 @@ components:
       required: true
       schema:
         type: number
-        format: int64
+        format: int
     commentid: 
       name: commentid
       in: path
@@ -509,7 +509,7 @@ components:
       required: true
       schema:  
         type: integer
-        format: int64
+        format: int
     likeid:
       name: likeid
       in: path
@@ -527,7 +527,7 @@ components:
         
     UserId:
       type: number
-      format: int64
+      format: int
     nameUser:
       type: string
       pattern: 'ˆ.*?$'

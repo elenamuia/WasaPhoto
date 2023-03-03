@@ -99,7 +99,7 @@ type AppDatabase interface {
 	AddComment(comment Comment) error
 	AddLike(like Like) error
 	BanUser(ban Banned) error
-	DeleteComment(comment Comment) (err error)
+	DeleteComment(int) (err error)
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(like Like) (err error)
 	DeleteProfile(user User) (err error)
@@ -180,14 +180,15 @@ func New(db *sql.DB) (AppDatabase, error) {
 						PhotoID int,
 					    UserIDReceiving int NOT NULL,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
-						UsernamePutting string,
+						CommentMessage string NOT NULL,
+						UserIDPutting int NOT NULL,
 					    DataPost string NOT NULL,
 					    FOREIGN KEY (UserIDReceiving) 
 					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
 					         ON UPDATE CASCADE
-					    FOREIGN KEY (UsernamePutting) 
-					      REFERENCES Users (username) 
+					    FOREIGN KEY (UserIDPutting) 
+					      REFERENCES Users (UserID) 
 					       ON DELETE CASCADE 
 					         ON UPDATE CASCADE
 					    FOREIGN KEY (PhotoID) 

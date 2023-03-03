@@ -12,7 +12,6 @@ import (
 func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	var ban Banned
-	var idget int
 
 	id, err2 := strconv.Atoi(ps.ByName("userid"))
 	if err2 != nil {
@@ -24,7 +23,9 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 	bool, err := rt.db.CheckAuthToken(id, authToken)
 	if bool {
-		if err != nil {
+		var idget int
+		err3 := json.NewDecoder(r.Body).Decode(&idget)
+		if err3 != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
 			return

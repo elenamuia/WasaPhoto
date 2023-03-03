@@ -3,19 +3,12 @@ package database
 import "time"
 
 func (db *appdbimpl) AddComment(comment Comment) error {
-	res, err1 := db.c.Exec(`INSERT INTO Comments(CommentID, PhotoID, UserIDReceiving, CommentID, UserIDPutting, UserIDReceiving, DataPost) VALUES (?,?,?,?,?,?,?)`,
-		comment.CommentID, comment.PhotoID, comment.UserIDPut, comment.UserIDRec, time.Now)
+	_, err1 := db.c.Exec(`INSERT INTO Comments( PhotoID, UserIDPutting, UserIDReceiving,CommentMessage, DataPost) VALUES (?,?,?,?,?)`,
+		comment.PhotoID, comment.UserIDPut, comment.UserIDRec, comment.CommMessage, time.Now())
 
 	if err1 != nil {
 		return err1
 	}
 
-	lastInsertID, err := res.LastInsertId()
-	if err != nil {
-
-		return err
-	}
-
-	comment.CommentID = int(lastInsertID)
 	return nil
 }

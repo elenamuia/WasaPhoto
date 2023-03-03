@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -13,7 +12,9 @@ import (
 
 func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedComment Comment
-	id, err1 := strconv.Atoi("id")
+	commentid, err1 := strconv.Atoi(ps.ByName("commentid"))
+	userid, err1 := strconv.Atoi(ps.ByName("userid"))
+
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -21,16 +22,11 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 	authToken := r.Header.Get("authToken")
 
-	bool, err := rt.db.CheckAuthToken(id, authToken)
+	bool, err := rt.db.CheckAuthToken(userid, authToken)
 
 	if bool {
-		err = json.NewDecoder(r.Body).Decode(&deletedComment)
-		if err != nil {
 
-			return
-		}
-
-		err = rt.db.DeleteComment(deletedComment.ToDatabase())
+		err = rt.db.DeleteComment(commentid)
 		if errors.Is(err, database.ErrCommentDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)

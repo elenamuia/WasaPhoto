@@ -2,7 +2,7 @@ package database
 
 func (db *appdbimpl) GetProfile(userid int) (p Profile, err error) {
 
-	rows, err1 := db.c.Query("SELECT p.PhotoID, p.UserID, count(f.FollowerID) as NumFollowed,  count(f.FollowedID) as NumFollower FROM Photo as p, Follower as f WHERE UserID=  ? ", userid)
+	rows, err1 := db.c.Query("SELECT p.PhotoID, p.UserID, count(f.FollowerID) as NumFollowed,  count(f.FollowedID) as NumFollower FROM Photo as p, Follower as f WHERE UserID=  ?  GROUP BY p.UserID ", userid)
 	if err1 != nil {
 		return p, err
 	}

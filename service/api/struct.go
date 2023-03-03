@@ -75,14 +75,14 @@ func (b *Banned) ToDatabase() database.Banned {
 	}
 }
 
-func (c *Comment) ToDatabase() database.Comment {
+func (c *Comment) ToDatabaseComment(userid int, userputting int, photoid int, comcont string) database.Comment {
 	return database.Comment{
 		CommentID:   c.CommentID,
-		CommMessage: c.CommentContent,
-		UserIDPut:   c.UserIDPut,
-		PhotoID:     c.PhotoID,
+		CommMessage: comcont,
+		UserIDPut:   userputting,
+		PhotoID:     photoid,
 		Datapost:    c.DataPost,
-		UserIDRec:   c.UserIDRec,
+		UserIDRec:   userid,
 	}
 }
 
