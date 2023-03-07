@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -11,27 +12,25 @@ import (
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var like Like
 
-	userrecid, err1 := strconv.Atoi(ps.ByName("userid"))
-	if err1 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	userrec := ps.ByName("userid")
+
 	photoid, err2 := strconv.Atoi(ps.ByName("photoid"))
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	userputid, err3 := strconv.Atoi(ps.ByName("likeid"))
-	if err3 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-
-		err6 := rt.db.AddLike(like.ToDatabaseLike(userrecid, userputid, photoid))
+		var userput string
+		err3 := json.NewDecoder(r.Body).Decode(&userput)
+		if err3 != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		err6 := rt.db.AddLike(like.ToDatabaseLike(userrec, userput, photoid))
 		if err6 != nil {
 
 			ctx.Logger.WithError(err).Error("can't comment the photo")

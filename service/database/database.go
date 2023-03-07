@@ -137,7 +137,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 			CREATE TABLE IF NOT EXISTS Follower (
 				Follower string ,
 				Followed string,
-				PRIMARY KEY(Follower, FOllowed)
+				PRIMARY KEY(Follower, Followed)
 				FOREIGN KEY (Follower) 
 				  REFERENCES Users (Name) 
 					 ON DELETE CASCADE 

@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -13,11 +12,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 	var ban Banned
 
-	id, err2 := strconv.Atoi(ps.ByName("userid"))
-	if err2 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	id := ps.ByName("user")
 
 	authToken := r.Header.Get("authToken")
 
@@ -32,11 +27,11 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 		}
 
-		if id == ban.BanningID && idget == ban.BannedID {
+		if id == ban.Banning && idget == ban.Banned {
 			ctx.Logger.WithError(err).Error("Banned USer")
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode("Banend User")
+			_ = json.NewEncoder(w).Encode("Banned User")
 			return
 		}
 

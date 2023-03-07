@@ -35,7 +35,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 			ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("can't delete the comment")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
-		} else if deletedComment.UserIDPut != deletedComment.UserIDRec {
+		} else if deletedComment.UserPut != deletedComment.UserRec {
 			ctx.Logger.WithError(err).WithField("commentID", deletedComment).Error("Not Authorized")
 			w.WriteHeader(http.StatusInternalServerError)
 		}

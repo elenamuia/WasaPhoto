@@ -13,7 +13,7 @@ import (
 func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var comment Comment
 	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
-
+	userrec := ps.ByName("userrec")
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Println(err1)
@@ -27,18 +27,17 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		var elements []string
 		err3 := json.NewDecoder(r.Body).Decode(&elements)
 		if err3 != nil {
-			fmt.Println(err3)
+
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		var comment_cont string
-		var useridput int
-		var userid int
-		comment_cont = elements[0]
-		useridput, _ = strconv.Atoi(elements[1])
-		userid, _ = strconv.Atoi(elements[2])
+		var userput string
 
-		err5 := rt.db.AddComment(comment.ToDatabaseComment(userid, useridput, photoid, comment_cont))
+		comment_cont = elements[0]
+		userput = elements[1]
+
+		err5 := rt.db.AddComment(comment.ToDatabaseComment(userrec, userput, photoid, comment_cont))
 		if err5 != nil {
 
 			ctx.Logger.WithError(err).Error("can't comment the photo")

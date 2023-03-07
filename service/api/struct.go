@@ -65,11 +65,11 @@ func (l *Login) FromDatabase(log string) {
 }
 
 // ToDatabase returns the fountain in a database-compatible representation
-func (b *Banned) ToDatabase() database.Banned {
+func (b *Banned) ToDatabase(banned string, banning string) database.Banned {
 	return database.Banned{
 
-		Banning: b.Banning,
-		Banned:  b.Banned,
+		Banning: banning,
+		Banned:  banned,
 	}
 }
 
@@ -84,19 +84,19 @@ func (c *Comment) ToDatabaseComment(userid string, userputting string, photoid i
 	}
 }
 
-func (l *Like) ToDatabaseLike(userrecid string, userputid string, photoid int) database.Like {
+func (l *Like) ToDatabaseLike(userrec string, userput string, photoid int) database.Like {
 	return database.Like{
-		LikeID:   userputid,
+		LikeID:   userput,
 		PhotoID:  photoid,
 		DataPost: l.Datapost,
-		UserRec:  userrecid,
+		UserRec:  userrec,
 	}
 }
 
-func (f *Follow) ToDatabaseFollow() database.Follow {
+func (f *Follow) ToDatabaseFollow(follower string, followed string) database.Follow {
 	return database.Follow{
-		Follower: f.Follower,
-		Followed: f.Followed,
+		Follower: follower,
+		Followed: followed,
 	}
 }
 

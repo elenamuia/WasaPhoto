@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -15,8 +14,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	var photo Photo
 	file, _, err2 := r.FormFile("photo")
 
-	userid := ("userid")
-	photo.UserID = userid
+	userid := ps.ByName("user")
+	photo.User = userid
 
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)

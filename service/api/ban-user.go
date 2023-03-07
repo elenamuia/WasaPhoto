@@ -12,26 +12,20 @@ import (
 func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	var bannedUser Banned
-
+	banned := ps.ByName("banneduser")
+	banning := ps.ByName("banninguser")
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
 
-		err2 := json.NewDecoder(r.Body).Decode(&bannedUser)
-		if bannedUser.BannedID == bannedUser.BanningID {
-			ctx.Logger.WithError(err).WithField("BannedID", bannedUser).Error("A user cannot ban himself/herself")
+		if banned == banning {
+			ctx.Logger.WithError(err).WithField("banneduser", banned).Error("A user cannot ban himself/herself")
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-		if err2 != nil {
 
-			w.WriteHeader(http.StatusBadRequest)
-			return
-
-		}
-
-		err = rt.db.BanUser(bannedUser.ToDatabase())
+		err = rt.db.BanUser(bannedUser.ToDatabase(banned, banning))
 
 		if err != nil {
 

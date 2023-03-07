@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -13,29 +12,21 @@ import (
 
 func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedLike Like
-
+	userrec := ps.ByName("userrec")
 	photoid, err2 := strconv.Atoi(ps.ByName("photoid"))
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	userputid, err1 := strconv.Atoi(ps.ByName("likeid"))
-	if err1 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	userput := ps.ByName("likeid")
+
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
-		var userrecid int
-		err3 := json.NewDecoder(r.Body).Decode(&userrecid)
-		if err3 != nil {
 
-			return
-		}
-		err4 := rt.db.DeleteLike(deletedLike.ToDatabaseLike(userrecid, userputid, photoid))
+		err4 := rt.db.DeleteLike(deletedLike.ToDatabaseLike(userrec, userput, photoid))
 		if errors.Is(err, database.ErrLikeDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)

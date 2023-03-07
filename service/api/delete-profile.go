@@ -3,7 +3,6 @@ package api
 import (
 	"errors"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -12,11 +11,8 @@ import (
 
 func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedUser Users
-	id, err1 := strconv.Atoi(ps.ByName("userid"))
-	if err1 != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	id := ps.ByName("user")
+
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
@@ -29,7 +25,7 @@ func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps ht
 			return
 		} else if err2 != nil {
 
-			ctx.Logger.WithError(err).WithField("UserID", deletedUser).Error("can't delete profile")
+			ctx.Logger.WithError(err).WithField("User", deletedUser).Error("can't delete profile")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 
