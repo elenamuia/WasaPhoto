@@ -23,7 +23,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-		var idget int
+		var idget string
 		err3 := json.NewDecoder(r.Body).Decode(&idget)
 		if err3 != nil {
 

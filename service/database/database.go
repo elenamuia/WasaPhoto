@@ -38,7 +38,6 @@ import (
 )
 
 type User struct {
-	ID        int
 	Name      string
 	AuthToken string
 }
@@ -49,40 +48,39 @@ type Photo struct {
 	NumLikes       int
 	NumComm        int
 	Datapost       time.Time
-	UserID         int
+	User           string
 }
 
 type Like struct {
-	LikeID   int
+	LikeID   string
 	PhotoID  int
 	DataPost time.Time
-	UserRec  int
+	UserRec  string
 }
 
 type Comment struct {
 	CommentID   int
 	CommMessage string
 	PhotoID     int
-	UserIDPut   int
-	UserIDRec   int
+	UserPut     string
+	UserRec     string
 	Datapost    time.Time
 }
 type Banned struct {
-	BannedID  int
-	BanningID int
+	Banned  string
+	Banning string
 }
 
 type Follow struct {
-	FollowerID int
-	FollowedID int
+	Follower string
+	Followed string
 }
 
 type Login struct {
-	IDlog       int
 	UsernameLog string
 }
 type Profile struct {
-	UserID   int
+	User     string
 	Photos   []int
 	Follower []int
 	Followed []int
@@ -102,10 +100,10 @@ type AppDatabase interface {
 	DeleteComment(int) (err error)
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(like Like) (err error)
-	DeleteProfile(int) (err error)
+	DeleteProfile(string) (err error)
 	GetPhoto(int) (Photo, error)
-	GetProfile(userid int) (p Profile, err error)
-	LoginUser(l Login) (UserID int, isNew bool, err error)
+	GetProfile(name string) (p Profile, err error)
+	LoginUser(l Login) (name string, isNew bool, err error)
 	CheckAuthToken(AuthToken string) (bool, error)
 	PostPhoto(photo Photo) (Photo, error)
 	PutFollow(follow Follow) error
@@ -131,35 +129,35 @@ func New(db *sql.DB) (AppDatabase, error) {
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
-			UserID int PRIMARY KEY,
-			username string NOT NULL UNIQUE,
-			AuthToken string NOT NULL	
+			AuthToken string NOT NULL PRIMARY KEY,
+			Name string NOT NULL UNIQUE
+				
 			) WITHOUT ROWID;
 			
 			CREATE TABLE IF NOT EXISTS Follower (
-				FollowerID int ,
-				FollowedID int,
-				PRIMARY KEY(FollowerID, FOllowedID)
-				FOREIGN KEY (FollowerID) 
-				  REFERENCES Users (UserID) 
+				Follower string ,
+				Followed string,
+				PRIMARY KEY(Follower, FOllowed)
+				FOREIGN KEY (Follower) 
+				  REFERENCES Users (Name) 
 					 ON DELETE CASCADE 
 					 ON UPDATE CASCADE
-				FOREIGN KEY (FollowedID) 
-				  REFERENCES Users (UserID) 
+				FOREIGN KEY (Followed) 
+				  REFERENCES Users (Name) 
 					 ON DELETE CASCADE 
 					 ON UPDATE CASCADE
 			) WITHOUT ROWID;
 
 			CREATE TABLE IF NOT EXISTS Banned (
-				BannedID int,
-				BanningID int,
-				PRIMARY KEY (BannedID, BanningID)
-				FOREIGN KEY (BannedID) 
-				  REFERENCES Users (UserID) 
+				Banned string,
+				Banning string,
+				PRIMARY KEY (Banned, Banning)
+				FOREIGN KEY (Banned) 
+				  REFERENCES Users (Name) 
 					ON DELETE CASCADE 
 					ON UPDATE CASCADE
-				FOREIGN KEY (BanningID) 
-				  REFERENCES Users (UserID) 
+				FOREIGN KEY (Banning) 
+				  REFERENCES Users (Name) 
 					 ON DELETE CASCADE 
 					 ON UPDATE CASCADE
 			) WITHOUT ROWID;
@@ -167,28 +165,28 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 			CREATE TABLE IF NOT EXISTS Photo (
 					PhotoID INTEGER PRIMARY KEY AUTOINCREMENT,
-				    UserID int,
+				    User string,
 				    Photo string NOT NULL,
 				    DataPost string NOT NULL,
-				    FOREIGN KEY (UserID) 
-				      REFERENCES Users (UserID) 
+				    FOREIGN KEY (User) 
+				      REFERENCES Users (Name) 
 				        ON DELETE CASCADE 
 				         ON UPDATE CASCADE
 				);
 
 				CREATE TABLE IF NOT EXISTS Comments (
 						PhotoID int,
-					    UserIDReceiving int NOT NULL,
+					    UserReceiving string NOT NULL,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
 						CommentMessage string NOT NULL,
-						UserIDPutting int NOT NULL,
+						UserPutting string NOT NULL,
 					    DataPost string NOT NULL,
-					    FOREIGN KEY (UserIDReceiving) 
-					      REFERENCES Users (UserID) 
+					    FOREIGN KEY (UserReceiving) 
+					      REFERENCES Users (Name) 
 					       ON DELETE CASCADE 
 					         ON UPDATE CASCADE
-					    FOREIGN KEY (UserIDPutting) 
-					      REFERENCES Users (UserID) 
+					    FOREIGN KEY (UserPutting) 
+					      REFERENCES Users (Name) 
 					       ON DELETE CASCADE 
 					         ON UPDATE CASCADE
 					    FOREIGN KEY (PhotoID) 
@@ -199,17 +197,17 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 				CREATE TABLE IF NOT EXISTS Like (
 
-						UserIDPutting int,
+						UserPutting string NOT NULL,
 						PhotoID string NOT NULL,
-						UserIDReceiving int NOT NULL,
+						UserReceiving string NOT NULL,
 						DataPost string NOT NULL,
-						PRIMARY KEY (PhotoID, UserIDPutting)
-						FOREIGN KEY (UserIDReceiving) 
-						REFERENCES Users (UserID) 
+						PRIMARY KEY (PhotoID, UserPutting)
+						FOREIGN KEY (UserReceiving) 
+						REFERENCES Users (Name) 
 							ON DELETE CASCADE 
 							ON UPDATE CASCADE
-						FOREIGN KEY (UserIDPutting) 
-						REFERENCES Users (UserID) 
+						FOREIGN KEY (UserPutting) 
+						REFERENCES Users (Name) 
 							ON DELETE CASCADE 
 							ON UPDATE CASCADE
 						FOREIGN KEY (PhotoID) 

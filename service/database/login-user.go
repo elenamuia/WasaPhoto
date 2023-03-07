@@ -14,29 +14,29 @@ func RandStringBytes(n int) string {
 	return string(b)
 }
 
-func (db *appdbimpl) LoginUser(l Login) (UserID int, isNew bool, err error) {
+func (db *appdbimpl) LoginUser(l Login) (User string, isNew bool, err error) {
 
 	var AuthToken = RandStringBytes(15)
 
-	rows, err1 := db.c.Query(`SELECT * from Users where UserID = ?`, l.IDlog)
+	rows, err1 := db.c.Query(`SELECT * from Users where Name = ?`, l.UsernameLog)
 
 	if err1 != nil {
-		return 0, false, err
+		return "", false, err
 	}
 
 	if err = rows.Err(); err != nil {
-		return 0, false, err
+		return "", false, err
 	}
 
 	if !rows.Next() {
-		_, err = db.c.Exec(`INSERT into Users (UserID, username, AuthToken) VALUES (?, ?, ?)`,
-			l.IDlog, l.UsernameLog, AuthToken)
+		_, err = db.c.Exec(`INSERT into Users (Name, AuthToken) VALUES () ?, ?)`,
+			l.UsernameLog, AuthToken)
 		if err != nil {
-			return 0, true, err
+			return "", true, err
 		}
-		return l.IDlog, true, nil
+		return l.UsernameLog, true, nil
 	}
 
-	return l.IDlog, false, nil
+	return l.UsernameLog, false, nil
 
 }

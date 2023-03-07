@@ -1,7 +1,7 @@
 package database
 
 func (db *appdbimpl) DeleteFollow(follow Follow) error {
-	res, err1 := db.c.Exec(`DELETE FROM Follower WHERE FollowerID=? AND FollowedID = ?`, follow.FollowerID, follow.FollowedID)
+	res, err1 := db.c.Exec(`DELETE FROM Follower WHERE Follower=? AND Followed = ?`, follow.Follower, follow.Followed)
 	if err1 != nil {
 		return err1
 	}

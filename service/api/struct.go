@@ -7,35 +7,34 @@ import (
 )
 
 type Users struct {
-	ID        int    `json:"UserID"`
-	Username  string `json:"Username"`
+	Name      string `json:"Username"`
 	AuthToken string `json:"AuthToken"`
 }
 
 type Banned struct {
-	BanningID int `json:"BanningID"`
-	BannedID  int `json:"BannedID"`
+	Banning string `json:"Banning"`
+	Banned  string `json:"Banned"`
 }
 
 type Comment struct {
 	CommentID      int       `json:"CommentID"`
 	CommentContent string    `json:"CommentContent"`
 	PhotoID        int       `json:"PhotoID"`
-	UserIDPut      int       `json:"UserIDPut"`
+	UserPut        string    `json:"UserPut"`
 	DataPost       time.Time `json:"datapost"`
-	UserIDRec      int       `json:"UserIDRec"`
+	UserRec        string    `json:"UserRec"`
 }
 
 type Like struct {
-	LikeID   int       `json:"LikeID"`
+	LikeID   string    `json:"LikeID"`
 	PhotoID  int       `json:"PhotoID"`
 	Datapost time.Time `json:"Datapost"`
-	UserRec  int       `json:"UserRec"`
+	UserRec  string    `json:"UserRec"`
 }
 
 type Follow struct {
-	FollowerID int `json:"FollowerID"`
-	FollowedID int `json:"FollowedID"`
+	Follower string `json:"Follower"`
+	Followed string `json:"Followed"`
 }
 
 type Photo struct {
@@ -46,23 +45,22 @@ type Photo struct {
 	Arrayoflike    []database.Like    `json:"Arrayoflike"`
 	Arrayofcomment []database.Comment `json:"Arrayofcomment"`
 	Datapost       time.Time          `json:"DataPost"`
-	UserID         int                `json:"UserID"`
+	User           string             `json:"UserID"`
 }
 
 type Login struct {
-	LoginID   int    `json:"LoginID"`
 	LoginName string `json:"LoginName"`
 }
 
 type Profile struct {
-	UserID   int   `json:"UserID"`
+	User     int   `json:"User"`
 	Photos   []int `json:"Photos"`
 	Follower []int `json:"Follower"`
 	Followed []int `json:"Followed"`
 }
 
-func (l *Login) FromDatabase(log int) {
-	l.LoginID = log
+func (l *Login) FromDatabase(log string) {
+	l.LoginName = log
 
 }
 
@@ -70,23 +68,23 @@ func (l *Login) FromDatabase(log int) {
 func (b *Banned) ToDatabase() database.Banned {
 	return database.Banned{
 
-		BanningID: b.BanningID,
-		BannedID:  b.BannedID,
+		Banning: b.Banning,
+		Banned:  b.Banned,
 	}
 }
 
-func (c *Comment) ToDatabaseComment(userid int, userputting int, photoid int, comcont string) database.Comment {
+func (c *Comment) ToDatabaseComment(userid string, userputting string, photoid int, comcont string) database.Comment {
 	return database.Comment{
 		CommentID:   c.CommentID,
 		CommMessage: comcont,
-		UserIDPut:   userputting,
+		UserPut:     userputting,
 		PhotoID:     photoid,
 		Datapost:    c.DataPost,
-		UserIDRec:   userid,
+		UserRec:     userid,
 	}
 }
 
-func (l *Like) ToDatabaseLike(userrecid int, userputid int, photoid int) database.Like {
+func (l *Like) ToDatabaseLike(userrecid string, userputid string, photoid int) database.Like {
 	return database.Like{
 		LikeID:   userputid,
 		PhotoID:  photoid,
@@ -97,37 +95,36 @@ func (l *Like) ToDatabaseLike(userrecid int, userputid int, photoid int) databas
 
 func (f *Follow) ToDatabaseFollow() database.Follow {
 	return database.Follow{
-		FollowerID: f.FollowerID,
-		FollowedID: f.FollowedID,
+		Follower: f.Follower,
+		Followed: f.Followed,
 	}
 }
 
-func (p *Photo) ToDatabasePhoto(userid int, photoStruct []byte) database.Photo {
+func (p *Photo) ToDatabasePhoto(userid string, photoStruct []byte) database.Photo {
 	return database.Photo{
 		ID:             p.ID,
 		PhotoStructure: photoStruct,
 		NumLikes:       p.NumLikes,
 		NumComm:        p.NumComm,
 		Datapost:       p.Datapost,
-		UserID:         p.UserID,
+		User:           p.User,
 	}
 }
 
 func (u *Users) ToDatabaseUser() database.User {
 	return database.User{
-		ID:        u.ID,
-		Name:      u.Username,
+
+		Name:      u.Name,
 		AuthToken: u.AuthToken,
 	}
 }
 
 func (u *Users) FromDatabase(username string) {
-	u.Username = username
+	u.Name = username
 }
 
 func (log *Login) ToDatabaseLogin() database.Login {
 	return database.Login{
-		IDlog:       log.LoginID,
 		UsernameLog: log.LoginName,
 	}
 }

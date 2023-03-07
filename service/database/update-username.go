@@ -2,8 +2,8 @@ package database
 
 func (db *appdbimpl) Updateusername(user User) (string, error) {
 	var username string
-	res, err1 := db.c.Exec(`UPDATE Users SET username = ? WHERE UserID=?`,
-		user.Name, user.ID)
+	res, err1 := db.c.Exec(`UPDATE Users SET Name = ? WHERE Name=?`,
+		user.Name)
 	if err1 != nil {
 		return "", err1
 	}
