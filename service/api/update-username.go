@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -14,12 +13,8 @@ import (
 
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	id, err1 := strconv.Atoi(ps.ByName("id"))
-	if err1 != nil {
+	id := ps.ByName("userid")
 
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
 	authToken := r.Header.Get("authToken")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
@@ -38,7 +33,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 		}
 
-		updatedUser.ID = id
+		updatedUser.Name = id
 
 		username, err2 := rt.db.Updateusername(updatedUser.ToDatabaseUser())
 		fmt.Println(username)
@@ -53,7 +48,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 
 		}
-		updatedUser.Username = username
+		updatedUser.Name = username
 		updatedUser.AuthToken = authToken
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(updatedUser)

@@ -36,8 +36,8 @@ paths:
             schema:
               type: object
               properties:
-                name:
-                  $ref: "#/components/schemas/nameUser"
+                id:
+                  $ref: "#/components/schemas/username"
         required: true
       responses:
         '201':
@@ -47,15 +47,15 @@ paths:
               schema:
                 type: object
                 properties:
-                  UserId: 
-                    $ref: "#/components/schemas/UserId"  
+                  id: 
+                    $ref: "#/components/schemas/nameUser"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
   
   /users/{userid}:
     parameters:
-    -  $ref: "#/components/parameters/userid"
+    -  $ref: "#/components/parameters/username"
     put:
       tags: [User]
       summary: Change Username
@@ -71,7 +71,7 @@ paths:
               type: object
               properties:
                 name:
-                  $ref: "#/components/schemas/UserId"
+                  $ref: "#/components/schemas/Name"
         required: true
       responses:
         "201":
@@ -83,7 +83,7 @@ paths:
                 type: object
                 properties:
                   username: 
-                    $ref: "#/components/schemas/nameUser" 
+                    $ref: "#/components/schemas/Name" 
         "400":
           $ref: "#/components/responses/BadRequest"
     
@@ -108,7 +108,7 @@ paths:
   
   /users/{userid}/profile/:
     parameters:
-    -  $ref: "#/components/parameters/userid"
+    -  $ref: "#/components/parameters/username"
     get:
       tags: [User]
       summary: Searches for a user
@@ -145,7 +145,7 @@ paths:
 
   /users/{userid}/mainstream/:
     parameters:
-    - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/username"
     get:
       tags: [User]
       summary: get mainstream
@@ -175,11 +175,11 @@ paths:
 
 
 
-  /users/{userid}/banned/{BannedId}:
+  /users/{banninguser}/banned/{banneduser}:
     parameters:
-    - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/username"
       
-    - $ref: "#/components/parameters/BannedId"
+    - $ref: "#/components/parameters/banned"
       
     put:
       tags: [User]
@@ -193,8 +193,8 @@ paths:
             schema:
               type: object
               properties:
-                userid:
-                  $ref: "#/components/schemas/UserId"
+                name:
+                  $ref: "#/components/schemas/Name"
                 
       responses:
         "201":
@@ -209,7 +209,7 @@ paths:
                       minItems: 0
                       maxItems: 1000 
                       items:
-                        $ref: "#/components/schemas/UserId"
+                        $ref: "#/components/schemas/Name"
         "404":
           $ref: "#/components/responses/NotFound"
         "409":
@@ -235,11 +235,11 @@ paths:
 
       
 
-  /users/{userid}/followed/{followedUserId}:
+  /users/{followinguser}/followed/{followeduser}:
     parameters:
-    - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/username"
       
-    - $ref: "#/components/parameters/followedUserId"
+    - $ref: "#/components/parameters/followed"
       
 
     
@@ -256,8 +256,8 @@ paths:
             schema:
               type: object
               properties:
-                id:
-                  $ref: "#/components/schemas/UserId"
+                Name:
+                  $ref: "#/components/schemas/Name"
       responses:
         "201":
           description: User correctly added to the list of followed users
@@ -271,7 +271,7 @@ paths:
                       minItems: 0
                       maxItems: 1000 
                       items:
-                        $ref: "#/components/schemas/UserId"
+                        $ref: "#/components/schemas/Name"
         "404":
           $ref: "#/components/responses/NotFound"
         "401":
@@ -293,7 +293,9 @@ paths:
 
 
 
-  /photos/:
+  /users/{userid}/photos/:
+    parameters:
+      - $ref: "#/components/parameters/username"
     
     post:
       tags: [Photo]
@@ -320,9 +322,10 @@ paths:
     
 
 
-  /photos/{photoid}:
+  /users/{userid}/photos/{photoid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
+    - $ref: "#/components/parameters/username"
     
     delete:
       tags: [Photo]
@@ -367,9 +370,10 @@ paths:
  
     
     
-  /photos/{photoid}/comments/:
+  /users/{userid}/photos/{photoid}/comments/:
     parameters:
     - $ref: "#/components/parameters/photoid"
+    - $ref: "#/components/parameters/username"
     
     
     post:
@@ -404,7 +408,15 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
-  /photos/{photoid}/comments/{commentid}:
+  /users/{userid}/photos/{photoid}/comments/{commentid}:
+
+    parameters:
+      - $ref: "#/components/parameters/photoid"
+      - $ref: "#/components/parameters/username"
+      - $ref: "#/components/parameters/commentid"
+
+
+
     delete:
       tags: [Photo]
       summary: Delete a certain comment
@@ -445,7 +457,7 @@ paths:
                   maxItems: 1000
                   properties:
                     UserLike:
-                      $ref: "#/components/schemas/UserId"  
+                      $ref: "#/components/schemas/username"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -468,22 +480,26 @@ paths:
 
 components:
   parameters:
-    userid: 
-      name: userid
+    username: 
+      name: username
       in: path
-      description: Id of a user that made the login
       required: true
       schema:
-        type: number
-        format: int
-    BannedId:
-      name: BannedId
+        type: string
+        pattern: 'ˆ.*?$'
+        minLength: 3
+        maxLength: 16 
+        
+
+
+    banned:
+      name: banned
       in: path
-      description: The Id of the user that has been banned
+      description: The username of the user that has been banned
       required: true
       schema:
-        type: number
-        format: int
+        $ref: "#/components/schemas/Name"
+
     photoid:  
       name: photoid
       in: path
@@ -492,14 +508,14 @@ components:
       schema:
         type: number
         format: int
-    followedUserId:
-      name: followedUserId
+    followed:
+      name: followed
       in: path
-      description: Id of the follower taken int consideration
+      description: Username of the follower taken int consideration
       required: true
       schema:
-        type: number
-        format: int
+        $ref: "#/components/schemas/Name"
+
     commentid: 
       name: commentid
       in: path
@@ -511,10 +527,10 @@ components:
     likeid:
       name: likeid
       in: path
-      description: Id of the like that has been considered 
+      description: Username of the like that has been considered 
       required: true
       schema:
-        $ref: "#/components/schemas/UserId"
+        $ref: "#/components/schemas/Name"
 
 
 
@@ -523,15 +539,13 @@ components:
   schemas:
    
         
-    UserId:
-      type: number
-      format: int
-    nameUser:
+   
+    Name:
       type: string
       pattern: 'ˆ.*?$'
       minLength: 3
       maxLength: 16
-      description: Real name of the user
+      description: User identification on that social
     
     PhotoId:
       description: value identifying of a photo
@@ -550,8 +564,8 @@ components:
         photoid:
           $ref: "#/components/schemas/PhotoId"
         
-        UserId:
-          $ref: "#/components/schemas/UserId"
+        User:
+          $ref: "#/components/schemas/Name"
           
         numLikes:
           description: number of likes linked to a photo
@@ -570,7 +584,7 @@ components:
             maxItems: 10000
             items:
               
-                $ref: "#/components/schemas/UserId"
+                $ref: "#/components/schemas/Name"
         ArrayOfComments:
           description: Array containing all comments relative to a certain photo
           type: object
@@ -580,7 +594,7 @@ components:
             maxItems: 1000
             items:
               allOf:
-              - $ref: "#/components/schemas/UserId"
+              - $ref: "#/components/schemas/Name"
               - $ref: "#/components/schemas/CommentContent"
               - $ref: "#/components/schemas/CommentId"
 
@@ -612,8 +626,8 @@ components:
           $ref: "#/components/schemas/CommentContent"
         PhotoId:
           $ref: "#/components/schemas/PhotoId"
-        UserId: 
-          $ref: "#/components/schemas/UserId"
+        User: 
+          $ref: "#/components/schemas/Name"
     
     Error:
       type: object
