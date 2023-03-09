@@ -37,7 +37,7 @@ paths:
               type: object
               properties:
                 id:
-                  $ref: "#/components/schemas/username"
+                  $ref: "#/components/schemas/Name"
         required: true
       responses:
         '201':
@@ -48,7 +48,7 @@ paths:
                 type: object
                 properties:
                   id: 
-                    $ref: "#/components/schemas/nameUser"  
+                    $ref: "#/components/schemas/Name"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -457,7 +457,7 @@ paths:
                   maxItems: 1000
                   properties:
                     UserLike:
-                      $ref: "#/components/schemas/username"  
+                      $ref: "#/components/schemas/Name"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
