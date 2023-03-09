@@ -11,9 +11,9 @@ import (
 
 func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedFollow Follow
-	follower := ps.ByName("followinguser")
+	follower := ps.ByName("userid")
 	followed := ps.ByName("followeduser")
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 

@@ -15,7 +15,6 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	file, _, err2 := r.FormFile("photo")
 
 	userid := ps.ByName("user")
-	photo.User = userid
 
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -50,7 +49,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	// fileBytes is now a []byte containing the contents of the file
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {

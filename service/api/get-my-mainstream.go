@@ -11,7 +11,7 @@ import (
 
 func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {

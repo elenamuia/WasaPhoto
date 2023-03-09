@@ -19,7 +19,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 

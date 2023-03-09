@@ -113,7 +113,6 @@ func (p *Photo) ToDatabasePhoto(userid string, photoStruct []byte) database.Phot
 
 func (u *Users) ToDatabaseUser() database.User {
 	return database.User{
-
 		Name:      u.Name,
 		AuthToken: u.AuthToken,
 	}

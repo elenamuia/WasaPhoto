@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
@@ -11,12 +12,13 @@ import (
 func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var login Login
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	err1 := json.NewDecoder(r.Body).Decode(&login)
 
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		fmt.Println("err1:", err1)
 		return
 	}
 
@@ -24,6 +26,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		fmt.Println("err2:", err2)
 		return
 	}
 

@@ -175,7 +175,7 @@ paths:
 
 
 
-  /users/{banninguser}/banned/{banneduser}:
+  /users/{userid}/banned/{banneduser}:
     parameters:
     - $ref: "#/components/parameters/username"
       
@@ -235,7 +235,7 @@ paths:
 
       
 
-  /users/{followinguser}/followed/{followeduser}:
+  /users/{userid}/followed/{followeduser}:
     parameters:
     - $ref: "#/components/parameters/username"
       

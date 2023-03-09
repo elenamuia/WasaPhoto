@@ -29,7 +29,7 @@ func (db *appdbimpl) LoginUser(l Login) (User string, isNew bool, err error) {
 	}
 
 	if !rows.Next() {
-		_, err = db.c.Exec(`INSERT into Users (Name, AuthToken) VALUES () ?, ?)`,
+		_, err = db.c.Exec(`INSERT into Users (Name, AuthToken) VALUES (?, ?)`,
 			l.UsernameLog, AuthToken)
 		if err != nil {
 			return "", true, err

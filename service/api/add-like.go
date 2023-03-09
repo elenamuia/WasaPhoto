@@ -20,7 +20,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {

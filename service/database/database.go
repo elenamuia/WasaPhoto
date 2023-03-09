@@ -109,7 +109,7 @@ type AppDatabase interface {
 	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream() (ArrayofPhotos []Photo, err error)
-	Updateusername(User) (string, error)
+	Updateusername(string, string) (string, error)
 	Ping() error
 }
 
@@ -129,9 +129,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
-			AuthToken string NOT NULL PRIMARY KEY,
-			Name string NOT NULL UNIQUE
-				
+			Name string NOT NULL PRIMARY KEY,
+			AuthToken string NOT NULL UNIQUE	
 			) WITHOUT ROWID;
 			
 			CREATE TABLE IF NOT EXISTS Follower (

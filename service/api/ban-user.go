@@ -13,8 +13,8 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	var bannedUser Banned
 	banned := ps.ByName("banneduser")
-	banning := ps.ByName("banninguser")
-	authToken := r.Header.Get("authToken")
+	banning := ps.ByName("userid")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 

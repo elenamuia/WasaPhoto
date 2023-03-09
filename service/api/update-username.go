@@ -15,7 +15,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 	id := ps.ByName("userid")
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
@@ -25,17 +25,15 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 		}
 
-		var updatedUser Users
-		err2 := json.NewDecoder(r.Body).Decode(&updatedUser)
+		var newName string
+		err2 := json.NewDecoder(r.Body).Decode(&newName)
 		if err2 != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
-		updatedUser.Name = id
-
-		username, err2 := rt.db.Updateusername(updatedUser.ToDatabaseUser())
+		username, err2 := rt.db.Updateusername(id, newName)
 		fmt.Println(username)
 		if errors.Is(err, database.ErrUserDoesNotExist) {
 
@@ -48,10 +46,9 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 
 		}
-		updatedUser.Name = username
-		updatedUser.AuthToken = authToken
+
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(updatedUser)
+		_ = json.NewEncoder(w).Encode(newName)
 
 		w.WriteHeader(http.StatusNoContent)
 	} else {

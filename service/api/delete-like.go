@@ -12,7 +12,7 @@ import (
 
 func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedLike Like
-	userrec := ps.ByName("userrec")
+	userrec := ps.ByName("userid")
 	photoid, err2 := strconv.Atoi(ps.ByName("photoid"))
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -20,7 +20,7 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 	userput := ps.ByName("likeid")
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 

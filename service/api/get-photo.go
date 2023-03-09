@@ -16,7 +16,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {

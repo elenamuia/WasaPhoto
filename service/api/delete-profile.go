@@ -13,7 +13,7 @@ func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps ht
 	var deletedUser Users
 	id := ps.ByName("user")
 
-	authToken := r.Header.Get("authToken")
+	authToken := r.Header.Get("Authorization")
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
