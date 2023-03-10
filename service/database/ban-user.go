@@ -1,8 +1,9 @@
 package database
 
-func (db *appdbimpl) BanUser(ban Banned) (err error) {
+func (db *appdbimpl) BanUser(banning string, banned string) (err error) {
+
 	_, err = db.c.Exec(`INSERT INTO Banned(Banned, Banning) VALUES (?,?)`,
-		ban.Banned, ban.Banning)
+		banned, banning)
 
 	if err != nil {
 

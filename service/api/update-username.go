@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -18,7 +17,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 	authToken := r.Header.Get("Authorization")
 	authToken = strings.Replace(authToken, "Bearer ", "", 1)
-	fmt.Println(authToken)
+
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if err != nil {
 
@@ -29,15 +28,15 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	if bool {
 		var newName string
 		err2 := json.NewDecoder(r.Body).Decode(&newName)
-		fmt.Println(newName)
+
 		if err2 != nil {
 
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		fmt.Println(id)
+
 		username, err2 := rt.db.Updateusername(id, newName)
-		fmt.Println(username)
+
 		if errors.Is(err, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
@@ -51,7 +50,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(newName)
+		_ = json.NewEncoder(w).Encode(username)
 
 		w.WriteHeader(http.StatusNoContent)
 	} else {

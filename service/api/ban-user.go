@@ -3,6 +3,8 @@ package api
 import (
 	"encoding/json"
 
+	"strings"
+
 	"net/http"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
@@ -14,7 +16,8 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	var bannedUser Banned
 	banned := ps.ByName("banneduser")
 	banning := ps.ByName("userid")
-	authToken := r.Header.Get("Authorization")
+	BearerToken := r.Header.Get("Authorization")
+	authToken := strings.Split(BearerToken, " ")[1]
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 
@@ -25,9 +28,9 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 
-		err = rt.db.BanUser(bannedUser.ToDatabase(banned, banning))
+		err1 := rt.db.BanUser(banning, banned)
 
-		if err != nil {
+		if err1 != nil {
 
 			ctx.Logger.WithError(err).Error("can't ban the user")
 			w.WriteHeader(http.StatusInternalServerError)
