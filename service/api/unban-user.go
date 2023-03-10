@@ -2,7 +2,9 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -12,9 +14,9 @@ import (
 func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var unban Banned
 	banning := ps.ByName("userid")
-	banned := ps.ByName("bannedguser")
+	banned := ps.ByName("banneduser")
 	authToken := r.Header.Get("Authorization")
-
+	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 		unban.Banned = banned
@@ -26,6 +28,7 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 			w.WriteHeader(http.StatusNotFound)
 			return
 		} else if err3 != nil {
+			fmt.Println(err3)
 
 			ctx.Logger.WithError(err).WithField("banneduser", unban).Error("can't unban user")
 			w.WriteHeader(http.StatusInternalServerError)

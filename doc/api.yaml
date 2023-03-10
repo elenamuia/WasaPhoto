@@ -55,7 +55,7 @@ paths:
   
   /users/{userid}:
     parameters:
-    -  $ref: "#/components/parameters/username"
+    -  $ref: "#/components/parameters/userid"
     put:
       tags: [User]
       summary: Change Username
@@ -108,7 +108,7 @@ paths:
   
   /users/{userid}/profile/:
     parameters:
-    -  $ref: "#/components/parameters/username"
+    -  $ref: "#/components/parameters/userid"
     get:
       tags: [User]
       summary: Searches for a user
@@ -145,7 +145,7 @@ paths:
 
   /users/{userid}/mainstream/:
     parameters:
-    - $ref: "#/components/parameters/username"
+    - $ref: "#/components/parameters/userid"
     get:
       tags: [User]
       summary: get mainstream
@@ -177,9 +177,9 @@ paths:
 
   /users/{userid}/banned/{banneduser}:
     parameters:
-    - $ref: "#/components/parameters/username"
+    - $ref: "#/components/parameters/userid"
       
-    - $ref: "#/components/parameters/banned"
+    - $ref: "#/components/parameters/bannedUser"
       
     put:
       tags: [User]
@@ -237,9 +237,9 @@ paths:
 
   /users/{userid}/followed/{followeduser}:
     parameters:
-    - $ref: "#/components/parameters/username"
+    - $ref: "#/components/parameters/userid"
       
-    - $ref: "#/components/parameters/followed"
+    - $ref: "#/components/parameters/followeduser"
       
 
     
@@ -325,7 +325,7 @@ paths:
   /users/{userid}/photos/{photoid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
-    - $ref: "#/components/parameters/username"
+    - $ref: "#/components/parameters/userid"
     
     delete:
       tags: [Photo]
@@ -373,7 +373,7 @@ paths:
   /users/{userid}/photos/{photoid}/comments/:
     parameters:
     - $ref: "#/components/parameters/photoid"
-    - $ref: "#/components/parameters/username"
+    - $ref: "#/components/parameters/userid"
     
     
     post:
@@ -412,7 +412,7 @@ paths:
 
     parameters:
       - $ref: "#/components/parameters/photoid"
-      - $ref: "#/components/parameters/username"
+      - $ref: "#/components/parameters/userid"
       - $ref: "#/components/parameters/commentid"
 
 
@@ -456,7 +456,7 @@ paths:
                   minItems: 0
                   maxItems: 1000
                   properties:
-                    UserLike:
+                    items:
                       $ref: "#/components/schemas/Name"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
@@ -480,9 +480,10 @@ paths:
 
 components:
   parameters:
-    username: 
+    userid: 
       name: username
       in: path
+      description: The username of the user
       required: true
       schema:
         type: string
@@ -492,7 +493,7 @@ components:
         
 
 
-    banned:
+    bannedUser:
       name: banned
       in: path
       description: The username of the user that has been banned
@@ -508,7 +509,7 @@ components:
       schema:
         type: number
         format: int
-    followed:
+    followeduser:
       name: followed
       in: path
       description: Username of the follower taken int consideration
@@ -583,7 +584,6 @@ components:
             minItems: 0
             maxItems: 10000
             items:
-              
                 $ref: "#/components/schemas/Name"
         ArrayOfComments:
           description: Array containing all comments relative to a certain photo
@@ -593,10 +593,7 @@ components:
             minItems: 0
             maxItems: 1000
             items:
-              allOf:
-              - $ref: "#/components/schemas/Name"
-              - $ref: "#/components/schemas/CommentContent"
-              - $ref: "#/components/schemas/CommentId"
+               $ref: "#/components/schemas/CommentId"
 
         datePost:
           type: string

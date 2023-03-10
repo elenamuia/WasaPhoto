@@ -16,7 +16,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	id := ps.ByName("userid")
 
 	authToken := r.Header.Get("Authorization")
-	authToken = strings.Replace(authToken, "Bearer ", "", 1)
+	authToken = strings.Split(authToken, " ")[1]
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if err != nil {

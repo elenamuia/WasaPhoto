@@ -128,91 +128,54 @@ func New(db *sql.DB) (AppDatabase, error) {
 	var tableName string
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE  IF NOT EXISTS Users (
+		sqlStmt := `
+			PRAGMA foreign_keys = ON;
+			CREATE TABLE  IF NOT EXISTS Users (
 			Name string NOT NULL PRIMARY KEY,
 			AuthToken string NOT NULL UNIQUE	
 			) WITHOUT ROWID;
 			
 			CREATE TABLE IF NOT EXISTS Follower (
-				Follower string ,
-				Followed string,
+				Follower string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+				Followed string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 				PRIMARY KEY(Follower, Followed)
-				FOREIGN KEY (Follower) 
-				  REFERENCES Users (Name) 
-					 ON DELETE CASCADE 
-					 ON UPDATE CASCADE
-				FOREIGN KEY (Followed) 
-				  REFERENCES Users (Name) 
-					 ON DELETE CASCADE 
-					 ON UPDATE CASCADE
+				
 			) WITHOUT ROWID;
 
 			CREATE TABLE IF NOT EXISTS Banned (
-				Banned string,
-				Banning string,
+				Banned string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE, 
+				Banning string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE, 
 				PRIMARY KEY (Banned, Banning)
-				FOREIGN KEY (Banned) 
-				  REFERENCES Users (Name) 
-					ON DELETE CASCADE 
-					ON UPDATE CASCADE
-				FOREIGN KEY (Banning) 
-				  REFERENCES Users (Name) 
-					 ON DELETE CASCADE 
-					 ON UPDATE CASCADE
 			) WITHOUT ROWID;
 
 
 			CREATE TABLE IF NOT EXISTS Photo (
 					PhotoID INTEGER PRIMARY KEY AUTOINCREMENT,
-				    User string,
+				    User string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 				    Photo string NOT NULL,
-				    DataPost string NOT NULL,
-				    FOREIGN KEY (User) 
-				      REFERENCES Users (Name) 
-				        ON DELETE CASCADE 
-				         ON UPDATE CASCADE
+				    DataPost string NOT NULL
+				    
 				);
 
 				CREATE TABLE IF NOT EXISTS Comments (
-						PhotoID int,
-					    UserReceiving string NOT NULL,
+						PhotoID int NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
+					    UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
 						CommentMessage string NOT NULL,
-						UserPutting string NOT NULL,
-					    DataPost string NOT NULL,
-					    FOREIGN KEY (UserReceiving) 
-					      REFERENCES Users (Name) 
-					       ON DELETE CASCADE 
-					         ON UPDATE CASCADE
-					    FOREIGN KEY (UserPutting) 
-					      REFERENCES Users (Name) 
-					       ON DELETE CASCADE 
-					         ON UPDATE CASCADE
-					    FOREIGN KEY (PhotoID) 
-					      REFERENCES Photo (PhotoID) 
-					       ON DELETE CASCADE 
-					         ON UPDATE CASCADE
+						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+					    DataPost string NOT NULL
+						
 					);
 
 				CREATE TABLE IF NOT EXISTS Like (
 
-						UserPutting string NOT NULL,
-						PhotoID string NOT NULL,
-						UserReceiving string NOT NULL,
+						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+						PhotoID string NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
+						UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 						DataPost string NOT NULL,
+						
 						PRIMARY KEY (PhotoID, UserPutting)
-						FOREIGN KEY (UserReceiving) 
-						REFERENCES Users (Name) 
-							ON DELETE CASCADE 
-							ON UPDATE CASCADE
-						FOREIGN KEY (UserPutting) 
-						REFERENCES Users (Name) 
-							ON DELETE CASCADE 
-							ON UPDATE CASCADE
-						FOREIGN KEY (PhotoID) 
-						REFERENCES Photo (PhotoID) 
-							ON DELETE CASCADE 
-							ON UPDATE CASCADE
+						
 					);
 `
 		_, err = db.Exec(sqlStmt)

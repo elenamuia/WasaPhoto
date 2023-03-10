@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strings"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -12,7 +13,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	follower := ps.ByName("userid")
 	followed := ps.ByName("followeduser")
 	authToken := r.Header.Get("Authorization")
-
+	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
