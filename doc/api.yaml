@@ -34,6 +34,7 @@ paths:
         content:
           application/json:
             schema:
+              description: User name
               type: object
               properties:
                 id:
@@ -45,6 +46,7 @@ paths:
           content:
             application/json:
               schema:
+                description: User whom registered or logged in
                 type: object
                 properties:
                   id: 
@@ -68,6 +70,7 @@ paths:
         content:
           application/json:
             schema:
+              description: New username
               type: object
               properties:
                 name:
@@ -80,6 +83,7 @@ paths:
           content:
             application/json:
               schema:
+                description: New username
                 type: object
                 properties:
                   username: 
@@ -125,14 +129,15 @@ paths:
 
             application/json:
               schema:
+                description: photo related to a certain profile
                 type: object
                 properties:
                   numFollowers:
                     type: integer
-                    format: int64
+                    format: int
                   numFollowedUsers:
                     type: integer
-                    format: int64
+                    format: int
                   ArrayofPhotos:
                     $ref: "#/components/schemas/ArrayofPhotos"
             
@@ -161,6 +166,7 @@ paths:
           content:
             application/json:
               schema:
+                description: Array of photos in the mainstream
                 type: object
                 properties:
                   ArrayofPhotos:
@@ -190,6 +196,7 @@ paths:
         content:
           application/json:
             schema:
+              description: The User that we want to ban
               type: object
               properties:
                 name:
@@ -306,13 +313,18 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  $ref: "#/components/schemas/PhotoId"
+              $ref: "#/components/schemas/PhotoId"
       responses:
         "201":
           description: Photo added
+          content:
+            application/json:
+              schema:
+                description: Info of the added photo
+                type: object
+                properties:
+                  photo:
+                    $ref: "#/components/schemas/Photo"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -332,6 +344,12 @@ paths:
         With this command a certain user can delete one of his/her photo from 
         the profile
       operationId: deletePhoto
+      requestBody:
+        description: Id of the added photo
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhotoId"
       responses:
         "204":
           description: Photo deleted
@@ -348,13 +366,20 @@ paths:
       description: Using this command, we can get all the info about a photo  
         and the photo itself from on its Id
       operationId: getPhoto
+      requestBody:
+        description: Id of the added photo
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhotoId"
       responses: 
-        "307":
+        "200":
           description: The operation went correctly, you will now be redirected 
             to the photo location
           content:
             application/json:
               schema:
+                description: Get the photo that the user was looking for
                 type: object
                 properties:
                   photo:
@@ -381,20 +406,18 @@ paths:
         someone's photo
       operationId: commentPhoto
       requestBody:
-        description: Id of the added comment
+        description: Info of the added comment
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  $ref: "#/components/schemas/Comment"
+              $ref: "#/components/schemas/Comment"
       responses:
-        "200":
+        "201":
           description: Comment correctly added
           content:
             application/json:
                 schema:
+                  description: Comment info
                   type: object
                   properties:
                     name:
@@ -421,6 +444,12 @@ paths:
       description: A user can use this command to delete
         one of the comments under his/her photo
       operationId: uncommentPhoto
+      requestBody:
+        description: Id of the added photo
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhotoId"
       responses:
         "204":
           description: Comment correctly deleted
@@ -439,10 +468,15 @@ paths:
       summary: Put like on a photo
       description: Using this command, the user who made the login
         can  put a like on a photo
-      
+      requestBody:
+        description: Like info
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Like"
       operationId: likePhoto
       responses:
-        "200":
+        "201":
           description: The photo has been liked
           content:
             application/json:
@@ -465,6 +499,12 @@ paths:
       description: Using this command, the user who made the login
         can  delete a like from a photo
       operationId: unlikePhoto
+      requestBody:
+        description: Id of the user whom wants to unlike the photo
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Name"
       responses:
         "204":
           description: The photo has been correctly unliked
@@ -547,7 +587,7 @@ components:
     PhotoId:
       description: value identifying of a photo
       type: number
-      format: int64
+      format: int
     Photo:
       type: object
       description: All items describing a posted photo
@@ -567,11 +607,11 @@ components:
         numLikes:
           description: number of likes linked to a photo
           type: integer
-          format: int64
+          format: int
         numComments:
           description: number of comments linked to a photo
           type: integer
-          format: int64
+          format: int
         ArrayOfLike:
           description: Array containing the IDs of all the users that liked the photo
           type: object
@@ -595,14 +635,13 @@ components:
           type: string
           pattern: 'ˆ.*?$'
           description: Date of photo posting
-          
           format: "YYYY-MM-DD"
           minLength: 0
           maxLength: 10
     CommentId:
       description: number identifying the comment
       type: integer
-      format: int64
+      format: int
     CommentContent:
       description: text of the comment
       type: string
@@ -619,8 +658,36 @@ components:
           $ref: "#/components/schemas/CommentContent"
         PhotoId:
           $ref: "#/components/schemas/PhotoId"
-        User: 
+        UserPut: 
           $ref: "#/components/schemas/Name"
+        UserRec: 
+          $ref: "#/components/schemas/Name"
+        datePost:
+          type: string
+          pattern: 'ˆ.*?$'
+          description: Date of photo posting
+          format: "YYYY-MM-DD"
+          minLength: 0
+          maxLength: 10
+    Like:
+      description: Info about the added like
+      type: object
+      properties: 
+        likeid:
+          $ref: "#/components/schemas/Name"
+        UserRec:  
+          $ref: "#/components/schemas/Name"
+        PhotoId:
+          $ref: "#/components/schemas/PhotoId"
+        datePost:
+          type: string
+          pattern: 'ˆ.*?$'
+          description: Date of photo posting
+          format: "YYYY-MM-DD"
+          minLength: 0
+          maxLength: 10
+            
+          
     
     Error:
       type: object
