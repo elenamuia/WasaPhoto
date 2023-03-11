@@ -178,8 +178,7 @@ paths:
   /users/{userid}/banned/{banneduser}:
     parameters:
     - $ref: "#/components/parameters/userid"
-      
-    - $ref: "#/components/parameters/bannedUser"
+    - $ref: "#/components/parameters/banneduser"
       
     put:
       tags: [User]
@@ -238,7 +237,6 @@ paths:
   /users/{userid}/followed/{followeduser}:
     parameters:
     - $ref: "#/components/parameters/userid"
-      
     - $ref: "#/components/parameters/followeduser"
       
 
@@ -295,7 +293,7 @@ paths:
 
   /users/{userid}/photos/:
     parameters:
-      - $ref: "#/components/parameters/username"
+      - $ref: "#/components/parameters/userid"
     
     post:
       tags: [Photo]
@@ -481,7 +479,7 @@ paths:
 components:
   parameters:
     userid: 
-      name: username
+      name: userid
       in: path
       description: The username of the user
       required: true
@@ -493,8 +491,8 @@ components:
         
 
 
-    bannedUser:
-      name: banned
+    banneduser:
+      name: banneduser
       in: path
       description: The username of the user that has been banned
       required: true
@@ -509,8 +507,9 @@ components:
       schema:
         type: number
         format: int
+    
     followeduser:
-      name: followed
+      name: followeduser
       in: path
       description: Username of the follower taken int consideration
       required: true
@@ -538,9 +537,6 @@ components:
       
     
   schemas:
-   
-        
-   
     Name:
       type: string
       pattern: 'ˆ.*?$'
