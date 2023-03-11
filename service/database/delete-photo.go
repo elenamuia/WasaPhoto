@@ -1,9 +1,7 @@
 package database
 
-import "fmt"
-
 func (db *appdbimpl) DeletePhoto(phId int) error {
-	fmt.Println(phId)
+
 	res, err1 := db.c.Exec(`DELETE FROM Photo WHERE PhotoID=? `, phId)
 
 	if err1 != nil {

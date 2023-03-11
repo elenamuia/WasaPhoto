@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	"fmt"
+
 	"net/http"
 	"strings"
 
@@ -28,7 +28,6 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 			w.WriteHeader(http.StatusNotFound)
 			return
 		} else if err3 != nil {
-			fmt.Println(err3)
 
 			ctx.Logger.WithError(err).WithField("banneduser", unban).Error("can't unban user")
 			w.WriteHeader(http.StatusInternalServerError)
