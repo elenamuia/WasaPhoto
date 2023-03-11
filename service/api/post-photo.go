@@ -3,8 +3,10 @@ package api
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -14,8 +16,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	var photo Photo
 	file, _, err2 := r.FormFile("photo")
 
-	userid := ps.ByName("user")
-
+	userid := ps.ByName("userid")
+	fmt.Println(userid)
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -50,7 +52,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// fileBytes is now a []byte containing the contents of the file
 
 	authToken := r.Header.Get("Authorization")
-
+	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 		// err := json.NewDecoder(r.Body).Decode(&photo)
@@ -62,8 +64,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 		photoRet, err4 := rt.db.PostPhoto(photo.ToDatabasePhoto(userid, bytes))
 		if err4 != nil {
-
-			ctx.Logger.WithError(err).Error("Can't post photo")
+			fmt.Println(err4)
+			ctx.Logger.WithError(err4).Error("Can't post photo")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
