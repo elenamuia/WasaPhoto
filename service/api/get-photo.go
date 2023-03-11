@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -17,14 +18,14 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 	authToken := r.Header.Get("Authorization")
-
+	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
 		photos, err2 := rt.db.GetPhoto(photoid)
 		if err2 != nil {
 
-			ctx.Logger.WithError(err).Error("Can't post photo")
+			ctx.Logger.WithError(err2).Error("Can't post photo")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

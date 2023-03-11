@@ -612,25 +612,6 @@ components:
           description: number of comments linked to a photo
           type: integer
           format: int
-        ArrayOfLike:
-          description: Array containing the IDs of all the users that liked the photo
-          type: object
-          items:
-            type: array
-            minItems: 0
-            maxItems: 10000
-            items:
-                $ref: "#/components/schemas/Name"
-        ArrayOfComments:
-          description: Array containing all comments relative to a certain photo
-          type: object
-          items:
-            type: array
-            minItems: 0
-            maxItems: 1000
-            items:
-               $ref: "#/components/schemas/CommentId"
-
         datePost:
           type: string
           pattern: 'ˆ.*?$'
