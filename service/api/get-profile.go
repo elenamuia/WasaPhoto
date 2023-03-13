@@ -12,7 +12,7 @@ import (
 
 func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	id := ps.ByName("user")
+	id := ps.ByName("userid")
 
 	authToken := r.Header.Get("Authorization")
 	authToken = strings.Split(authToken, " ")[1]
