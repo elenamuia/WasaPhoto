@@ -13,7 +13,7 @@ import (
 
 func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedLike Like
-	userrec := ps.ByName("userid")
+
 	photoid, err2 := strconv.Atoi(ps.ByName("photoid"))
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -27,7 +27,7 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	if bool {
 
-		err4 := rt.db.DeleteLike(deletedLike.ToDatabaseLike(userrec, userput, photoid))
+		err4 := rt.db.DeleteLike(userput, photoid)
 		if errors.Is(err, database.ErrLikeDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)

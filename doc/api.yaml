@@ -500,11 +500,17 @@ paths:
         can  delete a like from a photo
       operationId: unlikePhoto
       requestBody:
-        description: Id of the user whom wants to unlike the photo
+        description: Id of the user whom wants to unlike the photo and id of the photo
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Name"
+              description: Info of the like to remove
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/Name"
+                photoid:
+                  $ref:  "#/components/schemas/PhotoId"
       responses:
         "204":
           description: The photo has been correctly unliked

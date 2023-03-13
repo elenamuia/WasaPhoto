@@ -99,7 +99,7 @@ type AppDatabase interface {
 	BanUser(string, string) error
 	DeleteComment(int) (err error)
 	DeleteFollow(follow Follow) (err error)
-	DeleteLike(like Like) (err error)
+	DeleteLike(string, int) (err error)
 	DeleteProfile(string) (err error)
 	GetPhoto(int) (Photo, error)
 	GetProfile(name string) (p Profile, err error)
