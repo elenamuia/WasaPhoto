@@ -1,5 +1,7 @@
 package database
 
+import "sort"
+
 func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 
 	p.User = user
@@ -23,6 +25,7 @@ func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 		p.Photos = append(p.Photos, photoID)
 
 	}
+	sort.Sort(sort.Reverse(sort.IntSlice(p.Photos)))
 
 	if err5 := rows1.Err(); err5 != nil {
 		return p, err
