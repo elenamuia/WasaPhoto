@@ -82,8 +82,8 @@ type Login struct {
 type Profile struct {
 	User     string
 	Photos   []int
-	Follower []int
-	Followed []int
+	Follower []string
+	Followed []string
 }
 
 var ErrUserDoesNotExist = errors.New("User does not exist")
@@ -97,6 +97,7 @@ type AppDatabase interface {
 	AddComment(comment Comment) error
 	AddLike(like Like) error
 	BanUser(string, string) error
+	CheckIfBanned(string, string) (bool, error)
 	DeleteComment(int) error
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(string, int) (err error)
