@@ -97,7 +97,7 @@ type AppDatabase interface {
 	AddComment(comment Comment) error
 	AddLike(like Like) error
 	BanUser(string, string) error
-	DeleteComment(int) (err error)
+	DeleteComment(int) error
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(string, int) (err error)
 	DeleteProfile(string) (err error)
