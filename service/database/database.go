@@ -159,7 +159,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 				CREATE TABLE IF NOT EXISTS Comments (
 						PhotoID int NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
-					    UserReceiving string NOT NULL REFERENCES Photo(User) ON DELETE CASCADE ON UPDATE CASCADE,
+					    UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
 						CommentMessage string NOT NULL,
 						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -167,16 +167,16 @@ func New(db *sql.DB) (AppDatabase, error) {
 						
 					);
 
-				CREATE TABLE IF NOT EXISTS Like (
+			CREATE TABLE IF NOT EXISTS Like (
 
-						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
-						PhotoID string NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
-						UserReceiving string NOT NULL REFERENCES Photo(User) ON DELETE CASCADE ON UPDATE CASCADE,
-						DataPost string NOT NULL,
-						
-						PRIMARY KEY (PhotoID, UserPutting)
-						
-					);
+					UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+					PhotoID string NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
+					UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+					DataPost string NOT NULL,
+					
+					PRIMARY KEY (PhotoID, UserPutting)
+					
+				);
 `
 		_, err = db.Exec(sqlStmt)
 		if err != nil {

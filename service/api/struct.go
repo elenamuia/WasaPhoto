@@ -88,8 +88,8 @@ func (l *Like) ToDatabaseLike(userrec string, userput string, photoid int) datab
 	return database.Like{
 		LikeID:   userput,
 		PhotoID:  photoid,
-		DataPost: l.Datapost,
 		UserRec:  userrec,
+		DataPost: l.Datapost,
 	}
 }
 
