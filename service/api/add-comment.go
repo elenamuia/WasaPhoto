@@ -2,9 +2,9 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -16,10 +16,11 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	userrec := ps.ByName("userrec")
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println(err1)
+
 		return
 	}
 	authToken := r.Header.Get("Authorization")
+	authToken = strings.Split(authToken, " ")[1]
 
 	bool, err := rt.db.CheckAuthToken(authToken)
 
