@@ -45,8 +45,6 @@ type User struct {
 type Photo struct {
 	ID             int
 	PhotoStructure []byte
-	NumLikes       int
-	NumComm        int
 	Datapost       time.Time
 	User           string
 }
@@ -109,7 +107,7 @@ type AppDatabase interface {
 	PostPhoto(photo Photo) (Photo, error)
 	PutFollow(follow Follow) error
 	UnbanUser(ban Banned) (err error)
-	GetMyMainstream() (ArrayofPhotos []Photo, err error)
+	GetMyMainstream(userid string) (ArrayofPhotos []Photo, err error)
 	Updateusername(string, string) (string, error)
 	Ping() error
 }

@@ -1,9 +1,9 @@
 package database
 
-func (db *appdbimpl) GetMyMainstream() ([]Photo, error) {
+func (db *appdbimpl) GetMyMainstream(userid string) ([]Photo, error) {
 	var ArrayofPhotos []Photo
 
-	rows, err := db.c.Query(`SELECT PhotoID, User, Photo, NumComment, NumLike, DataPost FROM Photo ORDER BY DataPost DESC `)
+	rows, err := db.c.Query(`SELECT p.PhotoID, p.User, p.Photo FROM Photo as p, Follower as f WHERE p.User = f.Followed AND f.Follower = ?  ORDER BY PhotoID DESC `, userid)
 	if err != nil {
 		return nil, err
 	}
@@ -11,7 +11,7 @@ func (db *appdbimpl) GetMyMainstream() ([]Photo, error) {
 
 	for rows.Next() {
 		var photo Photo
-		err = rows.Scan(&photo.ID, &photo.User, &photo.NumComm, &photo.NumLikes, &photo.Datapost, &photo.PhotoStructure)
+		err = rows.Scan(&photo.ID, &photo.User, &photo.PhotoStructure)
 		if err != nil {
 			return nil, err
 		}
@@ -22,5 +22,5 @@ func (db *appdbimpl) GetMyMainstream() ([]Photo, error) {
 		return nil, err
 	}
 
-	return (ArrayofPhotos), nil
+	return ArrayofPhotos, nil
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -11,10 +12,10 @@ import (
 
 func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	var deletedUser Users
-	id := ps.ByName("user")
+	id := ps.ByName("userid")
 
 	authToken := r.Header.Get("Authorization")
-
+	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
