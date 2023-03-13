@@ -22,7 +22,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		photos, err2 := rt.db.GetPhoto(photoid)
+		photoget, err2 := rt.db.GetPhoto(photoid)
 		if err2 != nil {
 
 			ctx.Logger.WithError(err2).Error("Can't post photo")
@@ -31,7 +31,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(photos)
+		_ = json.NewEncoder(w).Encode(photoget)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
