@@ -19,6 +19,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/users/:userid/photos/:photoid", rt.wrap(rt.getPhoto))
 	rt.router.POST("/users/:userid/photos/:photoid/comments/", rt.wrap(rt.commentPhoto))
 	rt.router.GET("/users/:userid/photos/:photoid/listcomment/", rt.wrap(rt.getCommentList))
+	rt.router.GET("/users/:userid/photos/:photoid/listlike/", rt.wrap(rt.getLikeList))
 	rt.router.DELETE("/users/:userid/photos/:photoid/comments/:commentid", rt.wrap(rt.uncommentPhoto))
 	rt.router.PUT("/users/:userid/photos/:photoid/like/:likeid", rt.wrap(rt.likePhoto))
 	rt.router.DELETE("/users/:userid/photos/:photoid/like/:likeid", rt.wrap(rt.unlikePhoto))
