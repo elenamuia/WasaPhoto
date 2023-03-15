@@ -126,10 +126,9 @@ paths:
           description: |
             The user has been found
           content:
-
             application/json:
               schema:
-                description: photo related to a certain profile
+                description: username, photo related to a certain profile, number of followers, and number of followed users 
                 type: object
                 properties:
                   numFollowers:
@@ -140,6 +139,8 @@ paths:
                     format: int
                   ArrayofPhotos:
                     $ref: "#/components/schemas/ArrayofPhotos"
+                  Username:
+                    $ref: "#/components/schema/User"
             
         "404":
           $ref: "#/components/responses/NotFound"
@@ -205,17 +206,6 @@ paths:
       responses:
         "201":
           description: The user has been correctly banned
-          content:
-            application/json:
-                schema:
-                  type: object
-                  properties:
-                    ArrayofPhotos:
-                      type: array
-                      minItems: 0
-                      maxItems: 1000 
-                      items:
-                        $ref: "#/components/schemas/Name"
         "404":
           $ref: "#/components/responses/NotFound"
         "409":
@@ -266,17 +256,6 @@ paths:
       responses:
         "201":
           description: User correctly added to the list of followed users
-          content:
-            application/json:
-                schema:
-                  type: object
-                  properties:
-                    ArrayofPhotos:
-                      type: array
-                      minItems: 0
-                      maxItems: 1000 
-                      items:
-                        $ref: "#/components/schemas/Name"
         "404":
           $ref: "#/components/responses/NotFound"
         "401":
@@ -309,11 +288,11 @@ paths:
         Using this command if a certain user wants to delete his/her own profile
       operationId: uploadPhoto
       requestBody:
-        description: Id of the added photo
+        description: COntent of the photo
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PhotoId"
+              $ref: "#/components/schemas/PhotoContent"
       responses:
         "201":
           description: Photo added
@@ -414,14 +393,7 @@ paths:
       responses:
         "201":
           description: Comment correctly added
-          content:
-            application/json:
-                schema:
-                  description: Comment info
-                  type: object
-                  properties:
-                    name:
-                      $ref: "#/components/schemas/Comment"
+          
         "404":
           $ref: "#/components/responses/NotFound"
         "406":
@@ -445,11 +417,11 @@ paths:
         one of the comments under his/her photo
       operationId: uncommentPhoto
       requestBody:
-        description: Id of the added photo
+        description: Id of the deleted comment
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PhotoId"
+              $ref: "#/components/schemas/CommentId"
       responses:
         "204":
           description: Comment correctly deleted
@@ -478,18 +450,6 @@ paths:
       responses:
         "201":
           description: The photo has been liked
-          content:
-            application/json:
-              schema:
-                description: Array containing all the people who liked the picture
-                type: object
-                items:
-                  type: array
-                  minItems: 0
-                  maxItems: 1000
-                  properties:
-                    items:
-                      $ref: "#/components/schemas/Name"  
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -594,6 +554,11 @@ components:
       description: value identifying of a photo
       type: number
       format: int
+    PhotoContent:
+      description: actual photo uploaded
+      type: string
+          pattern: 'ˆ.*?$'
+          format: binary
     Photo:
       type: object
       description: All items describing a posted photo
