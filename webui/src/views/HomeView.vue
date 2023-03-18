@@ -3,54 +3,53 @@ export default {
 	data: function() {
 		return {
 			errormsg: null,
-			loading: false,
-			some_data: null,
+			userid: "",
 		}
 	},
 	methods: {
-		async refresh() {
-			this.loading = true;
+		async login() {
+			
 			this.errormsg = null;
 			try {
-				let response = await this.$axios.get("/");
-				this.some_data = response.data;
+				let response = await this.$axios.post("/login/");
+				this.userid = response.data;
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
-			this.loading = false;
+			
 		},
 	},
 	mounted() {
-		this.refresh()
+		this.login()
 	}
 }
 </script>
 
-<template>
-	<div>
-		<div
-			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-			<h1 class="h2">Home page</h1>
-			<div class="btn-toolbar mb-2 mb-md-0">
-				<div class="btn-group me-2">
-					<button type="button" class="btn btn-sm btn-outline-secondary" @click="refresh">
-						Refresh
-					</button>
-					<button type="button" class="btn btn-sm btn-outline-secondary" @click="exportList">
-						Export
-					</button>
+<template >
+	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+	<div style = "height: 300px; display: flex; justify-content: center; align-items: center;" >
+		
+		<div class="col-md-4">	
+			<form @submit.prevent="login()">
+				<div style="padding:5px;">
+					<input type="text" v-model="userid" placeholder="Username" style="border-color: #650C96;"/>
 				</div>
-				<div class="btn-group me-2">
-					<button type="button" class="btn btn-sm btn-outline-primary" @click="newItem">
-						New
-					</button>
+				<div class="btn-toolbar mb-2 mb-md-0">
+					<div class="btn-group me-2" style ="padding:5px;">
+						<button type="submit" class="btn btn-sm btn-outline-secondary" style=" background-color: #B173BE; color:antiquewhite; border-color:#650C96;">
+							Login
+						</button>	
+					</div>
 				</div>
-			</div>
+				
+			</form>
 		</div>
-
-		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+		
 	</div>
 </template>
 
 <style>
 </style>
+
+
+
