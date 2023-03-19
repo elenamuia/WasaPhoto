@@ -34,6 +34,8 @@ func (db *appdbimpl) LoginUser(l Login) (User string, isNew bool, err error) {
 		if err != nil {
 			return "", true, err
 		}
+
+		rows.Close()
 		return l.UsernameLog, true, nil
 	}
 

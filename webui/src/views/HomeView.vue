@@ -11,7 +11,9 @@ export default {
 			
 			this.errormsg = null;
 			try {
-				let response = await this.$axios.post("/login/");
+				let response = await this.$axios.post("/login/", {
+					LoginName: this.userid
+				});
 				this.userid = response.data;
 			} catch (e) {
 				this.errormsg = e.toString();
