@@ -6,11 +6,30 @@
 	<link rel="icon" href="/favicon.ico"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+	Vue is not defined
+	<script type="module" src="/bootstrap/js/bootstrap.bundle.js"></script>
+<script type="module" src="/src/main.js"></script>
+<script type="module"  src="/src/views/LoginView.vue"></script>
 </head>
 <body>
-<div id="app"></div>
 
-<script src="/bootstrap/js/bootstrap.bundle.js"></script>
-<script type="module" src="/src/main.js"></script>
+
+
+
+
+<div id="app">
+	<login-view-></login-view->
+</div>
+
+<script>
+	Vue.component('login-view', {
+		template: '#login-view-template'
+	});
+
+	new Vue({
+		el: '#app'
+	});
+</script>
+
 </body>
 </html>

@@ -15,14 +15,13 @@ export default {
 					LoginName: this.userid
 				});
 				this.userid = response.data;
+				this.$router.push('/mainstream')
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
+
 			
 		},
-	},
-	mounted() {
-		this.login()
 	}
 }
 </script>

@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -13,11 +12,9 @@ import (
 func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	if err9 := r.ParseForm(); err9 != nil {
 		http.Error(w, "Error parsing form", http.StatusBadRequest)
-		fmt.Println("error api")
+
 		return
 	}
-
-	fmt.Println("sono entrato")
 
 	var login Login
 
@@ -25,7 +22,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("err1:", err1)
+
 		return
 	}
 
@@ -33,13 +30,12 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("err2:", err2)
+
 		return
 	}
 
 	if !isNew {
 		authToken := r.Header.Get("Authorization")
-		fmt.Println("authToken dgdgd:", authToken)
 		authToken = strings.Split(authToken, " ")[1]
 		bool, err := rt.db.CheckAuthToken(authToken)
 		if err != nil {
