@@ -557,8 +557,8 @@ components:
     PhotoContent:
       description: actual photo uploaded
       type: string
-          pattern: 'ˆ.*?$'
-          format: binary
+      pattern: 'ˆ.*?$'
+      format: binary
     Photo:
       type: object
       description: All items describing a posted photo
