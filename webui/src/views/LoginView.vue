@@ -15,7 +15,7 @@ export default {
 					LoginName: this.userid
 				});
 				this.userid = response.data;
-				this.$router.push('/mainstream')
+				this.$router.push('/mainstream');
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
@@ -28,9 +28,10 @@ export default {
 
 <template >
 	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+
 	<div style = "height: 300px; display: flex; justify-content: center; align-items: center;" >
 		
-		<div class="col-md-4">	
+		<div class="col-md-2">	
 			<form @submit.prevent="login()">
 				<div style="padding:5px;">
 					<input type="text" v-model="userid" placeholder="Username" style="border-color: #650C96;"/>
