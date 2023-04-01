@@ -8,7 +8,9 @@ import LoadingSpinner from './components/LoadingSpinner.vue'
 import './assets/dashboard.css'
 import './assets/main.css'
 
-const login = createApp(Login)
+
+
+const login = createApp(Login);
 login.config.globalProperties.$axios = axios;
 login.component("ErrorMsg", ErrorMsg);
 login.component("LoadingSpinner", LoadingSpinner);

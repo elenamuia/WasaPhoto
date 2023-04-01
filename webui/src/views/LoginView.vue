@@ -11,11 +11,11 @@ export default {
 			
 			this.errormsg = null;
 			try {
-				let response = await this.$axios.post("/login/", {
+				let response = await this.$axios.post("/login", {
 					LoginName: this.userid
 				});
 				this.userid = response.data;
-				this.$router.push('/mainstream');
+				// this.$router.push('/mainstream');
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
@@ -29,7 +29,7 @@ export default {
 <template >
 	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 
-	<div style = "height: 300px; display: flex; justify-content: center; align-items: center;" >
+	<div style = "height: 300px; display: flex; justify-content: center; align-items: center; border-color: black;" >
 		
 		<div class="col-md-2">	
 			<form @submit.prevent="login()">
@@ -46,10 +46,8 @@ export default {
 				
 			</form>
 		</div>
-		
 	</div>
 </template>
-
 <style>
 </style>
 
