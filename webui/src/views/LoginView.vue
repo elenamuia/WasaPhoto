@@ -1,9 +1,6 @@
 <script>
 import { VueElement } from 'vue';
 
-
-
-
 export default {
 	data: function() {
 		return {
