@@ -3,6 +3,24 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 <script>
 export default {
+
+	
+	data: function() {
+		return {
+			errormsg: null,
+			loading: false,
+			some_data: null,
+		}
+	},
+	methods: {
+		async getMainstream(userid) {
+			console.log(userid);
+		},
+	},
+	mounted() {
+		console.log("FG: " + this.$userid);
+		this.getMainstream(this.$userid);
+	}
 	
 }
 </script>
@@ -25,21 +43,21 @@ export default {
 					</h6>
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<RouterLink to="/" class="nav-link">
+							<RouterLink to="/mainstream/" class="nav-link">
 								<svg class="feather"><use href="/feather-sprite-v4.29.0.svg#home"/></svg>
-								Search User
+								Home
 							</RouterLink>
 						</li>
 						<li class="nav-item">
-							<RouterLink to="/link1" class="nav-link">
+							<RouterLink to="/my_profile" class="nav-link">
 								<svg class="feather"><use href="/feather-sprite-v4.29.0.svg#layout"/></svg>
-								My Profile
+								Search Profile
 							</RouterLink>
 						</li>
 						<li class="nav-item">
-							<RouterLink to="/link2" class="nav-link">
+							<RouterLink to="/search/" class="nav-link">
 								<svg class="feather"><use href="/feather-sprite-v4.29.0.svg#key"/></svg>
-								Settings
+								My Profile
 							</RouterLink>
 						</li>
 					</ul>
@@ -49,7 +67,7 @@ export default {
 					</h6>
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<RouterLink :to="'/some/' + 'variable_here' + '/path'" class="nav-link">
+							<RouterLink :to="'/settings/'" class="nav-link">
 								<svg class="feather"><use href="/feather-sprite-v4.29.0.svg#file-text"/></svg>
 								Settings
 							</RouterLink>
@@ -57,9 +75,14 @@ export default {
 					</ul>
 				</div>
 			</nav>
-
-			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+			<main >
 				<RouterView />
+				
+				<div class="">
+					Ciao
+				</div>
+
+
 			</main>
 		</div>
 	</div>

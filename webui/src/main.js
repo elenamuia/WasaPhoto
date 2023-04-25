@@ -26,13 +26,17 @@ import axios from './services/axios.js';
 import ErrorMsg from './components/ErrorMsg.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
 
+
 import './assets/dashboard.css'
 import './assets/main.css'
 
-
+var user = {
+    id: null
+}
 
 const main_back = createApp(Main);
 main_back.config.globalProperties.$axios = axios;
+main_back.config.globalProperties.$user = reactive(user);
 main_back.component("ErrorMsg", ErrorMsg);
 main_back.component("LoadingSpinner", LoadingSpinner);
 main_back.use(router)
