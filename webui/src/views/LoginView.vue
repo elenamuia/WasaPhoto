@@ -1,25 +1,30 @@
 <script>
+import { VueElement } from 'vue';
+
+
+
+
 export default {
 	data: function() {
 		return {
-			errormsg: null,
-			userid: "",
+			errormsg: null
 		}
 	},
 	methods: {
 		async login() {
-			
-			this.errormsg = null;
+
 			try {
 				let response = await this.$axios.post("/login/", {
-					LoginName: this.userid
+					"LoginName": this.userid
 				});
-				this.userid = response.data;
-				this.$router.push({ path: '/mainstream' });
-			} catch (e) {
-				this.errormsg = e.toString();
-			}
 
+				this.errormsg = null;
+                this.$user.id = this.userid
+                this.$router.push('/mainstream/' + this.userid);
+			} catch (err) {
+				this.errormsg = err.message;
+			}
+ 
 			
 		},
 	}
