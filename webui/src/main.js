@@ -31,12 +31,12 @@ import './assets/dashboard.css'
 import './assets/main.css'
 
 var user = {
-    id: null
+    id: null,
 }
 
 const main_back = createApp(Main);
 main_back.config.globalProperties.$axios = axios;
-main_back.config.globalProperties.$user = reactive(user);
+main_back.config.globalProperties.$current_user = reactive(user);
 main_back.component("ErrorMsg", ErrorMsg);
 main_back.component("LoadingSpinner", LoadingSpinner);
 main_back.use(router)

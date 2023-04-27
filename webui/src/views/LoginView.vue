@@ -1,5 +1,8 @@
+<script setup>
+import { axios } from 'axios';
+</script>
+
 <script>
-import { VueElement } from 'vue';
 
 export default {
 	data: function() {
@@ -16,7 +19,7 @@ export default {
 				});
 
 				this.errormsg = null;
-                this.$user.id = this.userid
+                this.$current_user.id = this.userid
                 this.$router.push('/mainstream/' + this.userid);
 			} catch (err) {
 				this.errormsg = err.message;
