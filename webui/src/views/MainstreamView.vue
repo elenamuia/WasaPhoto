@@ -46,35 +46,35 @@ export default {
 			document.getElementById("submitBut").classList.add("disabled");
 			// take the first element received from the fileInput (defined in the html as the form-container)
 			const image = document.getElementById("fileInput").files[0];
+			console.log(image);
 			
-			// define a new Reader object to read the URL and to turn it into 
-			let reader = new FileReader();
+			// define a new Reader object to read the photo and turn it into an URL
+			//let reader = new FileReader();
 
-			reader.readAsDataURL(image);
-			reader.onload = (e) => {
-				const fileContent = e.target.result;
-				console.log(fileContent); // qui puoi usare la stringa URL generata dal file
-			}
-			
-			let response =  this.$axios.post("/users/"+ userid +"/photos/");
+			//reader.readAsDataURL(image);
+			//reader.onload = (e) => {
+			//	const fileContent = e.target.result;
+			//	console.log(fileContent); // qui puoi usare la stringa URL generata dal file
+			//}
+			try{
+			let response =  this.$axios.post("/users/"+ userid +"/photos/", {
+				"PhotoStructure": this.image
+			});
 			this.errormsg = null; 
+			// manually restyle and rename the submit button
+			const submit_button = document.getElementById("submitBut");
+			submit_button.classList.remove("btn");
+			submit_button.classList.remove("disabled");
 			
-		
-			if (response.status == 204) {
-                // manually restyle and rename the submit button
-                const submit_button = document.getElementById("submitBut");
-                submit_button.classList.remove("btn");
-                submit_button.classList.remove("disabled");
-                
-                setTimeout(() => {
-                    submit_button.innerHTML = "Submit";
-                }, 3000);
-                // Clear the form
-                document.getElementById("fileInput").value = "";
-                
-            }
-            else {
-                alert("Error uploading photo")
+			setTimeout(() => {
+				submit_button.innerHTML = "Submit";
+			}, 3000);
+			// Clear the form
+			document.getElementById("fileInput").value = "";
+
+            }catch(err){
+				alert(err.message);
+
             }
         
 			}

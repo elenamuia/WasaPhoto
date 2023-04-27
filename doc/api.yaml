@@ -139,8 +139,8 @@ paths:
                     format: int
                   ArrayofPhotos:
                     $ref: "#/components/schemas/ArrayofPhotos"
-                  Username:
-                    $ref: "#/components/schema/User"
+                  Name:
+                    $ref: "#/components/schema/Name"
             
         "404":
           $ref: "#/components/responses/NotFound"
@@ -323,12 +323,7 @@ paths:
         With this command a certain user can delete one of his/her photo from 
         the profile
       operationId: deletePhoto
-      requestBody:
-        description: Id of the added photo
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PhotoId"
+      
       responses:
         "204":
           description: Photo deleted
@@ -345,12 +340,7 @@ paths:
       description: Using this command, we can get all the info about a photo  
         and the photo itself from on its Id
       operationId: getPhoto
-      requestBody:
-        description: Id of the added photo
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PhotoId"
+     
       responses: 
         "200":
           description: The operation went correctly, you will now be redirected 
@@ -416,12 +406,6 @@ paths:
       description: A user can use this command to delete
         one of the comments under his/her photo
       operationId: uncommentPhoto
-      requestBody:
-        description: Id of the deleted comment
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CommentId"
       responses:
         "204":
           description: Comment correctly deleted
@@ -459,18 +443,6 @@ paths:
       description: Using this command, the user who made the login
         can  delete a like from a photo
       operationId: unlikePhoto
-      requestBody:
-        description: Id of the user whom wants to unlike the photo and id of the photo
-        content:
-          application/json:
-            schema:
-              description: Info of the like to remove
-              type: object
-              properties:
-                name:
-                  $ref: "#/components/schemas/Name"
-                photoid:
-                  $ref:  "#/components/schemas/PhotoId"
       responses:
         "204":
           description: The photo has been correctly unliked
