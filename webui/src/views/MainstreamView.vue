@@ -11,7 +11,16 @@ export default {
 			errormsg: null,
 			loading: false,
 			some_data: null,
-			photos: []
+			photos: [],
+			img:{
+				id:"",
+				UserID:0,
+				postingdate:null,
+				likes:0,
+				comments:0,
+				content:"",
+				file:"",
+			},
 		}
 	},
 	methods: {
@@ -40,8 +49,10 @@ export default {
 			document.getElementById("myForm").style.display = "none";
 		},
 
-		postPhoto(userid){
+		
+		postPhoto(userid, event){
 			
+			/*
 			// disable the Upload button while the photo is uploaded to avoid user-made mistakes
 			document.getElementById("submitBut").classList.add("disabled");
 			// take the first element received from the fileInput (defined in the html as the form-container)
@@ -76,17 +87,72 @@ export default {
 				alert(err.message);
 
             }
-        
+			*/
+			
+			/*
+			const xhr = new XMLHttpRequest();
+			const formData = new FormData();
+			const fileInput = document.querySelector('input[type="file"]');
+
+			formData.append('image', fileInput.files[0]);
+
+			xhr.open("POST", "http://localhost:3000/users/"+ userid +"/photos/", true);
+			// xhr.setRequestHeader("Content-Type", "multipart/form-data");
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+				if (xhr.status === 200) {
+					console.log("Upload complete!");
+				} else {
+					console.error("An error occurred while uploading the image.");
+				}
+				}
 			}
- 
+
+			xhr.send(formData);
+			},
+			*/
+			this.loading = true;
+			this.errormsg = null;
+			const image = document.getElementById("fileInput").files[0];
+			try {
+				console.log(image)
+				let fd = new FormData();
+				fd.append("photo", image);
+
+				let response = this.$axios.post("/users/"+ userid +"/photos/", fd).then(res => res);
+				
+				this.img=response.data
+				request.onreadystatechange = function(){
+					if (request.readyState===4){
+						if(request.status===200 && request.status.text === "OK"){
+							console.log("successful");
+						}
+						else{
+							console.log("failed")
+						}
+					}
+				}
+				
+				
+            	
+			} catch (e) {
+				if (e.response && e.response.status===404){
+					errormsg.msg=""
+				}
+				this.errormsg = e.toString();
+			}
+			this.loading = false;
+        
 		},
+ 
+		
 
 		Logout() {
 			this.$current_user.id = null;
 			this.$router.push("/");
 		},
 	
-
+	},
 	mounted() {
 		this.getMainstream(this.$current_user.id);
 		console.log("es: " + this.$current_user.id);
@@ -187,13 +253,21 @@ export default {
 					</div>
 				</div>
 
-				<div class="form-popup" id="myForm">
-					<form @submit.prevent="postPhoto(this.$current_user.id)" class="form-container">
+				<div class="form-popup" id="myForm" style="height: 50px; "> 
+					<!--<form>
+						<input type="file" ref="image" @change="NewPhoto"/>
+						<button type="button" @click="NewPhoto" Upload></button>
+						<input type="file" @change="UploadFile"  ref="file" accept="image/jpeg, image/png">
+						<button @click="postPhoto(this.$current_user.id, event)"> Upload</button>
+						<button type="button" class="btn cancel" @click="closeForm()">Close</button>
+					</form>-->
+					<form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container" enctype="multipart/form-data">
 							<h3 style = "margin-left: 10px;">Upload Photo</h3>
-							<input  class="form-control" type="file" id="fileInput" accept= "image/png, image/jpeg">
+							<input  class="form-control"  type="file" id="fileInput"  accept="image/jpeg, image/png">
 							<button type="submit" class="btn" id="submitBut">Upload</button>
 							<button type="button" class="btn cancel" @click="closeForm()">Close</button>
 					</form>
+
 				</div>
 			</main>
 		</div>
