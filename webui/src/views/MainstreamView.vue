@@ -1,29 +1,14 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import SideBarMenu from '../components/SideBar_Menu.vue'
 </script>
 <script>
 export default {
-
-
-	data: function () {
-		return {
-			errormsg: null,
-			loading: false,
-			some_data: null,
-			photos: [],
-			img:{
-				id:"",
-				UserID:0,
-				postingdate:null,
-				likes:0,
-				comments:0,
-				content:"",
-				file:"",
-			},
-		}
-	},
-	methods: {
+	components: {
+        SideBarMenu
+  	},
+	methods:{
 		getMainstream(userid) {
 			this.$axios.get("/users/"+ userid+"/mainstream/" , { responseType: 'arraybuffer' })
 				.then(response => {
@@ -40,238 +25,23 @@ export default {
 					console.error('Errore durante il caricamento delle immagini:', error);
 				});
 		},
-
-		openForm() {
-			document.getElementById("myForm").style.display = "block";
-		},
-
-		closeForm() {
-			document.getElementById("myForm").style.display = "none";
-		},
-
 		
-		postPhoto(userid, event){
-			
-			/*
-			// disable the Upload button while the photo is uploaded to avoid user-made mistakes
-			document.getElementById("submitBut").classList.add("disabled");
-			// take the first element received from the fileInput (defined in the html as the form-container)
-			const image = document.getElementById("fileInput").files[0];
-			console.log(image);
-			
-			// define a new Reader object to read the photo and turn it into an URL
-			//let reader = new FileReader();
+		mounted() {
 
-			//reader.readAsDataURL(image);
-			//reader.onload = (e) => {
-			//	const fileContent = e.target.result;
-			//	console.log(fileContent); // qui puoi usare la stringa URL generata dal file
-			//}
-			try{
-			let response =  this.$axios.post("/users/"+ userid +"/photos/", {
-				"PhotoStructure": this.image
-			});
-			this.errormsg = null; 
-			// manually restyle and rename the submit button
-			const submit_button = document.getElementById("submitBut");
-			submit_button.classList.remove("btn");
-			submit_button.classList.remove("disabled");
-			
-			setTimeout(() => {
-				submit_button.innerHTML = "Submit";
-			}, 3000);
-			// Clear the form
-			document.getElementById("fileInput").value = "";
-
-            }catch(err){
-				alert(err.message);
-
-            }
-			*/
-			
-			/*
-			const xhr = new XMLHttpRequest();
-			const formData = new FormData();
-			const fileInput = document.querySelector('input[type="file"]');
-
-			formData.append('image', fileInput.files[0]);
-
-			xhr.open("POST", "http://localhost:3000/users/"+ userid +"/photos/", true);
-			// xhr.setRequestHeader("Content-Type", "multipart/form-data");
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4) {
-				if (xhr.status === 200) {
-					console.log("Upload complete!");
-				} else {
-					console.error("An error occurred while uploading the image.");
-				}
-				}
-			}
-
-			xhr.send(formData);
-			},
-			*/
-			this.loading = true;
-			this.errormsg = null;
-			const image = document.getElementById("fileInput").files[0];
-			try {
-				console.log(image)
-				let fd = new FormData();
-				fd.append("photo", image);
-
-				let response = this.$axios.post("/users/"+ userid +"/photos/", fd).then(res => res);
-				
-				this.img=response.data
-				request.onreadystatechange = function(){
-					if (request.readyState===4){
-						if(request.status===200 && request.status.text === "OK"){
-							console.log("successful");
-						}
-						else{
-							console.log("failed")
-						}
-					}
-				}
-				
-				
-            	
-			} catch (e) {
-				if (e.response && e.response.status===404){
-					errormsg.msg=""
-				}
-				this.errormsg = e.toString();
-			}
-			this.loading = false;
-        
+			this.getMainstream(this.$current_user.id);
+			console.log("es: " + this.$current_user.id);
 		},
- 
-		
 
-		Logout() {
-			this.$current_user.id = null;
-			this.$router.push("/");
-		},
-	
-	},
-	mounted() {
-		this.getMainstream(this.$current_user.id);
-		console.log("es: " + this.$current_user.id);
 	}
-
 }
 </script>
 
-<template>
-	<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow" style = "width:100%;">
-		<a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#/">WasaPhoto</a>
-		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
-			data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</header>
-
-	<div class="container-fluid">
-		<div class="row">
-			<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style= "margin-top:55px;">
-				<div class="position-sticky pt-3 sidebar-sticky">
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-						<span>Home</span>
-					</h6>
-					<ul class="nav flex-column" >
-						<li class="nav-item">
-							<RouterLink to="/mainstream/" class="nav-link">
-								<svg class="feather">
-									<use href="/feather-sprite-v4.29.0.svg#home" />
-								</svg>
-								Home
-							</RouterLink>
-						</li>
-						<li class="nav-item">
-							<RouterLink to="/my_profile" class="nav-link">
-								<svg class="feather">
-									<use href="/feather-sprite-v4.29.0.svg#search" />
-								</svg>
-								Search Profile
-							</RouterLink>
-						</li>
-						<li class="nav-item">
-							<RouterLink to="/search/" class="nav-link">
-								<svg class="feather">
-									<use href="/feather-sprite-v4.29.0.svg#user" />
-								</svg>
-								My Profile
-							</RouterLink>
-						</li>
-					</ul>
-
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-						<span>Secondary menu</span>
-					</h6>
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link"></a>
-							<RouterLink :to="'/settings/'" class="nav-link">
-								<svg class="feather">
-									<use href="/feather-sprite-v4.29.0.svg#settings" />
-								</svg>
-								Settings
-							</RouterLink>
-
-						</li>
-
-						<li class="nav-item" @click="openForm()">
-				
-							<div class="nav-link">
-							<svg class="feather">
-								<use href="/feather-sprite-v4.29.0.svg#plus" />
-							</svg>
-							New Photo
-						</div>
-						</li>
-						<li class="nav-item" @click="Logout()">
-				
-							<div class="nav-link">
-							<svg class="feather">
-								<use href="/feather-sprite-v4.29.0.svg#log-out" />
-							</svg>
-							Logout
-						</div>
-						</li>
-					</ul> 
-				</div>
-			</nav>
-
-			<main>
-				<RouterView />
-
-				<div>
-					
-					<div v-for="photo in photos" :key="photo">
-						<img :src="photo" alt="Photo not loaded">
-					</div>
-				</div>
-
-				<div class="form-popup" id="myForm" style="height: 50px; "> 
-					<!--<form>
-						<input type="file" ref="image" @change="NewPhoto"/>
-						<button type="button" @click="NewPhoto" Upload></button>
-						<input type="file" @change="UploadFile"  ref="file" accept="image/jpeg, image/png">
-						<button @click="postPhoto(this.$current_user.id, event)"> Upload</button>
-						<button type="button" class="btn cancel" @click="closeForm()">Close</button>
-					</form>-->
-					<form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container" enctype="multipart/form-data">
-							<h3 style = "margin-left: 10px;">Upload Photo</h3>
-							<input  class="form-control"  type="file" id="fileInput"  accept="image/jpeg, image/png">
-							<button type="submit" class="btn" id="submitBut">Upload</button>
-							<button type="button" class="btn cancel" @click="closeForm()">Close</button>
-					</form>
-
-				</div>
-			</main>
-		</div>
-	</div>
+<template>	
+	<main>
+		<SideBarMenu></SideBarMenu>
+		<RouterView />
+	</main>
+	
 </template>
 
 <style>
