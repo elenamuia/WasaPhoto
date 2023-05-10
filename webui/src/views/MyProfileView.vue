@@ -6,8 +6,21 @@ import SideBarMenu from '../components/SideBar_Menu.vue'
 export default {
     components: {
         SideBarMenu
+  },
+  data(){
+    followerList = null,
+    followedList = null,
+    n_post = null
+  },
+
+
+mounted() {
+    axios.get('/api/valore-dal-backend')
+      .then(response => {
+        this.valoreDallaChiamataAPI = response.data;
+      });
   }
-}
+};
 </script>
 
 <template >
@@ -27,14 +40,19 @@ export default {
           <div class="navbar col-sm-2 ">
             <ul class="nav" style="font-size: large;">
               <li class="nav-item active">
+                
+
                 <a class="nav-link" href="#">Follower </a>
               </li>
-              <li class="nav-item">
+              <div v-if="followedList">{{followedList}}</div>
+              <li class="nav-item active">
                 <a class="nav-link" href="#">Followed </a>
               </li>
-              <li class="nav-item">
+              <div v-if="followerList">{{followerList}}</div>
+              <li class="nav-item active">
                 <a class="nav-link" href="#">Num Post </a>
               </li>
+              <div v-if="n_post">{{n_post}}</div>
             </ul>
           </div>
         </div>

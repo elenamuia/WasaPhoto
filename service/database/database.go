@@ -92,6 +92,8 @@ var ErrLikeDoesNotExist = errors.New("Like does not exist")
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	GetListComments(int) ([]Comment, error)
+	GetFollower(string) ([]string, error)
+	GetFollowed(string) ([]string, error)
 	GetListLike(int) ([]Like, error)
 	DeletePhoto(int) error
 	AddComment(comment Comment) error
