@@ -140,7 +140,7 @@ paths:
                   ArrayofPhotos:
                     $ref: "#/components/schemas/ArrayofPhotos"
                   Name:
-                    $ref: "#/components/schema/Name"
+                    $ref: "#/components/schemas/Name"
             
         "404":
           $ref: "#/components/responses/NotFound"
