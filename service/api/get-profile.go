@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -13,19 +12,19 @@ import (
 func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	id := ps.ByName("userid")
-
+	idget := ps.ByName("searcheduser")
 	authToken := r.Header.Get("Authorization")
 	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-		var idget string
-		err3 := json.NewDecoder(r.Body).Decode(&idget)
-		if err3 != nil {
+		// var idget string
+		//err3 := json.NewDecoder(r.Body).Decode(&idget)
+		//if err3 != nil {
+		//	fmt.Println("sono qui")
+		//	w.WriteHeader(http.StatusBadRequest)
+		//	return
 
-			w.WriteHeader(http.StatusBadRequest)
-			return
-
-		}
+		//}
 
 		bool, err6 := rt.db.CheckIfBanned(id, idget)
 
@@ -39,7 +38,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 			profile, err4 := rt.db.GetProfile(idget)
 			if err4 != nil {
-				fmt.Println(err4)
+
 				ctx.Logger.WithError(err4).Error("Can't get profile")
 				w.WriteHeader(http.StatusInternalServerError)
 				return

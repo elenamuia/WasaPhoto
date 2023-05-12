@@ -49,10 +49,10 @@ type Login struct {
 }
 
 type Profile struct {
-	User     int   `json:"User"`
-	Photos   []int `json:"Photos"`
-	Follower []int `json:"Follower"`
-	Followed []int `json:"Followed"`
+	User     int      `json:"User"`
+	Photos   []int    `json:"Photos"`
+	Follower []string `json:"Follower"`
+	Followed []string `json:"Followed"`
 }
 
 func (l *Login) FromDatabase(log string) {
