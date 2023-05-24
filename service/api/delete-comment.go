@@ -36,7 +36,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 		err3 := rt.db.DeleteComment(commentid)
 
-		if errors.Is(err, database.ErrCommentDoesNotExist) {
+		if errors.Is(err3, database.ErrCommentDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return

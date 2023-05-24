@@ -26,7 +26,7 @@ func (rt *_router) deleteMyProfile(w http.ResponseWriter, r *http.Request, ps ht
 			return
 		} else if err2 != nil {
 
-			ctx.Logger.WithError(err).WithField("User", deletedUser).Error("can't delete profile")
+			ctx.Logger.WithError(err2).WithField("User", deletedUser).Error("can't delete profile")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 
