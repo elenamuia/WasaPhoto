@@ -27,7 +27,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 		err6 := rt.db.AddLike(like.ToDatabaseLike(userrec, likeid, photoid))
 		if err6 != nil {
-			ctx.Logger.WithError(err).Error("can't like the photo")
+			ctx.Logger.WithError(err6).Error("can't like the photo")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

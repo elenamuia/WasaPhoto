@@ -19,11 +19,6 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	authToken = strings.Split(authToken, " ")[1]
 
 	bool, err := rt.db.CheckAuthToken(authToken)
-	if err != nil {
-
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
 
 	if bool {
 		var newName string
@@ -35,13 +30,13 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 		}
 
-		username, err2 := rt.db.Updateusername(id, newName)
+		username, err3 := rt.db.Updateusername(id, newName)
 
-		if errors.Is(err, database.ErrUserDoesNotExist) {
+		if errors.Is(err3, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
-		} else if err2 != nil {
+		} else if err3 != nil {
 
 			ctx.Logger.WithError(err).WithField("id", id).Error("can't update the username")
 			w.WriteHeader(http.StatusInternalServerError)

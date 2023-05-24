@@ -24,13 +24,13 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		deletedFollow.Follower = follower
 
 		err2 := rt.db.DeleteFollow(deletedFollow.ToDatabaseFollow(follower, followed))
-		if errors.Is(err, database.ErrUserDoesNotExist) {
+		if errors.Is(err2, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
 		} else if err2 != nil {
 
-			ctx.Logger.WithError(err).WithField("FollowerID", deletedFollow).Error("can't unfollow")
+			ctx.Logger.WithError(err2).WithField("FollowerID", deletedFollow).Error("can't unfollow")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

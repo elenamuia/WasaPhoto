@@ -12,5 +12,8 @@ func (db *appdbimpl) CheckIfBanned(userid string, idget string) (bool, error) {
 		return true, nil
 	}
 	rows.Close()
+	if err = rows.Err(); err != nil {
+		return false, err
+	}
 	return false, nil
 }

@@ -15,17 +15,18 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	authToken := r.Header.Get("Authorization")
 	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
+
 	if bool {
 
 		if followed == follower {
-			ctx.Logger.WithError(err).Error("A user can't follow himself/herself")
+			ctx.Logger.Error("A user can't follow himself/herself")
 			w.WriteHeader(http.StatusForbidden)
 			return
 		}
 		err2 := rt.db.PutFollow(follow.ToDatabaseFollow(follower, followed))
 		if err2 != nil {
 
-			ctx.Logger.WithError(err).Error("Can't add follower")
+			ctx.Logger.WithError(err2).Error("Can't add follower")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

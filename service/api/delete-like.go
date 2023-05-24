@@ -28,13 +28,13 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	if bool {
 
 		err4 := rt.db.DeleteLike(userput, photoid)
-		if errors.Is(err, database.ErrLikeDoesNotExist) {
+		if errors.Is(err4, database.ErrLikeDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
 		} else if err4 != nil {
 
-			ctx.Logger.WithError(err).WithField("LikeID", deletedLike).Error("can't unlike")
+			ctx.Logger.WithError(err4).WithField("LikeID", deletedLike).Error("can't unlike")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

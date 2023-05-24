@@ -17,6 +17,9 @@ func (db *appdbimpl) GetListComments(photoid int) (arrayofcom []Comment, err err
 
 		arrayofcom = append(arrayofcom, comm)
 	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
 
 	return arrayofcom, nil
 }

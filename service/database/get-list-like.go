@@ -17,6 +17,9 @@ func (db *appdbimpl) GetListLike(photoid int) (arrayoflike []Like, err error) {
 
 		arrayoflike = append(arrayoflike, like)
 	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
 
 	return arrayoflike, nil
 }

@@ -13,5 +13,8 @@ func (db *appdbimpl) CheckAuthToken(AuthToken string) (bool, error) {
 		return false, nil
 	}
 	rows.Close()
+	if err = rows.Err(); err != nil {
+		return false, err
+	}
 	return true, nil
 }

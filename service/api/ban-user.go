@@ -24,7 +24,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	if bool {
 
 		if banned == banning {
-			ctx.Logger.WithError(err).WithField("banneduser", banned).Error("A user cannot ban himself/herself")
+			ctx.Logger.WithField("banneduser", banned).Error("A user cannot ban himself/herself")
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 
@@ -32,7 +32,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 
 		if err1 != nil {
 
-			ctx.Logger.WithError(err).Error("can't ban the user")
+			ctx.Logger.WithError(err1).Error("can't ban the user")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
