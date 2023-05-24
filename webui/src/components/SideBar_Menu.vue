@@ -25,8 +25,18 @@ export default {
         closeForm() {
             document.getElementById("myForm").style.display = "none";
         },
+        openSearchBar(){
+            document.getElementById("search").style.display = "block";
+        },
 
         Search() {
+            let search = document.querySelector("input").value;
+			search = search.trim();
+			if (search.length > 0) {
+				// query ./users for results
+				
+				this.$router.push('/profile/' + search);
+            }
 
         },
 
@@ -66,6 +76,8 @@ export default {
             document.getElementById("myForm").style.display = "none";
 
         },
+
+       
 
 
 
@@ -110,7 +122,7 @@ export default {
                                     Home
                                 </RouterLink>
                             </li>
-                            <li cclass="nav-item" @click="Search()">
+                            <li cclass="nav-item" @click="openSearchBar()">
 
                                 <div class="nav-link">
                                     <svg class="feather">
@@ -186,7 +198,26 @@ export default {
                         </form>
 
                     </div>
+
+                    <div>
+                        <form>
+
+                            <input v-model="searchQuery" type="text" id="search">
+                            <button type="submit" class="btn" id="searchBut" @click="Search()">Search</button>
+                                <!-- Results -->
+                                <datalist class="list-group custom-select w-25 dropdown mt-5 position-absolute">
+
+                                    <option class=" list-group-item align-middle" v-for="user in search_results"
+                                        :key="user">
+
+                                        <i class="bi-person-circle m-2 fa-lg" style="font-size: 1.5rem;"></i>
+
+                                    </option>
+                                </datalist>
+                        </form>
+                    </div>
                 </main>
+
         </div>
     </div>
 </template>

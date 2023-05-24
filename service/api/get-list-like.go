@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -28,7 +27,6 @@ func (rt *_router) getLikeList(w http.ResponseWriter, r *http.Request, ps httpro
 		arraylike, err6 := rt.db.GetListLike(photoid)
 
 		if err6 != nil {
-			fmt.Println(err6)
 			ctx.Logger.WithError(err6).Error("Can't get list of likes")
 			w.WriteHeader(http.StatusInternalServerError)
 			return

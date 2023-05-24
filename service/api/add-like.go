@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -28,7 +27,6 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 		err6 := rt.db.AddLike(like.ToDatabaseLike(userrec, likeid, photoid))
 		if err6 != nil {
-			fmt.Println(err6)
 			ctx.Logger.WithError(err).Error("can't like the photo")
 			w.WriteHeader(http.StatusInternalServerError)
 			return

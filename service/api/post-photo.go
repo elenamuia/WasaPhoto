@@ -3,8 +3,6 @@ package api
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
-
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -20,7 +18,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	userid := ps.ByName("userid")
 
 	if err2 != nil {
-		fmt.Println("err2:", err2)
+
 		w.WriteHeader(http.StatusBadRequest)
 
 		return
@@ -30,7 +28,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	bytes, err3 := ioutil.ReadAll(file)
 	if err3 != nil {
-		fmt.Println("err3:", err3)
+
 		w.WriteHeader(http.StatusBadRequest)
 
 		return
