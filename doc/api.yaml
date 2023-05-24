@@ -110,9 +110,10 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
 
   
-  /users/{userid}/profile/:
+  /users/{userid}/profile/{searcheduser}":
     parameters:
     -  $ref: "#/components/parameters/userid"
+    -  $ref: "#/components/parameters/searcheduser"
     get:
       tags: [User]
       summary: Searches for a user
@@ -467,7 +468,13 @@ components:
         minLength: 3
         maxLength: 16 
         
-
+    searcheduser:
+      name: searcheduser
+      in: path
+      description: The username of the user that has been searched
+      required: true
+      schema:
+        $ref: "#/components/schemas/Name"
 
     banneduser:
       name: banneduser
