@@ -17,14 +17,6 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-		// var idget string
-		//err3 := json.NewDecoder(r.Body).Decode(&idget)
-		//if err3 != nil {
-		//	fmt.Println("sono qui")
-		//	w.WriteHeader(http.StatusBadRequest)
-		//	return
-
-		//}
 
 		bool, err6 := rt.db.CheckIfBanned(id, idget)
 

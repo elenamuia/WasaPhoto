@@ -12,7 +12,6 @@ import (
 
 func (rt *_router) getCommentList(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	// userid := ps.ByName("userid")
 	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
 	if err1 != nil {
 		w.WriteHeader(http.StatusBadRequest)
