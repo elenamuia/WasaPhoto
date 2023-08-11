@@ -1,9 +1,14 @@
 <script>
-
+import SearchModal from './SearchModal.vue';
 export default {
+
+    components: {
+        SearchModal
+    },
 
     data: function () {
         return {
+            isSearchModalOpen: false,
             errormsg: null,
             loading: false,
             some_data: null,
@@ -17,6 +22,12 @@ export default {
         }
     },
     methods: {
+        openSearchModal() {
+            this.isSearchModalOpen = true;
+        },
+        closeSearchModal() {
+            this.isSearchModalOpen = false;
+        },
 
         openForm() {
             document.getElementById("myForm").style.display = "block";
@@ -122,13 +133,18 @@ export default {
                                     Home
                                 </RouterLink>
                             </li>
-                            <li cclass="nav-item" @click="openSearchBar()">
-
+                            <li class="nav-item" @click="openSearchBar()">
+                            <!--
                                 <div class="nav-link">
                                     <svg class="feather">
                                         <use href="/feather-sprite-v4.29.0.svg#search" />
                                     </svg>
                                     Search Profile
+                                </div>
+                            -->
+                                <div>
+                                    <button @click="openSearchModal">Cerca Profili</button>
+                                    <search-modal :showModal="isSearchModalOpen" @close="closeSearchModal" />
                                 </div>
 
 
@@ -198,13 +214,13 @@ export default {
                         </form>
 
                     </div>
-
+                <!--
                     <div>
                         <form>
 
                             <input v-model="searchQuery" type="text" id="search">
                             <button type="submit" class="btn" id="searchBut" @click="Search()">Search</button>
-                                <!-- Results -->
+                                
                                 <datalist class="list-group custom-select w-25 dropdown mt-5 position-absolute">
 
                                     <option class=" list-group-item align-middle" v-for="user in search_results"
@@ -216,6 +232,7 @@ export default {
                                 </datalist>
                         </form>
                     </div>
+                -->
                 </main>
 
         </div>
