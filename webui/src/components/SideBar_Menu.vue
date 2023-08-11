@@ -133,15 +133,15 @@ export default {
                                     Home
                                 </RouterLink>
                             </li>
-                            <li class="nav-item" @click="openSearchBar()">
-                            <!--
+                            <li class="nav-item" @click="openSearchModal()">
+                                <!--
                                 <div class="nav-link">
                                     <svg class="feather">
                                         <use href="/feather-sprite-v4.29.0.svg#search" />
                                     </svg>
                                     Search Profile
-                                </div>
-                            -->
+                                </div>-->
+                            
                                 <div>
                                     <button @click="openSearchModal">Cerca Profili</button>
                                     <search-modal :showModal="isSearchModalOpen" @close="closeSearchModal" />

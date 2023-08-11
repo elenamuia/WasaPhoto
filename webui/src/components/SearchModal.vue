@@ -13,20 +13,24 @@
     },
     methods: {
       searchProfiles() {
+        console.log("searcheduser: " + this.searchQuery)
+        console.log("userid: " + this.$current_user.id)
 
         var url = '/users/:userid/profile/:searcheduser';
-        url.replace(':userid', this.searchQuery);
-        url.replace(':searcheduser', 'Elena');
+        url.replace(':userid', this.$current_user.id);
+        url.replace(':searcheduser', this.searchQuery);
         
         // Effettua la chiamata API per cercare i profili
-        axios.get(url, {})
-        .then(response => {
-          this.searchResults = response.data.User;
-        })
-        .catch(error => {
-          console.error('Errore durante la ricerca:', error);
-        });
-      },
+        try {
+				let response =  this.$axios.get(url, {});
+
+				this.errormsg = null;
+        this.$router.push('/profile/' + this.searchQuery);
+			} catch (err) {
+				this.errormsg = err.message;
+			}
+    },  
+     
       closeModal() {
         this.$emit('close');
       }
@@ -54,7 +58,7 @@
           </div>
           
         <!-- Bottone per chiudere la modale -->
-        <button @click= "showmodal =false">Close</button>
+        <button @click= "closeModal">Close</button>
       </div>  
     </div>
   </template>
