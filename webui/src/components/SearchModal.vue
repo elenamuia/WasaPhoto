@@ -8,13 +8,16 @@
     data() {
       return {
         searchQuery: '',
-        searchResults: ''
+        searchResults: '',
+        
       };
     },
     methods: {
       searchProfiles() {
+        
         console.log("searcheduser: " + this.searchQuery)
         console.log("userid: " + this.$current_user.id)
+        console.log(this.searchResults)
 
         var url = '/users/:userid/profile/:searcheduser';
         url.replace(':userid', this.$current_user.id);
@@ -31,9 +34,13 @@
 			}
     },  
      
-      closeModal() {
-        this.$emit('close');
-      }
+    closeModal() {
+     
+      this.$emit('close');
+      
+      console.log("closeModal")
+      
+    }
     }
   }
   </script>
@@ -41,20 +48,22 @@
 
 
   <template>
-    <div class="search-modal" v-if="showModal">
+    <div class="searchModal" >
       <!-- Campi di ricerca -->
       <div class="search-modal-content">
         <input type="text" v-model="searchQuery" placeholder="Who are you looking for?">
           <!-- Bottone per eseguire la ricerca -->
           <button @click="searchProfiles">Search</button>
           
-          <!-- Risultati della ricerca -->
-          <div v-if="searchResults.length > 0">
-            <h2>Risultati della ricerca:</h2>
-            <ul>
+          <!--<p> {{searchResult}}</p>-->
+          
+          <div>
+            <ul v-if="searchResults.length > 0">
+              <h2>Results:</h2>
               <li v-text="searchResults">
               </li>
             </ul>
+            <!--<p v-else> No profile has been found </p>-->
           </div>
           
         <!-- Bottone per chiudere la modale -->
@@ -65,7 +74,7 @@
   
   <style>
   /* Stili per la modale di ricerca */
-  .search-modal {
+  .searchModal {
     position: fixed;
     top: 0;
     left:0;

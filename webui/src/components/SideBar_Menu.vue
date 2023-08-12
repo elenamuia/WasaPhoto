@@ -1,13 +1,15 @@
 <script>
-import SearchModal from './SearchModal.vue';
+//import SearchModal from './SearchModal.vue';
 export default {
 
-    components: {
-        SearchModal
-    },
+    //components: {
+    //    SearchModal
+    //},
 
     data: function () {
         return {
+            searchQuery: '',
+            searchResults: '',
             isSearchModalOpen: false,
             errormsg: null,
             loading: false,
@@ -24,9 +26,12 @@ export default {
     methods: {
         openSearchModal() {
             this.isSearchModalOpen = true;
+
         },
         closeSearchModal() {
+            console.log("closeSearchModal")
             this.isSearchModalOpen = false;
+
         },
 
         openForm() {
@@ -36,19 +41,8 @@ export default {
         closeForm() {
             document.getElementById("myForm").style.display = "none";
         },
-        openSearchBar(){
+        openSearchBar() {
             document.getElementById("search").style.display = "block";
-        },
-
-        Search() {
-            let search = document.querySelector("input").value;
-			search = search.trim();
-			if (search.length > 0) {
-				// query ./users for results
-				
-				this.$router.push('/profile/' + search);
-            }
-
         },
 
 
@@ -76,7 +70,6 @@ export default {
                 }
 
 
-
             } catch (e) {
                 if (e.response && e.response.status === 404) {
                     errormsg.msg = ""
@@ -88,9 +81,37 @@ export default {
 
         },
 
-       
 
+        searchProfiles() {
 
+            console.log("searcheduser: " + this.searchQuery);
+            console.log("userid: " + this.$current_user.id);
+            var url = '/users/:userid/profile/:searcheduser';
+            url.replace(':userid', this.$current_user.id);
+            url.replace(':searcheduser', this.searchQuery);
+
+            // Effettua la chiamata API per cercare i profili
+            
+            this.$axios.get('/users/'+this.$current_user.id+'/profile/' + this.searchQuery).then(response => {
+                console.log("searchresults:" + response.data.User);
+                if (response.data.User == null) {
+
+                    this.searchResults = "No profile has been found";
+                    this.searchQuery = '';
+
+                } else {
+
+                    this.searchResults = response.data.User;
+                    this.searchQuery = '';
+                    this.errormsg = null;
+                    this.$router.push('/profile/' + this.searchResults);
+                }
+            }).catch(err => 
+                {this.errormsg = err.message;
+                console.log(this.errormsg)
+            });
+           
+        },
 
         Logout() {
             this.$current_user.id = null;
@@ -118,7 +139,8 @@ export default {
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="margin-top:50px;">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+                    style="margin-top:50px;">
                     <div class="position-sticky pt-3 sidebar-sticky">
                         <h6
                             class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
@@ -133,20 +155,14 @@ export default {
                                     Home
                                 </RouterLink>
                             </li>
-                            <li class="nav-item" @click="openSearchModal()">
-                                <!--
+                            <li class="nav-item" @click="openSearchModal">
+
                                 <div class="nav-link">
                                     <svg class="feather">
                                         <use href="/feather-sprite-v4.29.0.svg#search" />
                                     </svg>
                                     Search Profile
-                                </div>-->
-                            
-                                <div>
-                                    <button @click="openSearchModal">Cerca Profili</button>
-                                    <search-modal :showModal="isSearchModalOpen" @close="closeSearchModal" />
                                 </div>
-
 
                             </li>
                             <li class="nav-item">
@@ -197,45 +213,65 @@ export default {
                     </div>
                 </nav>
             </div>
-                <main class= "col-md-8" style ="width:500px; height:auto">
-                    <div >
-                        <div v-for="photo in photos" :key="photo" >
-                            <img :src="photo" alt="Photo not loaded">
+            <main class="col-md-8" style="width:500px; height:auto">
+                <div>
+                    <div v-for="photo in photos" :key="photo">
+                        <img :src="photo" alt="Photo not loaded">
+                    </div>
+                </div>
+
+                <div class="form-popup" id="myForm">
+                    <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
+                        enctype="multipart/form-data">
+                        <h3 style="margin-left: 10px;">Upload Photo</h3>
+                        <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png"
+                            style="width:fit-content;">
+                        <button type="submit" class="btn" id="submitBut">Upload</button>
+                        <button type="button" class="btn cancel" @click="closeForm()">Close</button>
+                    </form>
+
+                </div>
+
+                <div class="searchModal" v-if="isSearchModalOpen">
+                    <!-- Campi di ricerca -->
+                    <div class="search-modal-content">
+                        <input type="text" v-model="searchQuery" placeholder="Who are you looking for?">
+                        <!-- Bottone per eseguire la ricerca -->
+                        <button @click="searchProfiles">Search</button>
+                        <div>
+                            <p v-text="searchResults"></p>
                         </div>
+
+                        <!-- Bottone per chiudere la modale -->
+                        <button @click="closeSearchModal">Close</button>
                     </div>
-
-                    <div class="form-popup" id="myForm">
-                        <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
-                            enctype="multipart/form-data">
-                            <h3 style="margin-left: 10px;">Upload Photo</h3>
-                            <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png" style ="width:fit-content;">
-                            <button type="submit" class="btn" id="submitBut">Upload</button>
-                            <button type="button" class="btn cancel" @click="closeForm()">Close</button>
-                        </form>
-
-                    </div>
-                <!--
-                    <div>
-                        <form>
-
-                            <input v-model="searchQuery" type="text" id="search">
-                            <button type="submit" class="btn" id="searchBut" @click="Search()">Search</button>
-                                
-                                <datalist class="list-group custom-select w-25 dropdown mt-5 position-absolute">
-
-                                    <option class=" list-group-item align-middle" v-for="user in search_results"
-                                        :key="user">
-
-                                        <i class="bi-person-circle m-2 fa-lg" style="font-size: 1.5rem;"></i>
-
-                                    </option>
-                                </datalist>
-                        </form>
-                    </div>
-                -->
-                </main>
+                </div>
+                
+                
+            </main>
 
         </div>
     </div>
 </template>
-<style></style>
+<style>
+.searchModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    /* Stili per il posizionamento e overlay */
+}
+
+.search-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+
+}
+</style>

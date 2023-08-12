@@ -49,7 +49,7 @@ type Login struct {
 }
 
 type Profile struct {
-	User     int      `json:"User"`
+	User     string   `json:"User"`
 	Photos   []int    `json:"Photos"`
 	Follower []string `json:"Follower"`
 	Followed []string `json:"Followed"`
