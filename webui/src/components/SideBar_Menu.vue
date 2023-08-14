@@ -14,6 +14,7 @@ export default {
             errormsg: null,
             loading: false,
             some_data: null,
+            url_profile: null,
             photos: [],
             img: {
                 id: "",
@@ -86,9 +87,7 @@ export default {
 
             console.log("searcheduser: " + this.searchQuery);
             console.log("userid: " + this.$current_user.id);
-            var url = '/users/:userid/profile/:searcheduser';
-            url.replace(':userid', this.$current_user.id);
-            url.replace(':searcheduser', this.searchQuery);
+          
 
             // Effettua la chiamata API per cercare i profili
             
@@ -100,11 +99,10 @@ export default {
                     this.searchQuery = '';
 
                 } else {
-
-                    this.searchResults = response.data.User;
                     this.searchQuery = '';
                     this.errormsg = null;
-                    this.$router.push('/profile/' + this.searchResults);
+                    
+                    this.$router.push('/profile/' + response.data.User);
                 }
             }).catch(err => 
                 {this.errormsg = err.message;
@@ -173,7 +171,7 @@ export default {
                                     My Profile
                                 </RouterLink>
                             </li>
-                        </ul>
+                  <!--      </ul>
 
                         <h6
                             class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
@@ -189,7 +187,7 @@ export default {
                                     Settings
                                 </RouterLink>
 
-                            </li>
+                            </li> -->
 
                             <li class="nav-item" @click="openForm()">
 

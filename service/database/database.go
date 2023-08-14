@@ -111,6 +111,7 @@ type AppDatabase interface {
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream(userid string) (ArrayofPhotos []Photo, err error)
 	Updateusername(string, string) (string, error)
+	GetBannedList(string) ([]string, error)
 	Ping() error
 }
 
