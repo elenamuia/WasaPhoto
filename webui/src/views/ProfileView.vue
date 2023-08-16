@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
 import SideBarMenu from '../components/SideBar_Menu.vue'
 </script>
 <script>
@@ -20,12 +19,12 @@ export default {
       followed: [],
       post: [],
       profile_username: null,
-
     }
   },
 
+
   methods: {
-    refresh() {
+    async refresh() {
 
       this.profile_username = this.$route.params.userid;
       console.log(this.profile_username)
@@ -39,9 +38,7 @@ export default {
         this.my_profile = false;
       }
 
-      let response =  this.$axios.get("/users/" + this.username + "/bans");
-      this.has_banned_you = response.data.users.map(x => x["username-string"]).includes(this.$current_user.id);
-
+      //response = this.$axios.get("/users/" + this.$current_user.id + "/banned");
 
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
@@ -58,11 +55,10 @@ export default {
     },
 
     async Follow() {
-      console.log("before following: " + this.isFollower)
       this.$axios.put("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
       this.isFollower = true;
       this.n_follower += 1;
-      console.log("after following: " + this.isFollower)
+
     },
 
     async Unfollow() {
@@ -81,19 +77,12 @@ export default {
       this.$axios.delete("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
       this.isBanned = false;
 
-    },
-
-  
-
+    }
 },
 
 
-
-
-
 mounted() {
-  this.refresh();
-
+    this.refresh()
 },
 
 }
@@ -121,8 +110,8 @@ mounted() {
               <button class="btn btn-primary btn-md" type="button" @click="changeUsername()">
                 Change Name
               </button>
-
             </div>
+
 
             <div v-else>
 
@@ -132,13 +121,13 @@ mounted() {
                   <Transition name="fade" mode="out-in">
                     <div v-if="isFollower">
                       <button class="btn btn-warning btn-lg" type="button" @click="Unfollow()">
-                        
+                        <i class="bi-person-dash-fill"></i>
                         Unfollow
                       </button>
                     </div>
                     <div v-else>
                       <button class="btn btn-primary btn-lg" type="button" @click="Follow()">
-                        
+                        <i class="bi-person-plus-fill"></i>
                         Follow
                       </button>
                     </div>
@@ -147,14 +136,14 @@ mounted() {
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
                     <div v-if="isBanned">
-                      <button class="btn btn-success btn-lg" type="button" @click="Unban()">
-                        
+                      <button class="btn btn-success btn-lg" type="button" @click="UnBan()">
+                        <i class="bi-person-check-fill"></i>
                         Unban
                       </button>
                     </div>
                     <div v-else>
                       <button class=" btn btn-danger btn-lg" type="button" @click="Ban()">
-                        
+                        <i class="bi-person-x-fill"></i>
                         Ban
                       </button>
                     </div>
@@ -171,7 +160,6 @@ mounted() {
         <div class="col col-sm-1" style="font-size: medium;">
           {{ this.n_follower }}
         </div>
-
         <div class="col col-sm-1" style="font-size: medium;">
           Num Followed:
         </div>
@@ -185,13 +173,10 @@ mounted() {
         <div class="col col-sm-1" style="font-size: medium;">
           {{ this.n_posts }}
         </div>
-
-
-
-        <RouterView />
+        
       </div>
     </div>
-
+    <RouterView />
   </main>
 </template>
 <style scoped>

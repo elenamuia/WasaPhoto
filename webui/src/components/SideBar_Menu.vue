@@ -1,10 +1,6 @@
 <script>
-//import SearchModal from './SearchModal.vue';
-export default {
 
-    //components: {
-    //    SearchModal
-    //},
+export default {
 
     data: function () {
         return {
@@ -87,9 +83,6 @@ export default {
 
             console.log("searcheduser: " + this.searchQuery);
             console.log("userid: " + this.$current_user.id);
-          
-
-            // Effettua la chiamata API per cercare i profili
             
             this.$axios.get('/users/'+this.$current_user.id+'/profile/' + this.searchQuery).then(response => {
                 console.log("searchresults:" + response.data.User);
@@ -171,23 +164,6 @@ export default {
                                     My Profile
                                 </RouterLink>
                             </li>
-                  <!--      </ul>
-
-                        <h6
-                            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-                            <span>Secondary menu</span>
-                        </h6>
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link"></a>
-                                <RouterLink :to="'/settings/'" class="nav-link">
-                                    <svg class="feather">
-                                        <use href="/feather-sprite-v4.29.0.svg#settings" />
-                                    </svg>
-                                    Settings
-                                </RouterLink>
-
-                            </li> -->
 
                             <li class="nav-item" @click="openForm()">
 
@@ -244,8 +220,7 @@ export default {
                         <button @click="closeSearchModal">Close</button>
                     </div>
                 </div>
-                
-                
+                <RouterView />
             </main>
 
         </div>
