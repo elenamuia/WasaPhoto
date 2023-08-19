@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -13,7 +12,6 @@ import (
 func (rt *_router) getBanList(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	userid := ps.ByName("userid")
-	fmt.Println("userid: ", userid)
 
 	authToken := r.Header.Get("Authorization")
 	authToken = strings.Split(authToken, " ")[1]
@@ -22,7 +20,6 @@ func (rt *_router) getBanList(w http.ResponseWriter, r *http.Request, ps httprou
 
 		//arrayban, err6 := rt.db.getBanningList(userid)
 		arrayban, err6 := rt.db.GetBanningList(userid)
-		fmt.Println("arrayban: ", arrayban)
 
 		if err6 != nil {
 			ctx.Logger.WithError(err6).Error("Can't get list of likes")

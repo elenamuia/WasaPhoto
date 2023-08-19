@@ -109,7 +109,7 @@ type AppDatabase interface {
 	CheckAuthToken(AuthToken string) (bool, error)
 	PostPhoto(photo Photo) (Photo, error)
 	PutFollow(follow Follow) error
-	UnbanUser(ban Banned) (err error)
+	UnbanUser(string, string) error
 	GetMyMainstream(userid string) (ArrayofPhotos []Photo, err error)
 	Updateusername(string, string) (string, error)
 	Ping() error

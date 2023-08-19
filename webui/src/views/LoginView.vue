@@ -62,7 +62,7 @@ export default {
 			</form>
 		</div>
 	</div>
-	<Routerview />
+	<RouterView :key="$route.fullPath"></RouterView>
 </main>
 </template>
 <style>

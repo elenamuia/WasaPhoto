@@ -12,7 +12,7 @@ import (
 )
 
 func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	var unban Banned
+
 	banning := ps.ByName("userid")
 	banned := ps.ByName("banneduser")
 	authToken := r.Header.Get("Authorization")
@@ -20,22 +20,20 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
-		unban.Banned = banned
-		unban.Banning = banning
 
-		err3 := rt.db.UnbanUser(unban.ToDatabase(banned, banning))
-		if errors.Is(err3, database.ErrPhotoDoesNotExist) {
+		err3 := rt.db.UnbanUser(banning, banned)
+		if errors.Is(err3, database.ErrUserDoesNotExist) {
 
 			w.WriteHeader(http.StatusNotFound)
 			return
 		} else if err3 != nil {
 
-			ctx.Logger.WithError(err3).WithField("banneduser", unban).Error("can't unban user")
+			ctx.Logger.WithError(err3).WithField("banneduser", banned).Error("can't unban user")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 
 		} else if banned == banning {
-			ctx.Logger.WithField("banneduser", unban).Error("Not Authorized")
+			ctx.Logger.WithField("banneduser", banned).Error("Not Authorized")
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 

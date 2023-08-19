@@ -19,6 +19,7 @@ export default {
       followed: [],
       post: [],
       profile_username: null,
+      get_banned:[],
     }
   },
 
@@ -38,7 +39,8 @@ export default {
         this.my_profile = false;
       }
 
-      //response = this.$axios.get("/users/" + this.$current_user.id + "/banned");
+      this.get_banned = await this.$axios.get("/users/" + this.$current_user.id + "/banned/");
+      console.log(this.get_banned.data)
 
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
@@ -136,7 +138,7 @@ mounted() {
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
                     <div v-if="isBanned">
-                      <button class="btn btn-success btn-lg" type="button" @click="UnBan()">
+                      <button class="btn btn-success btn-lg" type="button" @click="Unban()">
                         <i class="bi-person-check-fill"></i>
                         Unban
                       </button>
