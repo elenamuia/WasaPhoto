@@ -32,7 +32,7 @@ export default {
 
 <template>
     <main >
-				<RouterView />
+		<RouterView :key="$route.fullPath"></RouterView>
     </main>
 </template>
 

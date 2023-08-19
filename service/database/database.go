@@ -103,6 +103,7 @@ type AppDatabase interface {
 	DeleteLike(string, int) (err error)
 	DeleteProfile(string) (err error)
 	GetPhoto(int) (Photo, error)
+	GetBanningList(string) ([]string, error)
 	GetProfile(name string) (p Profile, err error)
 	LoginUser(l Login) (name string, isNew bool, err error)
 	CheckAuthToken(AuthToken string) (bool, error)
@@ -111,7 +112,6 @@ type AppDatabase interface {
 	UnbanUser(ban Banned) (err error)
 	GetMyMainstream(userid string) (ArrayofPhotos []Photo, err error)
 	Updateusername(string, string) (string, error)
-	GetBannedList(string) ([]string, error)
 	Ping() error
 }
 

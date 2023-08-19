@@ -176,7 +176,7 @@ mounted() {
         
       </div>
     </div>
-    <RouterView />
+    <RouterView :key="$route.fullPath"></RouterView>
   </main>
 </template>
 <style scoped>

@@ -39,7 +39,7 @@ export default {
 <template>	
 	<main>
 		<SideBarMenu></SideBarMenu>
-		<RouterView />
+		<RouterView :key="$route.fullPath"></RouterView>
 	</main>
 	
 </template>

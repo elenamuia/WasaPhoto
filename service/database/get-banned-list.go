@@ -1,8 +1,12 @@
 package database
 
-func (db *appdbimpl) GetBannedList(userid string) (listban []string, err error) {
+import "fmt"
 
-	rows, err1 := db.c.Query("SELECT Banning FROM Banned WHERE Banned = ? ", userid)
+func (db *appdbimpl) GetBanningList(userid string) (listban []string, err error) {
+
+	rows, err1 := db.c.Query("SELECT b.Banning FROM Banned as b WHERE Banned = ? ", userid)
+	fmt.Println("rows")
+
 	if err1 != nil {
 		return listban, err
 	}
@@ -11,12 +15,15 @@ func (db *appdbimpl) GetBannedList(userid string) (listban []string, err error) 
 		var ban string
 		err2 := rows.Scan(&ban)
 		if err2 != nil {
-
+			fmt.Println("ban: " + ban)
 			return listban, err
 		}
 
 		listban = append(listban, ban)
+		fmt.Println(listban)
 	}
+	rows.Close()
+
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
