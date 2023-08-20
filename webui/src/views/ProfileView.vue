@@ -40,8 +40,10 @@ export default {
       }
 
       if (!this.my_profile){
-        this.has_banned_me = await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
-        console.log(this.has_banned_me.data)
+        await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username).then(response=>{
+          this.has_banned_me = response.data
+        });
+        console.log(this.has_banned_me)
       }
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
@@ -156,7 +158,7 @@ mounted() {
           </div>
         </div>
 
-        <div v-if="!has_banned_me">
+        <div v-if="!has_banned_me" class="row">
 
           <div class="col col-sm-1" style="font-size: medium;">
             Num Follower:
@@ -170,7 +172,6 @@ mounted() {
           <div class="col col-sm-1" style="font-size: medium;">
             {{ this.n_followed }}
           </div>
-
           <div class="col col-sm-1" style="font-size: medium;">
             Num Post:
           </div>

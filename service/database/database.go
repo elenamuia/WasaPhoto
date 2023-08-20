@@ -97,7 +97,9 @@ type AppDatabase interface {
 	AddComment(comment Comment) error
 	AddLike(like Like) error
 	BanUser(string, string) error
-	CheckIfBanned(string, string) (bool, error)
+	CheckIfHasBannedMe(string, string) (bool, error)
+	CheckIfFollow(string, string) (bool, error)
+	CheckIfIBanned(string, string) (bool, error)
 	DeleteComment(int) error
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(string, int) (err error)

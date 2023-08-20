@@ -1,6 +1,6 @@
 package database
 
-func (db *appdbimpl) CheckIfBanned(userid string, idget string) (bool, error) {
+func (db *appdbimpl) CheckIfHasBannedMe(userid string, idget string) (bool, error) {
 	rows, err := db.c.Query(`SELECT Banned,Banning FROM Banned WHERE Banned = ? AND Banning = ? `, userid, idget)
 	if err != nil {
 		return true, err
