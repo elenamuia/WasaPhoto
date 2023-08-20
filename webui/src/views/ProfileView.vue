@@ -39,9 +39,10 @@ export default {
         this.my_profile = false;
       }
 
-      this.get_banned = await this.$axios.get("/users/" + this.$current_user.id + "/banned/");
-      console.log(this.get_banned.data)
-
+      if (!this.my_profile){
+        this.has_banned_me = await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
+        console.log(this.has_banned_me.data)
+      }
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
         this.n_followed = response.data.Followed.length;
@@ -105,7 +106,7 @@ mounted() {
             <b style="margin-bottom: 10px">{{ this.profile_username }}</b>
 
             <div v-if="has_banned_me">
-              Unavailable information
+              No info available, you have been banned by this user!
             </div>
 
             <div v-else-if="my_profile">
@@ -113,7 +114,6 @@ mounted() {
                 Change Name
               </button>
             </div>
-
 
             <div v-else>
 
@@ -156,24 +156,27 @@ mounted() {
           </div>
         </div>
 
-        <div class="col col-sm-1" style="font-size: medium;">
-          Num Follower:
-        </div>
-        <div class="col col-sm-1" style="font-size: medium;">
-          {{ this.n_follower }}
-        </div>
-        <div class="col col-sm-1" style="font-size: medium;">
-          Num Followed:
-        </div>
-        <div class="col col-sm-1" style="font-size: medium;">
-          {{ this.n_followed }}
-        </div>
+        <div v-if="!has_banned_me">
 
-        <div class="col col-sm-1" style="font-size: medium;">
-          Num Post:
-        </div>
-        <div class="col col-sm-1" style="font-size: medium;">
-          {{ this.n_posts }}
+          <div class="col col-sm-1" style="font-size: medium;">
+            Num Follower:
+          </div>
+          <div class="col col-sm-1" style="font-size: medium;">
+            {{ this.n_follower }}
+          </div>
+          <div class="col col-sm-1" style="font-size: medium;">
+            Num Followed:
+          </div>
+          <div class="col col-sm-1" style="font-size: medium;">
+            {{ this.n_followed }}
+          </div>
+
+          <div class="col col-sm-1" style="font-size: medium;">
+            Num Post:
+          </div>
+          <div class="col col-sm-1" style="font-size: medium;">
+            {{ this.n_posts }}
+          </div>
         </div>
         
       </div>
