@@ -11,6 +11,7 @@ func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 
 		return p, err1
 	}
+	defer func() { _ = rows1.Close() }()
 
 	for rows1.Next() {
 
@@ -30,12 +31,12 @@ func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 	if err5 := rows1.Err(); err5 != nil {
 		return p, err
 	}
-	rows1.Close()
 
 	rows2, err8 := db.c.Query(`SELECT Follower FROM Follower WHERE Followed = ?`, user)
 	if err8 != nil {
 		return p, err8
 	}
+	defer func() { _ = rows2.Close() }()
 
 	for rows2.Next() {
 		var followerid string
@@ -51,12 +52,12 @@ func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 
 		return p, err4
 	}
-	rows2.Close()
 
 	rows3, err3 := db.c.Query(`SELECT Followed FROM Follower WHERE Follower = ?`, user)
 	if err3 != nil {
 		return p, err3
 	}
+	defer func() { _ = rows3.Close() }()
 
 	for rows3.Next() {
 		var followedid string
@@ -71,7 +72,6 @@ func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 	if err5 := rows3.Err(); err5 != nil {
 		return p, err
 	}
-	rows3.Close()
 
 	return p, nil
 }

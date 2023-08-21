@@ -6,6 +6,7 @@ func (db *appdbimpl) GetListComments(photoid int) (arrayofcom []Comment, err err
 	if err1 != nil {
 		return arrayofcom, err
 	}
+	defer func() { _ = rows.Close() }()
 
 	for rows.Next() {
 		var comm Comment

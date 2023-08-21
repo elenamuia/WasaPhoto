@@ -6,6 +6,7 @@ func (db *appdbimpl) GetListLike(photoid int) (arrayoflike []Like, err error) {
 	if err1 != nil {
 		return arrayoflike, err
 	}
+	defer func() { _ = rows.Close() }()
 
 	for rows.Next() {
 		var like Like

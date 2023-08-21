@@ -5,11 +5,12 @@ func (db *appdbimpl) CheckIfIBanned(userid string, idget string) (bool, error) {
 	if err != nil {
 		return true, err
 	}
+	defer func() { _ = rows.Close() }()
 
 	if rows.Next() {
 		return true, nil
 	}
-	rows.Close()
+
 	if err = rows.Err(); err != nil {
 		return false, err
 	}
