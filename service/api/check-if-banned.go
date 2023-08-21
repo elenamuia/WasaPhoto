@@ -19,7 +19,7 @@ func (rt *_router) checkIfHasBannedMe(w http.ResponseWriter, r *http.Request, ps
 	if bool {
 
 		//arrayban, err6 := rt.db.getBanningList(userid)
-		arrayban, err6 := rt.db.CheckIfHasBannedMe(userid, banninguser)
+		hasbanned, err6 := rt.db.CheckIfHasBannedMe(userid, banninguser)
 
 		if err6 != nil {
 			ctx.Logger.WithError(err6).Error("Can't check if banned")
@@ -28,7 +28,7 @@ func (rt *_router) checkIfHasBannedMe(w http.ResponseWriter, r *http.Request, ps
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(arrayban)
+		_ = json.NewEncoder(w).Encode(hasbanned)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")

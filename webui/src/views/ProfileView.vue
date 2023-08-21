@@ -40,11 +40,19 @@ export default {
       }
 
       if (!this.my_profile){
-        await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username).then(response=>{
+        await this.$axios.get("/users/" + this.$current_user.id + "/bannedby/" + this.profile_username).then(response=>{
           this.has_banned_me = response.data
         });
         console.log(this.has_banned_me)
+        await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username).then(response=>{
+          this.isBanned = response.data
+        });
+        await this.$axios.get("/users/" + this.$current_user.id + "/followed/" + this.profile_username).then(response=>{
+          this.isFollower = response.data
+        });
+        console.log("isFollower: "+ this.isFollower)
       }
+
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
         this.n_followed = response.data.Followed.length;
@@ -123,7 +131,7 @@ mounted() {
               <div class="row">
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
-                    <div v-if="isFollower">
+                    <div v-if="this.isFollower">
                       <button class="btn btn-warning btn-lg" type="button" @click="Unfollow()">
                         <i class="bi-person-dash-fill"></i>
                         Unfollow
@@ -139,7 +147,7 @@ mounted() {
                 </div>
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
-                    <div v-if="isBanned">
+                    <div v-if="this.isBanned">
                       <button class="btn btn-success btn-lg" type="button" @click="Unban()">
                         <i class="bi-person-check-fill"></i>
                         Unban

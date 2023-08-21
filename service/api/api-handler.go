@@ -25,8 +25,8 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:userid/photos/:photoid/like/:likeid", rt.wrap(rt.unlikePhoto))
 	rt.router.PUT("/users/:userid/followed/:followeduser", rt.wrap(rt.followUser))
 	rt.router.DELETE("/users/:userid/followed/:followeduser", rt.wrap(rt.unfollowUser))
-	rt.router.GET("/users/:userid/banned/:banninguser", rt.wrap(rt.checkIfHasBannedMe))
-	rt.router.GET("/users/:userid/banned/:baneduser", rt.wrap(rt.checkIfIBanned))
+	rt.router.GET("/users/:userid/bannedby/:banninguser", rt.wrap(rt.checkIfHasBannedMe))
+	rt.router.GET("/users/:userid/banned/:banneduser", rt.wrap(rt.checkIfIBanned))
 	rt.router.GET("/users/:userid/followed/:followeduser", rt.wrap(rt.checkIfFollow))
 	rt.router.GET("/liveness", rt.liveness)
 
