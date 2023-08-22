@@ -1,10 +1,12 @@
 <script setup>
 import SideBarMenu from '../components/SideBar_Menu.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 </script>
 <script>
 export default {
   components: {
-    SideBarMenu
+    SideBarMenu,
+    LoadingSpinner
   },
   data: function () {
     return {
@@ -17,11 +19,24 @@ export default {
       my_profile: true,
       follower: [],
       followed: [],
-      post: [],
+      photos: [],
+      currentPage: 1,
+      photosPerPage: 5,
       profile_username: null,
-      get_banned:[],
+      get_banned: [],
+      loading:false,
+      photoPartial: [],
     }
+
+    
   },
+
+  
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+
+  
 
 
   methods: {
@@ -39,32 +54,29 @@ export default {
         this.my_profile = false;
       }
 
-      if (!this.my_profile){
-        await this.$axios.get("/users/" + this.$current_user.id + "/bannedby/" + this.profile_username).then(response=>{
+      if (!this.my_profile) {
+        await this.$axios.get("/users/" + this.$current_user.id + "/bannedby/" + this.profile_username).then(response => {
           this.has_banned_me = response.data
         });
         console.log(this.has_banned_me)
-        await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username).then(response=>{
+        await this.$axios.get("/users/" + this.$current_user.id + "/banned/" + this.profile_username).then(response => {
           this.isBanned = response.data
         });
-        await this.$axios.get("/users/" + this.$current_user.id + "/followed/" + this.profile_username).then(response=>{
+        await this.$axios.get("/users/" + this.$current_user.id + "/followed/" + this.profile_username).then(response => {
           this.isFollower = response.data
         });
-        console.log("isFollower: "+ this.isFollower)
+        console.log("isFollower: " + this.isFollower)
       }
 
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
         this.n_followed = response.data.Followed.length;
-      });
-
-      this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
         this.n_follower = response.data.Follower.length;
+        this.n_posts = response.data.Photos.length;
+        this.post = response.data.Photos;
       });
 
-      this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
-        this.n_posts = response.data.Photos.length;
-      });
+
     },
 
     async Follow() {
@@ -80,23 +92,57 @@ export default {
       this.n_follower -= 1;
     },
 
-    async Ban(){
+    async Ban() {
       this.$axios.put("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
       this.isBanned = true;
 
     },
 
-    async Unban(){
+    async Unban() {
       this.$axios.delete("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
       this.isBanned = false;
 
+    },
+    async loadPhotos(page) {
+      this.loading = true;
+      try {
+        let response = await this.$axios.get('/users/' + this.$current_user.id + '/photos/', {
+          params: {
+            profile: this.profile_username,
+            page: page,
+            perpage: this.photosPerPage
+          }
+        });
+        console.log("response: "+response.data)
+        
+        var dataArray = response.data.map(item =>item.PhotoStructure);
+        this.photos = [...this.photos, ...dataArray];  // Aggiungi nuove foto alla lista esistente
+        console.log("response: " + this.photos)
+        const blob = new Blob([this.photos], { type: 'image/jpeg' });
+        const imageUrl = URL.createObjectURL(blob);
+        this.photos.push(imageUrl);
+        this.currentPage++;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        console.error("Errore nel recuperare le foto:", error);
+      }
+    },
+    handleScroll() {
+      let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
+      if (nearBottom && !this.loading) {
+        this.loadPhotos(this.currentPage);
+      }
     }
-},
+  
+  },
 
 
-mounted() {
-    this.refresh()
-},
+  mounted() {
+    this.refresh();
+    this.loadPhotos(this.currentPage);
+    window.addEventListener('scroll', this.handleScroll);
+  },
 
 }
 
@@ -187,10 +233,19 @@ mounted() {
             {{ this.n_posts }}
           </div>
         </div>
-        
+      </div>
+      <div>
+        <div v-for="photo in photos" :key="photo.PhotoID">
+          <img :src="photo.Photo" alt="Foto"/>
+        </div>
+        <div>
+          <div v-if="loading">
+            <LoadingSpinner></LoadingSpinner>
+          </div>
+        </div>
       </div>
     </div>
-    <RouterView :key="$route.fullPath"></RouterView>
+      <RouterView :key="$route.fullPath"></RouterView>
   </main>
 </template>
 <style scoped>
@@ -202,11 +257,11 @@ mounted() {
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 0.1s
+  transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 0.1s
 }
 
 .fade-enter,
 .fade-leave-to {
-    opacity: 0
+  opacity: 0
 }
 </style>

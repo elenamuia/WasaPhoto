@@ -11,9 +11,16 @@ import (
 )
 
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+	userID := r.URL.Query().Get("profile")
+	page, err2 := strconv.Atoi(r.URL.Query().Get("page"))
+	perPage, err3 := strconv.Atoi(r.URL.Query().Get("perpage"))
 
-	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
-	if err1 != nil {
+	if err2 != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if err3 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -22,7 +29,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		photoget, err2 := rt.db.GetPhoto(photoid)
+		photos, err2 := rt.db.GetPagePhoto(userID, page, perPage)
 		if err2 != nil {
 
 			ctx.Logger.WithError(err2).Error("Can't post photo")
@@ -31,7 +38,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(photoget)
+		_ = json.NewEncoder(w).Encode(photos)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")

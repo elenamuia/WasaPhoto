@@ -44,9 +44,9 @@ type User struct {
 
 type Photo struct {
 	ID             int
+	User           string
 	PhotoStructure []byte
 	Datapost       time.Time
-	User           string
 }
 
 type Like struct {
@@ -104,7 +104,7 @@ type AppDatabase interface {
 	DeleteFollow(follow Follow) (err error)
 	DeleteLike(string, int) (err error)
 	DeleteProfile(string) (err error)
-	GetPhoto(int) (Photo, error)
+	GetPagePhoto(userid string, offset int, perPage int) (photos []Photo, err error)
 	GetBanningList(string) ([]string, error)
 	GetProfile(name string) (p Profile, err error)
 	LoginUser(l Login) (name string, isNew bool, err error)

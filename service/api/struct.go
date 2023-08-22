@@ -99,9 +99,9 @@ func (f *Follow) ToDatabaseFollow(follower string, followed string) database.Fol
 func (p *Photo) ToDatabasePhoto(userid string, photoStruct []byte) database.Photo {
 	return database.Photo{
 		ID:             p.ID,
+		User:           userid,
 		PhotoStructure: photoStruct,
 		Datapost:       p.Datapost,
-		User:           userid,
 	}
 }
 

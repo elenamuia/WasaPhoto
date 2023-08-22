@@ -642,7 +642,7 @@ components:
       description: array of photo belonging to a certain user
       type: array
       minItems: 0
-      maxItems: 1000 
+      maxItems: 100 
       items:
         $ref: "#/components/schemas/PhotoId"
    

@@ -39,6 +39,7 @@ export default {
 <template>	
 	<main>
 		<SideBarMenu></SideBarMenu>
+
 		<RouterView :key="$route.fullPath"></RouterView>
 	</main>
 	
@@ -46,7 +47,6 @@ export default {
 
 <style>
 
-/* The popup form - hidden by default */
 .form-popup {
 	background-color:lightsteelblue;
 	display: none;

@@ -1,12 +1,28 @@
 package database
 
-func (db *appdbimpl) GetPhoto(photoid int) (photo Photo, err error) {
+func (db *appdbimpl) GetPagePhoto(userid string, page int, perPage int) (photos []Photo, err error) {
+	offset := (page - 1) * perPage
 
-	err1 := db.c.QueryRow("SELECT * FROM Photo WHERE PhotoID=  ? ", photoid).Scan(&photo.ID, &photo.User, &photo.PhotoStructure, &photo.Datapost)
+	rows, err1 := db.c.Query("SELECT PhotoID, User,Photo FROM Photo WHERE User=? LIMIT ? OFFSET ? ", userid, perPage, offset)
 
 	if err1 != nil {
-		return photo, err
+		return nil, err1
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p Photo
+		if err2 := rows.Scan(&p.ID, &p.User, &p.PhotoStructure); err2 != nil {
+			return nil, err2
+		}
+
+		photos = append(photos, p)
+
 	}
 
-	return photo, nil
+	if err5 := rows.Err(); err5 != nil {
+		return photos, err5
+	}
+
+	return photos, nil
 }
