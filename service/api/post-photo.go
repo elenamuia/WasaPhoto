@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -25,7 +25,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	defer file.Close()
 
-	bytes, err3 := ioutil.ReadAll(file)
+	bytes, err3 := io.ReadAll(file)
 	if err3 != nil {
 
 		w.WriteHeader(http.StatusBadRequest)

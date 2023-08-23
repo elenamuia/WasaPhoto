@@ -113,13 +113,15 @@ export default {
             perpage: this.photosPerPage
           }
         });
-        console.log("response: "+response.data)
+        
         
         var dataArray = response.data.map(item =>item.PhotoStructure);
-        this.photos = [...this.photos, ...dataArray];  // Aggiungi nuove foto alla lista esistente
-        console.log("response: " + this.photos)
-        const blob = new Blob([this.photos], { type: 'image/jpeg' });
+        //this.photos = [...this.photos, ...dataArray];  // Aggiungi nuove foto alla lista esistente
+        console.log("response: " + this.dataArray)
+        const blob = new Blob(dataArray, { type: 'image/jpeg' });
+        console.log("blob: "+blob)
         const imageUrl = URL.createObjectURL(blob);
+        console.log("imageurl: "+imageUrl)
         this.photos.push(imageUrl);
         this.currentPage++;
         this.loading = false;
