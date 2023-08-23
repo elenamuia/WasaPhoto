@@ -24,20 +24,15 @@ export default {
       photosPerPage: 5,
       profile_username: null,
       get_banned: [],
-      loading:false,
+      loading: false,
       photoPartial: [],
     }
-
-    
   },
 
-  
+
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
   },
-
-  
-
 
   methods: {
     async refresh() {
@@ -70,13 +65,24 @@ export default {
 
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
-        this.n_followed = response.data.Followed.length;
-        this.n_follower = response.data.Follower.length;
-        this.n_posts = response.data.Photos.length;
-        this.post = response.data.Photos;
+        if (response.data.Followed == null){
+          this.n_followed = 0;
+        }else{
+          this.n_followed = response.data.Followed.length;
+        }
+        if (response.data.Follower == null){
+          this.n_follower = 0;
+        }else{
+          this.n_follower = response.data.Follower.length;
+        }
+        if (response.data.Photos == null){
+          this.n_posts = 0;
+        }else{
+          this.n_posts = response.data.Photos.length;
+        }
+
+        console.log(this.n_posts)
       });
-
-
     },
 
     async Follow() {
@@ -103,6 +109,16 @@ export default {
       this.isBanned = false;
 
     },
+
+    async bytesToBase64(bytes) {
+      
+      const binary = String.fromCharCode(...bytes);
+      const binarystring = window.btoa(binary);
+      
+      console.log("binarystring: ", binarystring)
+      return binarystring;
+    },
+
     async loadPhotos(page) {
       this.loading = true;
       try {
@@ -113,16 +129,17 @@ export default {
             perpage: this.photosPerPage
           }
         });
-        
-        
-        var dataArray = response.data.map(item =>item.PhotoStructure);
-        //this.photos = [...this.photos, ...dataArray];  // Aggiungi nuove foto alla lista esistente
-        console.log("response: " + this.dataArray)
-        const blob = new Blob(dataArray, { type: 'image/jpeg' });
-        console.log("blob: "+blob)
-        const imageUrl = URL.createObjectURL(blob);
-        console.log("imageurl: "+imageUrl)
-        this.photos.push(imageUrl);
+
+
+        var dataArray = response.data.map(item => item.PhotoStructure);
+        console.log("response: " + dataArray)
+        for (const imageBytes of dataArray) {
+          console.log("imagebytes: ", imageBytes)
+          this.photos.push(imageBytes);
+
+        }
+
+
         this.currentPage++;
         this.loading = false;
       } catch (error) {
@@ -136,7 +153,8 @@ export default {
         this.loadPhotos(this.currentPage);
       }
     }
-  
+
+
   },
 
 
@@ -145,6 +163,7 @@ export default {
     this.loadPhotos(this.currentPage);
     window.addEventListener('scroll', this.handleScroll);
   },
+
 
 }
 
@@ -237,8 +256,9 @@ export default {
         </div>
       </div>
       <div>
-        <div v-for="photo in photos" :key="photo.PhotoID">
-          <img :src="photo.Photo" alt="Foto"/>
+        <div v-for="(imageBytes, index) in photos" :key="index">
+          <img :src="imageBytes" alt="Foto" />
+          
         </div>
         <div>
           <div v-if="loading">
@@ -247,7 +267,7 @@ export default {
         </div>
       </div>
     </div>
-      <RouterView :key="$route.fullPath"></RouterView>
+    <RouterView :key="$route.fullPath"></RouterView>
   </main>
 </template>
 <style scoped>

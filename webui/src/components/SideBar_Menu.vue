@@ -220,7 +220,7 @@ export default {
                         <button @click="closeSearchModal">Close</button>
                     </div>
                 </div>
-                <RouterView />
+                <RouterView :key="$route.fullPath"></RouterView>
             </main>
 
         </div>

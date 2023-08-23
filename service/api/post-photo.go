@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -32,26 +33,24 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 		return
 	}
-	/*
-		var base64Encoding string
 
-		// Determine the content type of the image file
-		mimeType := http.DetectContentType(bytes)
+	var base64Encoding string
 
-		// Prepend the appropriate URI scheme header depending
-		// on the MIME type
-		switch mimeType {
-		case "image/jpeg":
-			base64Encoding += "data:image/jpeg;base64,"
-		case "image/png":
-			base64Encoding += "data:image/png;base64,"
-		}
-		resultEncoding := base64.StdEncoding.EncodeToString(bytes)
+	// Determine the content type of the image file
+	mimeType := http.DetectContentType(bytes)
 
-		// Append the base64 encoded output
-		base64Encoding += resultEncoding
+	// Prepend the appropriate URI scheme header depending
+	// on the MIME type
+	switch mimeType {
+	case "image/jpeg":
+		base64Encoding = "data:image/jpeg;base64,"
+	case "image/png":
+		base64Encoding = "data:image/png;base64,"
+	}
+	resultEncoding := base64.StdEncoding.EncodeToString(bytes)
 
-	*/
+	// Append the base64 encoded output
+	base64Encoding = base64Encoding + resultEncoding
 
 	// fileBytes is now a []byte containing the contents of the file
 
@@ -59,14 +58,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	authToken = strings.Split(authToken, " ")[1]
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
-		// err := json.NewDecoder(r.Body).Decode(&photo)
-		// if err != nil {
 
-		// 	w.WriteHeader(http.StatusBadRequest)
-		//	fmt.Printf("err")
-		// 	return
-
-		photoRet, err4 := rt.db.PostPhoto(photo.ToDatabasePhoto(userid, bytes))
+		photoRet, err4 := rt.db.PostPhoto(photo.ToDatabasePhoto(userid, base64Encoding))
 		if err4 != nil {
 
 			ctx.Logger.WithError(err4).Error("Can't post photo")

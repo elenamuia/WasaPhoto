@@ -45,7 +45,7 @@ type User struct {
 type Photo struct {
 	ID             int
 	User           string
-	PhotoStructure []byte
+	PhotoStructure string
 	Datapost       time.Time
 }
 
