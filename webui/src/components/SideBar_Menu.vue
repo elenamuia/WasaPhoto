@@ -7,6 +7,7 @@ export default {
             searchQuery: '',
             searchResults: '',
             isSearchModalOpen: false,
+            isPhotoModalOpen: false,
             errormsg: null,
             loading: false,
             some_data: null,
@@ -31,6 +32,15 @@ export default {
 
         },
 
+        openPhotoModal(){
+            console.log(this.isPhotoModalOpen)
+            this.isPhotoModalOpen = true;
+        },
+
+        closePhotoModal(){
+            this.isPhotoModalOpen = false;
+        },
+
         openForm() {
             document.getElementById("myForm").style.display = "block";
         },
@@ -38,9 +48,7 @@ export default {
         closeForm() {
             document.getElementById("myForm").style.display = "none";
         },
-        openSearchBar() {
-            document.getElementById("search").style.display = "block";
-        },
+        
 
 
         postPhoto(userid, event) {
@@ -51,22 +59,21 @@ export default {
                 console.log(image)
                 let fd = new FormData();
                 fd.append("photo", image);
-
                 let response = this.$axios.post("/users/" + userid + "/photos/", fd).then(res => res);
-
-                this.img = response.data
+                this.img = response.data;
+                this.closePhotoModal();
+                this.$router.push('/mainstream/' + this.$current_user.id);
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
                         if (request.status === 200 && request.status.text === "OK") {
-                            console.log("successful");
+                            console.log("successful");   
+                                                   
                         }
                         else {
                             console.log("failed")
                         }
                     }
                 }
-
-
             } catch (e) {
                 if (e.response && e.response.status === 404) {
                     errormsg.msg = ""
@@ -75,6 +82,7 @@ export default {
             }
             this.loading = false;
             document.getElementById("myForm").style.display = "none";
+
 
         },
 
@@ -165,7 +173,7 @@ export default {
                                 </RouterLink>
                             </li>
 
-                            <li class="nav-item" @click="openForm()">
+                            <li class="nav-item" @click="openPhotoModal()">
 
                                 <div class="nav-link">
                                     <svg class="feather">
@@ -194,7 +202,21 @@ export default {
                     </div>
                 </div>
 
-                <div class="form-popup" id="myForm">
+
+                <div class="photoModal" v-if="isPhotoModalOpen">
+                   <div class="photo-modal-content">
+                    <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
+                        enctype="multipart/form-data">
+                        <h3 style="margin-left: 10px;">Upload Photo</h3>
+                        <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png"
+                            style="width:fit-content;">
+                        <button type="submit" class="btn" id="submitBut">Upload</button>
+                        <button type="button" class="btn cancel" @click="closePhotoModal()">Close</button>
+                    </form>
+                   </div>
+                </div>
+
+        <!--    <div class="form-popup" id="myForm">
                     <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
                         enctype="multipart/form-data">
                         <h3 style="margin-left: 10px;">Upload Photo</h3>
@@ -204,7 +226,9 @@ export default {
                         <button type="button" class="btn cancel" @click="closeForm()">Close</button>
                     </form>
 
-                </div>
+                </div> -->
+
+
 
                 <div class="searchModal" v-if="isSearchModalOpen">
                     <!-- Campi di ricerca -->
@@ -246,5 +270,27 @@ export default {
     padding: 20px;
     border-radius: 5px;
 
+}
+
+.photoModal {
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+
+
+}
+
+.photo-modal-content{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    padding:20px;
+    border-radius:5px;
 }
 </style>

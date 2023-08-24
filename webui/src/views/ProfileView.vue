@@ -31,6 +31,7 @@ export default {
 
 
   beforeDestroy() {
+    
     window.removeEventListener('scroll', this.handleScroll);
   },
 
@@ -60,7 +61,7 @@ export default {
         await this.$axios.get("/users/" + this.$current_user.id + "/followed/" + this.profile_username).then(response => {
           this.isFollower = response.data
         });
-        console.log("isFollower: " + this.isFollower)
+        
       }
 
 
@@ -114,9 +115,12 @@ export default {
       
       const binary = String.fromCharCode(...bytes);
       const binarystring = window.btoa(binary);
-      
-      console.log("binarystring: ", binarystring)
       return binarystring;
+    },
+
+    async handleNewPhotoAdded () {
+      this.loadPhotos();
+
     },
 
     async loadPhotos(page) {
@@ -132,11 +136,8 @@ export default {
 
 
         var dataArray = response.data.map(item => item.PhotoStructure);
-        console.log("response: " + dataArray)
         for (const imageBytes of dataArray) {
-          console.log("imagebytes: ", imageBytes)
           this.photos.push(imageBytes);
-
         }
 
 
@@ -255,9 +256,9 @@ export default {
           </div>
         </div>
       </div>
-      <div>
+      <div class="uploaded-photos">
         <div v-for="(imageBytes, index) in photos" :key="index">
-          <img :src="imageBytes" alt="Foto" />
+          <img :src="imageBytes" alt="Foto" class="uploaded-photo"/>
           
         </div>
         <div>
@@ -275,6 +276,20 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.uploaded-photos{
+  display: flex;
+  
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.uploaded-photo{
+  max-width: 200px;
+  max-height: 200px;
+  margin:30px;
+  border-color: black;
 }
 
 .fade-enter-active,
