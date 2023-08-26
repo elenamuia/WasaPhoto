@@ -105,7 +105,6 @@ type AppDatabase interface {
 	DeleteLike(string, int) (err error)
 	DeleteProfile(string) (err error)
 	GetPagePhoto(userid string, offset int, perPage int) (photos []Photo, err error)
-	GetBanningList(string) ([]string, error)
 	GetProfile(name string) (p Profile, err error)
 	LoginUser(l Login) (name string, isNew bool, err error)
 	CheckAuthToken(AuthToken string) (bool, error)
