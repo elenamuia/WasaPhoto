@@ -1,12 +1,14 @@
 <script setup>
 import SideBarMenu from '../components/SideBar_Menu.vue'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
+import Stream_Photo from '../components/Stream_Photo.vue';
 </script>
 <script>
 export default {
   components: {
     SideBarMenu,
-    LoadingSpinner
+    LoadingSpinner,
+    Stream_Photo
   },
   data: function () {
     return {
@@ -26,12 +28,12 @@ export default {
       get_banned: [],
       loading: false,
       photoPartial: [],
+      posts: [],
     }
   },
 
 
   beforeDestroy() {
-    
     window.removeEventListener('scroll', this.handleScroll);
   },
 
@@ -61,24 +63,24 @@ export default {
         await this.$axios.get("/users/" + this.$current_user.id + "/followed/" + this.profile_username).then(response => {
           this.isFollower = response.data
         });
-        
+
       }
 
 
       this.$axios.get("/users/" + this.$current_user.id + "/profile/" + this.profile_username).then(response => {
-        if (response.data.Followed == null){
+        if (response.data.Followed == null) {
           this.n_followed = 0;
-        }else{
+        } else {
           this.n_followed = response.data.Followed.length;
         }
-        if (response.data.Follower == null){
+        if (response.data.Follower == null) {
           this.n_follower = 0;
-        }else{
+        } else {
           this.n_follower = response.data.Follower.length;
         }
-        if (response.data.Photos == null){
+        if (response.data.Photos == null) {
           this.n_posts = 0;
-        }else{
+        } else {
           this.n_posts = response.data.Photos.length;
         }
 
@@ -112,13 +114,13 @@ export default {
     },
 
     async bytesToBase64(bytes) {
-      
+
       const binary = String.fromCharCode(...bytes);
       const binarystring = window.btoa(binary);
       return binarystring;
     },
 
-    async handleNewPhotoAdded () {
+    async handleNewPhotoAdded() {
       this.loadPhotos();
 
     },
@@ -133,12 +135,22 @@ export default {
             perpage: this.photosPerPage
           }
         });
-
-
-        var dataArray = response.data.map(item => item.PhotoStructure);
-        for (const imageBytes of dataArray) {
-          this.photos.push(imageBytes);
+        if (response.data == null){
+          return
         }
+
+        
+        this.posts = response.data;
+        for (const imageBytes of this.posts) {
+          this.photos.push(imageBytes);
+          
+        }
+
+
+        //var dataArray = response.data.map(item => item.PhotoStructure);
+        //for (const imageBytes of dataArray) {
+        //  this.photos.push(imageBytes);
+        //}
 
 
         this.currentPage++;
@@ -256,11 +268,8 @@ export default {
           </div>
         </div>
       </div>
-      <div class="uploaded-photos">
-        <div v-for="(imageBytes, index) in photos" :key="index">
-          <img :src="imageBytes" alt="Foto" class="uploaded-photo"/>
-          
-        </div>
+      <div>
+        <Stream_Photo :posts="this.photos"></Stream_Photo>
         <div>
           <div v-if="loading">
             <LoadingSpinner></LoadingSpinner>
@@ -278,27 +287,18 @@ export default {
   align-items: flex-start;
 }
 
-.uploaded-photos{
+.uploaded-photos {
   display: flex;
-  
+
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
-.uploaded-photo{
-  max-width: 200px;
-  max-height: 200px;
-  margin:30px;
-  border-color: black;
-}
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 0.1s
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0
+.uploaded-photo {
+  max-width: 500px;
+  max-height: 500px;
+  margin: 30px;
+  object-fit: cover;
 }
 </style>
