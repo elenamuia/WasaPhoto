@@ -113,6 +113,7 @@ type AppDatabase interface {
 	PutFollow(follow Follow) error
 	UnbanUser(string, string) error
 	GetMyMainstream(userid string) (ArrayofPhotos []Photo, err error)
+	CheckILiked(string, int) (bool, error)
 	Updateusername(string, string) (string, error)
 	Ping() error
 }

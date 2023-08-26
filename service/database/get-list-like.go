@@ -2,7 +2,7 @@ package database
 
 func (db *appdbimpl) GetListLike(photoid int) (arrayoflike []Like, err error) {
 
-	rows, err1 := db.c.Query("SELECT * FROM Like WHERE PhotoID = ? ", photoid)
+	rows, err1 := db.c.Query("SELECT UserPutting, PhotoID, UserReceiving FROM Like WHERE PhotoID = ? ", photoid)
 	if err1 != nil {
 		return arrayoflike, err
 	}
@@ -10,7 +10,7 @@ func (db *appdbimpl) GetListLike(photoid int) (arrayoflike []Like, err error) {
 
 	for rows.Next() {
 		var like Like
-		err2 := rows.Scan(&like.LikeID, &like.PhotoID, &like.UserRec, &like.DataPost)
+		err2 := rows.Scan(&like.LikeID, &like.PhotoID, &like.UserRec)
 		if err2 != nil {
 
 			return arrayoflike, err

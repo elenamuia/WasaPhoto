@@ -28,6 +28,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/users/:userid/bannedby/:banninguser", rt.wrap(rt.checkIfHasBannedMe))
 	rt.router.GET("/users/:userid/banned/:banneduser", rt.wrap(rt.checkIfIBanned))
 	rt.router.GET("/users/:userid/followed/:followeduser", rt.wrap(rt.checkIfFollow))
+	rt.router.GET("/users/:userid/photos/:photoid/like/:likeid", rt.wrap(rt.checkILiked))
 	rt.router.GET("/liveness", rt.liveness)
 
 	return rt.router

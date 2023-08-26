@@ -33,7 +33,7 @@ export default {
   },
 
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   },
 
@@ -83,8 +83,6 @@ export default {
         } else {
           this.n_posts = response.data.Photos.length;
         }
-
-        console.log(this.n_posts)
       });
     },
 
