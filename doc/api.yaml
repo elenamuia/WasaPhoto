@@ -335,30 +335,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
 
 
-    get:
-      tags: [Photo]    
-      summary: Get a photo from its Id
-      description: Using this command, we can get all the info about a photo  
-        and the photo itself from on its Id
-      operationId: getPhoto
-     
-      responses: 
-        "200":
-          description: The operation went correctly, you will now be redirected 
-            to the photo location
-          content:
-            application/json:
-              schema:
-                description: Get the photo that the user was looking for
-                type: object
-                properties:
-                  photo:
-                    $ref: "#/components/schemas/Photo"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
-
     
  
     
@@ -414,7 +390,7 @@ paths:
           $ref: "#/components/responses/Forbidden"
       
 
-  /photos/{photoid}/like/{likeid}:
+  /users/{userid}/photos/{photoid}/like/{likeid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
     
