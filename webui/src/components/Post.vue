@@ -18,7 +18,6 @@ export default {
         }
     },
 
-
     methods: {
 
         async initialize() {
@@ -42,24 +41,18 @@ export default {
 
             response = await this.$axios.get("/users/" + this.username + "/photos/" + this.photo_id + "/like/"+this.$current_user.id);
             this.liked = response.data;
-            console.log("liked: "+this.liked)
-            
+            console.log("liked: " + this.liked)
             response = await this.$axios.get("/users/" + this.username + "/photos/" + this.photo_id + "/listcomment/");
             
-            
-            
-                      
-
         },
+
         toggleLike() {
             this.liked = !this.liked;
             if (!this.liked){
                 this.Unlike();
             }else{
                 this.Like();
-            }
-            
-
+            }  
         },
 
         async Like() {
@@ -75,13 +68,11 @@ export default {
             this.num_likes -= 1;
 
         },
-
     },
 
     mounted() {
 
         this.initialize();
-
     }
 }
 </script>
@@ -117,8 +108,7 @@ export default {
                             fill="none" stroke="red" ></path>
                     </svg>
                     {{this.num_likes}}
-                </div>
-                
+                </div>  
             </div>
         </div>
     </div>
@@ -146,4 +136,5 @@ export default {
     max-height: 250px;
     margin: 15px;
     object-fit: cover;
-}</style>
+}
+</style>

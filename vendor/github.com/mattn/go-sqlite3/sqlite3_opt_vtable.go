@@ -3,6 +3,7 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file.
 
+//go:build sqlite_vtable || vtable
 // +build sqlite_vtable vtable
 
 package sqlite3
@@ -496,7 +497,7 @@ func goVBestIndex(pVTab unsafe.Pointer, icp unsafe.Pointer) *C.char {
 	return nil
 }
 
-//export goVClose
+// export goVClose
 func goVClose(pCursor unsafe.Pointer) *C.char {
 	vtc := lookupHandle(pCursor).(*sqliteVTabCursor)
 	err := vtc.vTabCursor.Close()
@@ -506,13 +507,13 @@ func goVClose(pCursor unsafe.Pointer) *C.char {
 	return nil
 }
 
-//export goMDestroy
+// export goMDestroy
 func goMDestroy(pClientData unsafe.Pointer) {
 	m := lookupHandle(pClientData).(*sqliteModule)
 	m.module.DestroyModule()
 }
 
-//export goVFilter
+// export goVFilter
 func goVFilter(pCursor unsafe.Pointer, idxNum C.int, idxName *C.char, argc C.int, argv **C.sqlite3_value) *C.char {
 	vtc := lookupHandle(pCursor).(*sqliteVTabCursor)
 	args := (*[(math.MaxInt32 - 1) / unsafe.Sizeof((*C.sqlite3_value)(nil))]*C.sqlite3_value)(unsafe.Pointer(argv))[:argc:argc]
@@ -531,7 +532,7 @@ func goVFilter(pCursor unsafe.Pointer, idxNum C.int, idxName *C.char, argc C.int
 	return nil
 }
 
-//export goVNext
+// export goVNext
 func goVNext(pCursor unsafe.Pointer) *C.char {
 	vtc := lookupHandle(pCursor).(*sqliteVTabCursor)
 	err := vtc.vTabCursor.Next()
@@ -541,7 +542,7 @@ func goVNext(pCursor unsafe.Pointer) *C.char {
 	return nil
 }
 
-//export goVEof
+// export goVEof
 func goVEof(pCursor unsafe.Pointer) C.int {
 	vtc := lookupHandle(pCursor).(*sqliteVTabCursor)
 	err := vtc.vTabCursor.EOF()
@@ -551,7 +552,7 @@ func goVEof(pCursor unsafe.Pointer) C.int {
 	return 0
 }
 
-//export goVColumn
+// export goVColumn
 func goVColumn(pCursor, cp unsafe.Pointer, col C.int) *C.char {
 	vtc := lookupHandle(pCursor).(*sqliteVTabCursor)
 	c := (*SQLiteContext)(cp)
@@ -562,7 +563,7 @@ func goVColumn(pCursor, cp unsafe.Pointer, col C.int) *C.char {
 	return nil
 }
 
-//export goVRowid
+// export goVRowid
 func goVRowid(pCursor unsafe.Pointer, pRowid *C.sqlite3_int64) *C.char {
 	vtc := lookupHandle(pCursor).(*sqliteVTabCursor)
 	rowid, err := vtc.vTabCursor.Rowid()
@@ -573,7 +574,7 @@ func goVRowid(pCursor unsafe.Pointer, pRowid *C.sqlite3_int64) *C.char {
 	return nil
 }
 
-//export goVUpdate
+// export goVUpdate
 func goVUpdate(pVTab unsafe.Pointer, argc C.int, argv **C.sqlite3_value, pRowid *C.sqlite3_int64) *C.char {
 	vt := lookupHandle(pVTab).(*sqliteVTab)
 

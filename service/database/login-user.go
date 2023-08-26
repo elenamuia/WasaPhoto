@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -36,7 +35,7 @@ func (db *appdbimpl) LoginUser(l Login) (User string, isNew bool, err error) {
 			l.UsernameLog, AuthToken)
 
 		if err != nil {
-			fmt.Println("err: ", err)
+
 			return "", true, err
 		}
 
