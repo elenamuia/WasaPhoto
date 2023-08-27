@@ -85,98 +85,103 @@ export default {
         }
       });
     },
+    async delPost(post) {
+      console.log("post: " + post)
+      for (let i = 0; i < this.photos.length; i++) {
+        if (this.photos[i].ID === post.ID) {
+          this.photos.splice(i, 1);
+          i--;
+        }
+        
+      };
+      this.n_posts -=1;
+      },
 
     async Follow() {
-      this.$axios.put("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
-      this.isFollower = true;
-      this.n_follower += 1;
+        this.$axios.put("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
+        this.isFollower = true;
+        this.n_follower += 1;
 
-    },
+      },
 
     async Unfollow() {
-      this.$axios.delete("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
-      this.isFollower = false;
-      this.n_follower -= 1;
-    },
+        this.$axios.delete("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
+        this.isFollower = false;
+        this.n_follower -= 1;
+      },
 
     async Ban() {
-      this.$axios.put("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
-      this.isBanned = true;
+        this.$axios.put("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
+        this.isBanned = true;
 
-    },
+      },
 
     async Unban() {
-      this.$axios.delete("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
-      this.isBanned = false;
+        this.$axios.delete("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
+        this.isBanned = false;
 
-    },
+      },
 
     async bytesToBase64(bytes) {
 
-      const binary = String.fromCharCode(...bytes);
-      const binarystring = window.btoa(binary);
-      return binarystring;
-    },
+        const binary = String.fromCharCode(...bytes);
+        const binarystring = window.btoa(binary);
+        return binarystring;
+      },
 
     async handleNewPhotoAdded() {
-      this.loadPhotos();
+        this.loadPhotos();
 
-    },
+      },
 
     async loadPhotos(page) {
-      this.loading = true;
-      try {
-        let response = await this.$axios.get('/users/' + this.$current_user.id + '/photos/', {
-          params: {
-            profile: this.profile_username,
-            page: page,
-            perpage: this.photosPerPage
+        this.loading = true;
+        try {
+          let response = await this.$axios.get('/users/' + this.$current_user.id + '/photos/', {
+            params: {
+              profile: this.profile_username,
+              page: page,
+              perpage: this.photosPerPage
+            }
+          });
+          if (response.data == null) {
+            return
           }
-        });
-        if (response.data == null){
-          return
+
+
+          this.posts = response.data;
+          for (const imageBytes of this.posts) {
+            this.photos.push(imageBytes);
+
+          }
+
+
+          this.currentPage++;
+          this.loading = false;
+        } catch (error) {
+          this.loading = false;
+          console.error("Errore nel recuperare le foto:", error);
         }
-
-        
-        this.posts = response.data;
-        for (const imageBytes of this.posts) {
-          this.photos.push(imageBytes);
-          
+      },
+      handleScroll() {
+        let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
+        if (nearBottom && !this.loading) {
+          this.loadPhotos(this.currentPage);
         }
-
-
-        //var dataArray = response.data.map(item => item.PhotoStructure);
-        //for (const imageBytes of dataArray) {
-        //  this.photos.push(imageBytes);
-        //}
-
-
-        this.currentPage++;
-        this.loading = false;
-      } catch (error) {
-        this.loading = false;
-        console.error("Errore nel recuperare le foto:", error);
       }
+
+
     },
-    handleScroll() {
-      let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
-      if (nearBottom && !this.loading) {
-        this.loadPhotos(this.currentPage);
-      }
-    }
 
 
-  },
+    mounted() {
+      this.refresh();
+      this.loadPhotos(this.currentPage);
+      window.addEventListener('scroll', this.handleScroll);
+    },
 
 
-  mounted() {
-    this.refresh();
-    this.loadPhotos(this.currentPage);
-    window.addEventListener('scroll', this.handleScroll);
-  },
-
-
-}
+  }
 
 </script>
 
@@ -267,7 +272,7 @@ export default {
         </div>
       </div>
       <div>
-        <Stream_Photo :posts="this.photos"></Stream_Photo>
+        <Stream_Photo :posts="this.photos" @delete-post="delPost"></Stream_Photo>
         <div>
           <div v-if="loading">
             <LoadingSpinner></LoadingSpinner>

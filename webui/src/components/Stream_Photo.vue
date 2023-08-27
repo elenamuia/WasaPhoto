@@ -24,6 +24,7 @@ export default {
         }
     },
 
+    emits: ["delete-post"],
     
 
     methods: {
@@ -31,6 +32,11 @@ export default {
         async initialize() {
 
         },
+        async DelPost(post) {
+
+            this.$emit("delete-post", post);
+        },
+
 
         
 
@@ -46,7 +52,7 @@ export default {
 <template>
 
     <div v-for="(post, index) in posts_" :key="index" class="m-1">
-        <Post :post="post"></Post>
+        <Post :post="post" @delete-post="DelPost"></Post>
     </div>
 
 </template>
