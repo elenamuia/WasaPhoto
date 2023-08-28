@@ -15,6 +15,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
 	userrec := ps.ByName("userid")
 	if err1 != nil {
+
 		w.WriteHeader(http.StatusBadRequest)
 
 		return

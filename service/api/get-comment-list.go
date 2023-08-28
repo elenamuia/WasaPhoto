@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
+
 	"net/http"
 	"strconv"
 	"strings"
@@ -15,7 +15,6 @@ func (rt *_router) getCommentList(w http.ResponseWriter, r *http.Request, ps htt
 
 	photoid, err1 := strconv.Atoi(ps.ByName("photoid"))
 	if err1 != nil {
-		fmt.Println("err1: ", err1)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -28,7 +27,6 @@ func (rt *_router) getCommentList(w http.ResponseWriter, r *http.Request, ps htt
 		arraycomm, err6 := rt.db.GetListComments(photoid)
 
 		if err6 != nil {
-			fmt.Println("err6: ", err6)
 			ctx.Logger.WithError(err6).Error("Can't get list of comments")
 			w.WriteHeader(http.StatusInternalServerError)
 			return

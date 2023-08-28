@@ -21,7 +21,7 @@ export default {
         }
     },
 
-    emits:["delete-post"],
+    emits: ["delete-post"],
 
     methods: {
 
@@ -51,13 +51,13 @@ export default {
 
             response = await this.$axios.get("/users/" + this.username + "/photos/" + this.photo_id + "/like/" + this.$current_user.id);
             this.liked = response.data;
-            
+
             response = await this.$axios.get("/users/" + this.username + "/photos/" + this.photo_id + "/listcomment/");
-            if (response.data != null){
+            if (response.data != null) {
                 this.comments = response.data
             }
             console.log(this.comments)
-            
+
         },
 
         toggleLike() {
@@ -82,34 +82,44 @@ export default {
             this.num_likes -= 1;
 
         },
-        async deletePhoto(){
+        async deletePhoto() {
 
-            this.$axios.delete("/users/" + this.username + "/photos/" + this.photo_id);           
+            this.$axios.delete("/users/" + this.username + "/photos/" + this.photo_id);
             this.$emit("delete-post", this.post);
 
         },
-        async toggleCommentList(){
+        async toggleCommentList() {
             this.comment_open = !this.comment_open;
 
 
         },
-        async addComment(){
-            
-        if(this.newComment.trim() !== ''){
-            const Body = [];
-            Body.push(this.newComment)
-            Body.push(this.username)
-            this.$axios.post("/users/"+this.username+"/photos/"+this.photo_id+"/comments/", Body);
-            this.comments.push({
-                UserPut: this.username,
-                CommMessage: this.newComment
-                
-            })
-            this.newComment = '';
-        }
+        async addComment() {
+
+            if (this.newComment.trim() !== '') {
+                const Body = [];
+                Body.push(this.newComment)
+                Body.push(this.username)
+                this.$axios.post("/users/" + this.username + "/photos/" + this.photo_id + "/comments/", Body);
+                this.comments.push({
+                    UserPut: this.username,
+                    CommMessage: this.newComment
+
+                })
+                this.newComment = '';
+            }
 
         },
-        
+
+        async deleteComment(commentid){
+            this.$axios.delete("/users/"+this.username+"/photos/"+this.photo_id+"/comments/"+commentid)
+            for (let i = 0; i < this.comments.length; i++) {
+                if (this.comments[i].CommentID === commentid) {
+                this.comments.splice(i, 1);
+                i--;
+                }
+        }
+    },
+
     },
 
     mounted() {
@@ -123,7 +133,8 @@ export default {
     <div style="max-width: 500px;">
         <div class="rounded border shadow-lg">
 
-            <div class="row align-content-between my-2" style ="display:flex; justify-content: space-between; align-items:center; ">
+            <div class="row align-content-between my-2"
+                style="display:flex; justify-content: space-between; align-items:center; ">
 
                 <div class="col">
                     <i class="bi-person-circle mx-1" style="font-size: 2em"></i>
@@ -131,17 +142,17 @@ export default {
                     <span class="col font-weight-bold h4">
                         {{ this.username }}
                     </span>
-                
+
                 </div>
                 <div class="col-auto" v-if="my_post">
                     <div @click="deletePhoto">
                         <div class="nav-link">
                             <svg class="feather">
                                 <use href="/feather-sprite-v4.29.0.svg#trash-2" />
-                            </svg>       
+                            </svg>
                         </div>
-                    </div>  
-                </div>             
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -169,18 +180,27 @@ export default {
                         <div class="nav-link">
                             <svg class="feather">
                                 <use href="/feather-sprite-v4.29.0.svg#message-circle" />
-                            </svg>       
+                            </svg>
                         </div>
-                    </div> 
+                    </div>
                     <div v-if="this.comment_open" class="comment-container">
                         <div class="comments">
                             <div v-for="(comment, index) in comments" :key="index" class="comment">
-                                <div class= "comments">
-                                    <span class="comment-user"><strong>{{comment.UserPut}}</strong>:</span>
-                                    <span class="comment-text">{{comment.CommMessage}}</span>
+                                <div class="comments">
+                                    <span class="comment-user"><strong>{{ comment.UserPut }}</strong>:</span>
+                                    <span class="comment-text">{{ comment.CommMessage}}</span>
+                                    <div v-if="comment.UserPut === this.$current_user.id">
+                                        <div @click="deleteComment(comment.CommentID)">
+                                            <div class="nav-link">
+                                                <svg class="feather">
+                                                    <use href="/feather-sprite-v4.29.0.svg#trash-2" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <hr class="divider"/>
-                            </div> 
+                                <hr class="divider" />
+                            </div>
                         </div>
 
                         <hr class="divider" />
@@ -190,10 +210,10 @@ export default {
                             <button @click="addComment">Send</button>
                         </div>
                     </div>
-                    
 
 
-                </div>   
+
+                </div>
             </div>
         </div>
     </div>
@@ -208,32 +228,33 @@ export default {
 
 }
 
-.divider{
+.divider {
     border-top: 1px solid #ccc;
     margin: 10px 0;
 }
 
-.comment-container{
+.comment-container {
     border: 1px solid #ccc;
     padding: 10px;
 }
 
-.add-comment{
-    background-color: #f5f5f5;;
-    padding:10px;
+.add-comment {
+    background-color: #f5f5f5;
+    ;
+    padding: 10px;
 }
 
-.comment-user{
+.comment-user {
     margin-right: 5px;
 }
 
-.comment-content{
+.comment-content {
     display: flex;
     align-items: center;
     font-weight: bold;
 }
 
-.comment-text{
+.comment-text {
     flex: 1;
 }
 
@@ -249,6 +270,6 @@ export default {
     top: 10px;
     right: 10px;
     cursor: pointer;
-    
+
 }
 </style>
