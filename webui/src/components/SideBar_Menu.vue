@@ -49,8 +49,6 @@ export default {
             document.getElementById("myForm").style.display = "none";
         },
 
-
-
         async postPhoto(userid, event) {
             this.loading = true;
             this.errormsg = null;
@@ -62,7 +60,7 @@ export default {
                 let response = this.$axios.post("/users/" + userid + "/photos/", fd).then(res => res);
                 this.img = response.data;
                 this.closePhotoModal();
-                this.$router.push('/mainstream/' + this.$current_user.id);
+                this.$router.push('/profile/' + this.$current_user.id);
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
                         if (request.status === 200 && request.status.text === "OK") {
@@ -231,20 +229,7 @@ export default {
                     </div>
                 </div>
 
-                <!--    <div class="form-popup" id="myForm">
-                    <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
-                        enctype="multipart/form-data">
-                        <h3 style="margin-left: 10px;">Upload Photo</h3>
-                        <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png"
-                            style="width:fit-content;">
-                        <button type="submit" class="btn" id="submitBut">Upload</button>
-                        <button type="button" class="btn cancel" @click="closeForm()">Close</button>
-                    </form>
-
-                </div> -->
-
-
-
+            
                 <div class="searchModal" v-if="isSearchModalOpen">
                     <!-- Campi di ricerca -->
                     <div class="search-modal-content">

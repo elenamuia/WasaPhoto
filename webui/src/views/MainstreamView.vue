@@ -2,91 +2,65 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import SideBarMenu from '../components/SideBar_Menu.vue'
+import Stream_Photo from '../components/Stream_Photo.vue';
 </script>
 <script>
 export default {
 	components: {
-        SideBarMenu
-  	},
-	methods:{
-		getMainstream(userid) {
-			this.$axios.get("/users/"+ userid+"/mainstream/" , { responseType: 'arraybuffer' })
-				.then(response => {
-					// Trasforma l'array di byte in un oggetto Blob
-					const blob = new Blob([response.data], { type: 'image/jpeg' }); // Modifica il tipo MIME a seconda del tipo di immagine restituito
+		SideBarMenu,
+		Stream_Photo
+	},
+	data: function () {
+		return {
+			posts: [],
+			loading: false,
+		}
+	},
 
-					// Crea un URL di dati (data URL) dall'oggetto Blob
-					const imageUrl = URL.createObjectURL(blob);
+	methods: {
+		async initialize() {
 
-					// Assegna l'URL di dati all'array di immagini nel componente
-					this.photos.push(imageUrl);
-				})
-				.catch(error => {
-					console.error('Errore durante il caricamento delle immagini:', error);
-				});
+			let response = await this.$axios.get("/users/" + this.$current_user.id + "/mainstream/");
+			this.posts = response.data;
+			console.log(this.posts)
 		},
-		
-		mounted() {
+		async delPost(post) {
+			console.log("post: " + post)
+			for (let i = 0; i < this.posts.length; i++) {
+				if (this.posts[i].ID === post.ID) {
+					this.posts.splice(i, 1);
+					i--;
+				}
 
-			this.getMainstream(this.$current_user.id);
-			console.log("es: " + this.$current_user.id);
+			};
+			this.n_posts -= 1;
 		},
 
-	}
+
+
+	},
+	mounted() {
+		this.initialize();
+
+	},
 }
 </script>
 
-<template>	
+<template>
 	<main>
 		<SideBarMenu></SideBarMenu>
-
+		<div class="col" style="margin-left: 750px;">
+			<Stream_Photo :posts="this.posts" @delete-post="delPost()"></Stream_Photo>
+			<div>
+				<div v-if="loading">
+					<LoadingSpinner></LoadingSpinner>
+				</div>
+			</div>
+		</div>
 		<RouterView :key="$route.fullPath"></RouterView>
 	</main>
-	
 </template>
 
-<style>
-
-.form-popup {
-	background-color:lightsteelblue;
-	display: none;
-	position: center;
-	border: 3px solid black;
-	z-index: 9;
-	margin-top: 50px;
-
-}
-
-.form-control {
-	margin-left: 10px;
-	margin-top: 20px;
-}
-
-.form-container .btn {
-  background-color:darkolivegreen;
-  color: white;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-right: 20px;
-  margin-left: 10px;
-  
-
-}
-
-
-
-
-.form-container .cancel {
-	background-color:darkred;
-	color: white;
-	
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover,
-.open-button:hover {
-	opacity: 1;
-}
-</style>
+<style></style>
 
 

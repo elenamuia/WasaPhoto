@@ -29,6 +29,8 @@ export default {
       loading: false,
       photoPartial: [],
       posts: [],
+      showChangeUsernameInput: false,
+      newusernameInput:'',
     }
   },
 
@@ -163,12 +165,52 @@ export default {
           console.error("Errore nel recuperare le foto:", error);
         }
       },
+
+      async validateUsername(username) {
+        const usernameRegex = /^[a-zA-Z0-9]{3,12}$/;
+        return usernameRegex.test(username);
+
+      },
+
+      async toggleChangeUsernameInput(){
+        this.showChangeUsernameInput = !this.showChangeUsernameInput;
+        this.newUsernameInput = '';
+      },
+
+      async changeUsername(){
+        
+        if(this.validateUsername(this.newusernameInput)){
+          try{
+            console.log(typeof this.newusernameInput)
+            const req_body = {
+                Name: this.newusernameInput,
+            }
+
+          this.$axios.put("/users/"+this.$current_user.id, req_body);
+          this.$current_user.id = this.newusernameInput
+          this.profile_username = this.newusernameInput
+
+          this.showChangeUsernameInput = false;
+          this.$router.push("/profile/" + this.newusernameInput);
+          }catch (error){
+            console.error ("Update username error: ", error)
+
+          }
+
+        }else{
+          alert("The length of the new username must be between min 3 and max 12 characters")
+
+        }
+        
+      },
+
       handleScroll() {
         let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
         if (nearBottom && !this.loading) {
           this.loadPhotos(this.currentPage);
         }
-      }
+      },
+
 
 
     },
@@ -203,9 +245,15 @@ export default {
             </div>
 
             <div v-else-if="my_profile">
-              <button class="btn btn-primary btn-md" type="button" @click="changeUsername()">
+              <button class="btn btn-primary btn-md" type="button" @click="toggleChangeUsernameInput()">
                 Change Name
               </button>
+              <div v-if="showChangeUsernameInput">
+                <input v-model="newUsernameInput" type="text" placeholder="Type new username..."/>
+                <button type="submit" class="btn" @click="changeUsername()">Save</button>
+                <button type="button" class="btn cancel" @click="toggleChangeUsernameInput()">Close</button>
+
+              </div>
             </div>
 
             <div v-else>

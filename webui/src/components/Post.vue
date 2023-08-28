@@ -98,10 +98,10 @@ export default {
             if (this.newComment.trim() !== '') {
                 const Body = [];
                 Body.push(this.newComment)
-                Body.push(this.username)
+                Body.push(this.$current_user.id)
                 this.$axios.post("/users/" + this.username + "/photos/" + this.photo_id + "/comments/", Body);
                 this.comments.push({
-                    UserPut: this.username,
+                    UserPut: this.$current_user.id,
                     CommMessage: this.newComment
 
                 })
