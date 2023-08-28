@@ -112,7 +112,9 @@ export default {
 
         async Logout() {
             this.$current_user.id = null;
+            localStorage.removeItem('token');
             this.$router.push("/");
+
         },
 
         async deleteProfile(){
