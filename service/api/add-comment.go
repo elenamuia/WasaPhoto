@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -29,7 +28,6 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		var elements []string
 		err3 := json.NewDecoder(r.Body).Decode(&elements)
 		if err3 != nil {
-			fmt.Println("err3: ", err3)
 
 			w.WriteHeader(http.StatusBadRequest)
 			return
