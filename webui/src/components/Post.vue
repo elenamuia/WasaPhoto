@@ -95,13 +95,9 @@ export default {
         async addComment(){
             
         if(this.newComment.trim() !== ''){
-            console.log(this.newComment)
-
             const Body = [];
             Body.push(this.newComment)
             Body.push(this.username)
-            console.log(Body)
-
             this.$axios.post("/users/"+this.username+"/photos/"+this.photo_id+"/comments/", Body);
             this.comments.push({
                 username: this.username,
@@ -179,7 +175,7 @@ export default {
                         <div class="comments">
                             <div v-for="(comment, index) in comments" :key="index" class="comment">
                                 <div class= "comments">
-                                    <span class="comment-user">{{comment.username}}:</span>
+                                    <span class="comment-user"><strong>{{comment.username}}:</strong></span>
                                     <span class="comment-text">{{comment.text}}</span>
                                 </div>
                                 <hr class="divider"/>
