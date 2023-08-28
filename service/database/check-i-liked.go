@@ -1,7 +1,7 @@
 package database
 
-func (db *appdbimpl) CheckILiked(userrec string, photoid int) (bool, error) {
-	rows, err := db.c.Query(`SELECT UserReceiving FROM Like WHERE UserReceiving = ? AND PhotoID = ? `, userrec, photoid)
+func (db *appdbimpl) CheckILiked(userput string, photoid int) (bool, error) {
+	rows, err := db.c.Query(`SELECT UserPutting FROM Like WHERE UserPutting = ? AND PhotoID = ? `, userput, photoid)
 	if err != nil {
 		return true, err
 	}

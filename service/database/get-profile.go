@@ -1,10 +1,18 @@
 package database
 
-import "sort"
+import (
+	"database/sql"
+	"sort"
+)
 
 func (db *appdbimpl) GetProfile(user string) (p Profile, err error) {
 
-	p.User = user
+	err6 := db.c.QueryRow(`SELECT Name from Users WHERE Name =?`, user).Scan(&p.User)
+	if err6 != nil {
+		if err6 == sql.ErrNoRows {
+			return p, err
+		}
+	}
 
 	rows1, err1 := db.c.Query(`SELECT p.PhotoID FROM Photo as p WHERE p.User = ?`, user)
 	if err1 != nil {

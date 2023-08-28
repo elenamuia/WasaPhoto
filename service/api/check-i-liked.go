@@ -12,7 +12,7 @@ import (
 
 func (rt *_router) checkILiked(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	userrec := ps.ByName("likeid")
+	userput := ps.ByName("likeid")
 	photoid, err2 := strconv.Atoi(ps.ByName("photoid"))
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -24,7 +24,7 @@ func (rt *_router) checkILiked(w http.ResponseWriter, r *http.Request, ps httpro
 	if bool {
 
 		//arrayban, err6 := rt.db.getBanningList(userid)
-		hasbanned, err6 := rt.db.CheckILiked(userrec, photoid)
+		hasbanned, err6 := rt.db.CheckILiked(userput, photoid)
 
 		if err6 != nil {
 			ctx.Logger.WithError(err6).Error("Can't check if banned")

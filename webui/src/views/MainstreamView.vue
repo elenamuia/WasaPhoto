@@ -49,7 +49,7 @@ export default {
 <template>
 	<main>
 		<SideBarMenu></SideBarMenu>
-		<div class="col" style="margin-left: 750px;">
+		<div class="col" style="margin-left: 750px; margin-top: 30px;">
 			<Stream_Photo :posts="this.posts" @delete-post="delPost()"></Stream_Photo>
 			<div>
 				<div v-if="loading">

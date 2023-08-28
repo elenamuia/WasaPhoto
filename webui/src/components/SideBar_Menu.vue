@@ -92,7 +92,7 @@ export default {
 
             this.$axios.get('/users/' + this.$current_user.id + '/profile/' + this.searchQuery).then(response => {
                 console.log("searchresults:" + response.data.User);
-                if (response.data.User == null) {
+                if (response.data.User == "") {
 
                     this.searchResults = "No profile has been found";
                     this.searchQuery = '';
