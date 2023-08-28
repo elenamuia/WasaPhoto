@@ -56,6 +56,7 @@ export default {
             if (response.data != null){
                 this.comments = response.data
             }
+            console.log(this.comments)
             
         },
 
@@ -88,7 +89,7 @@ export default {
 
         },
         async toggleCommentList(){
-            this.comment_open = !this.comment_open
+            this.comment_open = !this.comment_open;
 
 
         },
@@ -100,8 +101,8 @@ export default {
             Body.push(this.username)
             this.$axios.post("/users/"+this.username+"/photos/"+this.photo_id+"/comments/", Body);
             this.comments.push({
-                username: this.username,
-                text: this.newComment
+                UserPut: this.username,
+                CommMessage: this.newComment
                 
             })
             this.newComment = '';
@@ -175,8 +176,8 @@ export default {
                         <div class="comments">
                             <div v-for="(comment, index) in comments" :key="index" class="comment">
                                 <div class= "comments">
-                                    <span class="comment-user"><strong>{{comment.username}}:</strong></span>
-                                    <span class="comment-text">{{comment.text}}</span>
+                                    <span class="comment-user"><strong>{{comment.UserPut}}</strong>:</span>
+                                    <span class="comment-text">{{comment.CommMessage}}</span>
                                 </div>
                                 <hr class="divider"/>
                             </div> 
