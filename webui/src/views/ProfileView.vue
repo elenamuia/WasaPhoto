@@ -271,7 +271,7 @@ export default {
           </div>
         </div>
       </div>
-      <div>
+      <div v-if="!has_banned_me" class="col">
         <Stream_Photo :posts="this.photos" @delete-post="delPost"></Stream_Photo>
         <div>
           <div v-if="loading">

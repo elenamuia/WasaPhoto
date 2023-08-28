@@ -51,7 +51,7 @@ export default {
 
 <template>
 
-    <div v-for="(post, index) in posts_" :key="index" class="m-1">
+    <div v-for="(post, index) in posts_" :key="index" class="col-md-4 mx-2">
         <Post :post="post" @delete-post="DelPost"></Post>
     </div>
 

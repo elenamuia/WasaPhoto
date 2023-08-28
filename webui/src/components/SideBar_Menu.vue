@@ -32,12 +32,12 @@ export default {
 
         },
 
-        openPhotoModal(){
+        openPhotoModal() {
             console.log(this.isPhotoModalOpen)
             this.isPhotoModalOpen = true;
         },
 
-        closePhotoModal(){
+        closePhotoModal() {
             this.isPhotoModalOpen = false;
         },
 
@@ -48,10 +48,10 @@ export default {
         closeForm() {
             document.getElementById("myForm").style.display = "none";
         },
-        
 
 
-        postPhoto(userid, event) {
+
+        async postPhoto(userid, event) {
             this.loading = true;
             this.errormsg = null;
             const image = document.getElementById("fileInput").files[0];
@@ -66,8 +66,8 @@ export default {
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
                         if (request.status === 200 && request.status.text === "OK") {
-                            console.log("successful");   
-                                                   
+                            console.log("successful");
+
                         }
                         else {
                             console.log("failed")
@@ -81,18 +81,18 @@ export default {
                 this.errormsg = e.toString();
             }
             this.loading = false;
-            
+
 
 
         },
 
 
-        searchProfiles() {
+        async searchProfiles() {
 
             console.log("searcheduser: " + this.searchQuery);
             console.log("userid: " + this.$current_user.id);
-            
-            this.$axios.get('/users/'+this.$current_user.id+'/profile/' + this.searchQuery).then(response => {
+
+            this.$axios.get('/users/' + this.$current_user.id + '/profile/' + this.searchQuery).then(response => {
                 console.log("searchresults:" + response.data.User);
                 if (response.data.User == null) {
 
@@ -102,19 +102,25 @@ export default {
                 } else {
                     this.searchQuery = '';
                     this.errormsg = null;
-                    
+
                     this.$router.push('/profile/' + response.data.User);
                 }
-            }).catch(err => 
-                {this.errormsg = err.message;
+            }).catch(err => {
+                this.errormsg = err.message;
                 console.log(this.errormsg)
             });
-           
+
         },
 
-        Logout() {
+        async Logout() {
             this.$current_user.id = null;
             this.$router.push("/");
+        },
+
+        async deleteProfile(){
+            this.$axios.delete("/users/"+this.$current_user.id);
+            this.$router.push('/');
+            
         },
 
     },
@@ -191,6 +197,15 @@ export default {
                                     Logout
                                 </div>
                             </li>
+                            <li class="nav-item" @click="deleteProfile()">
+
+                                <div class="nav-link">
+                                    <svg class="feather">
+                                        <use href="/feather-sprite-v4.29.0.svg#user-x" />
+                                    </svg>
+                                    Delete Profile
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -204,19 +219,19 @@ export default {
 
 
                 <div class="photoModal" v-if="isPhotoModalOpen">
-                   <div class="photo-modal-content">
-                    <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
-                        enctype="multipart/form-data">
-                        <h3 style="margin-left: 10px;">Upload Photo</h3>
-                        <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png"
-                            style="width:fit-content;">
-                        <button type="submit" class="btn" id="submitBut">Upload</button>
-                        <button type="button" class="btn cancel" @click="closePhotoModal()">Close</button>
-                    </form>
-                   </div>
+                    <div class="photo-modal-content">
+                        <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
+                            enctype="multipart/form-data">
+                            <h3 style="margin-left: 10px;">Upload Photo</h3>
+                            <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png"
+                                style="width:fit-content;">
+                            <button type="submit" class="btn" id="submitBut">Upload</button>
+                            <button type="button" class="btn cancel" @click="closePhotoModal()">Close</button>
+                        </form>
+                    </div>
                 </div>
 
-        <!--    <div class="form-popup" id="myForm">
+                <!--    <div class="form-popup" id="myForm">
                     <form @submit.prevent="postPhoto(this.$current_user.id, event)" class="form-container"
                         enctype="multipart/form-data">
                         <h3 style="margin-left: 10px;">Upload Photo</h3>
@@ -273,7 +288,7 @@ export default {
 }
 
 .photoModal {
-    
+
     position: fixed;
     top: 0;
     left: 0;
@@ -284,13 +299,13 @@ export default {
 
 }
 
-.photo-modal-content{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+.photo-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
-    padding:20px;
-    border-radius:5px;
+    padding: 20px;
+    border-radius: 5px;
 }
 </style>
