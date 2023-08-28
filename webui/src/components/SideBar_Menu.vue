@@ -81,7 +81,7 @@ export default {
                 this.errormsg = e.toString();
             }
             this.loading = false;
-            document.getElementById("myForm").style.display = "none";
+            
 
 
         },
