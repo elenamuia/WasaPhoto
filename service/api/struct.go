@@ -6,6 +6,10 @@ import (
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
 )
 
+type BodyReq struct {
+	Username string `json:"Username"`
+}
+
 type Users struct {
 	Name      string `json:"Name"`
 	AuthToken string `json:"AuthToken"`

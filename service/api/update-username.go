@@ -12,10 +12,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type BodyReq struct {
-	Username string `json:"Username"`
-}
-
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	id := ps.ByName("userid")
@@ -27,7 +23,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 	if bool {
 		var body BodyReq
-		fmt.Println(r.Body)
+
 		err2 := json.NewDecoder(r.Body).Decode(&body)
 
 		if err2 != nil {

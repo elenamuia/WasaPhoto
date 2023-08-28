@@ -34,7 +34,6 @@ export default {
     }
   },
 
-
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   },
@@ -87,6 +86,7 @@ export default {
         }
       });
     },
+
     async delPost(post) {
       console.log("post: " + post)
       for (let i = 0; i < this.photos.length; i++) {
@@ -125,7 +125,6 @@ export default {
     },
 
     async bytesToBase64(bytes) {
-
       const binary = String.fromCharCode(...bytes);
       const binarystring = window.btoa(binary);
       return binarystring;
@@ -133,7 +132,6 @@ export default {
 
     async handleNewPhotoAdded() {
       this.loadPhotos();
-
     },
 
     async loadPhotos(page) {
@@ -149,12 +147,9 @@ export default {
         if (response.data == null) {
           return
         }
-
-
         this.posts = response.data;
         for (const imageBytes of this.posts) {
           this.photos.push(imageBytes);
-
         }
 
 
@@ -169,7 +164,6 @@ export default {
     async validateUsername(username) {
       const usernameRegex = /^[a-zA-Z0-9]{3,12}$/;
       return usernameRegex.test(username);
-
     },
 
     async toggleChangeUsernameInput() {
@@ -202,26 +196,19 @@ export default {
       }
 
     },
-
     handleScroll() {
       let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
       if (nearBottom && !this.loading) {
         this.loadPhotos(this.currentPage);
       }
     },
-
-
-
   },
-
 
   mounted() {
     this.refresh();
     this.loadPhotos(this.currentPage);
     window.addEventListener('scroll', this.handleScroll);
   },
-
-
 }
 
 </script>
@@ -230,8 +217,8 @@ export default {
   <main>
 
     <SideBarMenu>
-
     </SideBarMenu>
+
     <div class="container-fluid" style="margin-left: 400px; margin-top: 30px; height: max-content;">
       <div class="row">
 
@@ -243,26 +230,23 @@ export default {
               No info available, you have been banned by this user!
             </div>
 
-            <div v-else-if="my_profile">
+            <div v-else-if="my_profile" style="margin-bottom: 20px;margin-top: 20px;">
               <button class="btn btn-primary btn-md" type="button" @click="toggleChangeUsernameInput()">
                 Change Name
               </button>
               <div v-if="showChangeUsernameInput">
                 <input v-model="newUsernameInput" type="text" placeholder="Type new username..." />
-                <button type="submit" class="btn" @click="changeUsername()">Save</button>
-                <button type="button" class="btn cancel" @click="toggleChangeUsernameInput()">Close</button>
-
+                <button type="button" class="btn btn-primary btn-sm" @click="changeUsername()">Save</button>
+                <button type="button" class=" btn btn-danger btn-sm" @click="toggleChangeUsernameInput()">Close</button>
               </div>
             </div>
 
-            <div v-else>
-
-              <!-- Follow Button -->
+            <div v-else style="margin-bottom: 20px; margin-top: 20px;">
               <div class="row">
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
                     <div v-if="this.isFollower">
-                      <button class="btn btn-warning btn-lg" type="button" @click="Unfollow()">
+                      <button class="btn btn-outline-primary btn-lg" type="button" @click="Unfollow()">
                         <i class="bi-person-dash-fill"></i>
                         Unfollow
                       </button>
@@ -296,22 +280,22 @@ export default {
           </div>
         </div>
 
-        <div v-if="!has_banned_me" class="row">
+        <div v-if="!has_banned_me" class="row" style="margin-bottom: 20px;">
 
-          <div class="col col-sm-1" style="font-size: medium;">
-            Num Follower:
+          <div class="col col-sm-2" style="font-size: medium;">
+            <strong>Num Follower:</strong>
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
             {{ this.n_follower }}
           </div>
-          <div class="col col-sm-1" style="font-size: medium;">
-            Num Followed:
+          <div class="col col-sm-2" style="font-size: medium;">
+            <strong>Num Followed:</strong>
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
             {{ this.n_followed }}
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
-            Num Post:
+            <strong>Num Post:</strong>
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
             {{ this.n_posts }}
@@ -337,18 +321,4 @@ export default {
   align-items: flex-start;
 }
 
-.uploaded-photos {
-  display: flex;
-
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.uploaded-photo {
-  max-width: 500px;
-  max-height: 500px;
-  margin: 30px;
-  object-fit: cover;
-}
 </style>

@@ -161,8 +161,8 @@ export default {
 
 
             <div class="row">
-                <div class="col">
-                    <div @click="toggleLike">
+                <div class="col-sm-2">
+                    <div @click="toggleLike()" class="icon-container">
                         <svg width="24" height="24" viewBox="0 0 24 24">
 
                             <path v-if="liked"
@@ -176,7 +176,7 @@ export default {
                     </div>
                 </div>
                 <div class="col">
-                    <div @click="toggleCommentList()">
+                    <div @click="toggleCommentList()" class="icon-container">
                         <div class="nav-link">
                             <svg class="feather">
                                 <use href="/feather-sprite-v4.29.0.svg#message-circle" />
@@ -272,4 +272,13 @@ export default {
     cursor: pointer;
 
 }
+
+.icon-container{
+    display: flex;
+    align-items: center;
+    gap:5px;
+    cursor: pointer;
+}
+
+
 </style>
