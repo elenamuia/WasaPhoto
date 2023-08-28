@@ -12,6 +12,10 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+type BodyReq struct {
+	Username string `json:"Username"`
+}
+
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	id := ps.ByName("userid")
@@ -22,8 +26,9 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
-		var newName string
-		err2 := json.NewDecoder(r.Body).Decode(&newName)
+		var body BodyReq
+		fmt.Println(r.Body)
+		err2 := json.NewDecoder(r.Body).Decode(&body)
 
 		if err2 != nil {
 			fmt.Println("err2: ", err2)
@@ -31,7 +36,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			return
 		}
 
-		username, err3 := rt.db.Updateusername(id, newName)
+		username, err3 := rt.db.Updateusername(id, body.Username)
 
 		if errors.Is(err3, database.ErrUserDoesNotExist) {
 

@@ -30,7 +30,7 @@ export default {
       photoPartial: [],
       posts: [],
       showChangeUsernameInput: false,
-      newusernameInput:'',
+      newUsernameInput: '',
     }
   },
 
@@ -94,136 +94,135 @@ export default {
           this.photos.splice(i, 1);
           i--;
         }
-        
+
       };
-      this.n_posts -=1;
-      },
+      this.n_posts -= 1;
+    },
 
     async Follow() {
-        this.$axios.put("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
-        this.isFollower = true;
-        this.n_follower += 1;
+      this.$axios.put("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
+      this.isFollower = true;
+      this.n_follower += 1;
 
-      },
+    },
 
     async Unfollow() {
-        this.$axios.delete("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
-        this.isFollower = false;
-        this.n_follower -= 1;
-      },
+      this.$axios.delete("/users/" + this.$current_user.id + "/followed/" + this.profile_username);
+      this.isFollower = false;
+      this.n_follower -= 1;
+    },
 
     async Ban() {
-        this.$axios.put("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
-        this.isBanned = true;
+      this.$axios.put("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
+      this.isBanned = true;
 
-      },
+    },
 
     async Unban() {
-        this.$axios.delete("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
-        this.isBanned = false;
+      this.$axios.delete("/users/" + this.$current_user.id + "/banned/" + this.profile_username);
+      this.isBanned = false;
 
-      },
+    },
 
     async bytesToBase64(bytes) {
 
-        const binary = String.fromCharCode(...bytes);
-        const binarystring = window.btoa(binary);
-        return binarystring;
-      },
+      const binary = String.fromCharCode(...bytes);
+      const binarystring = window.btoa(binary);
+      return binarystring;
+    },
 
     async handleNewPhotoAdded() {
-        this.loadPhotos();
+      this.loadPhotos();
 
-      },
+    },
 
     async loadPhotos(page) {
-        this.loading = true;
-        try {
-          let response = await this.$axios.get('/users/' + this.$current_user.id + '/photos/', {
-            params: {
-              profile: this.profile_username,
-              page: page,
-              perpage: this.photosPerPage
-            }
-          });
-          if (response.data == null) {
-            return
+      this.loading = true;
+      try {
+        let response = await this.$axios.get('/users/' + this.$current_user.id + '/photos/', {
+          params: {
+            profile: this.profile_username,
+            page: page,
+            perpage: this.photosPerPage
           }
-
-
-          this.posts = response.data;
-          for (const imageBytes of this.posts) {
-            this.photos.push(imageBytes);
-
-          }
-
-
-          this.currentPage++;
-          this.loading = false;
-        } catch (error) {
-          this.loading = false;
-          console.error("Errore nel recuperare le foto:", error);
+        });
+        if (response.data == null) {
+          return
         }
-      },
 
-      async validateUsername(username) {
-        const usernameRegex = /^[a-zA-Z0-9]{3,12}$/;
-        return usernameRegex.test(username);
 
-      },
+        this.posts = response.data;
+        for (const imageBytes of this.posts) {
+          this.photos.push(imageBytes);
 
-      async toggleChangeUsernameInput(){
-        this.showChangeUsernameInput = !this.showChangeUsernameInput;
-        this.newUsernameInput = '';
-      },
+        }
 
-      async changeUsername(){
-        
-        if(this.validateUsername(this.newusernameInput)){
-          try{
-            console.log(typeof this.newusernameInput)
-            const req_body = {
-                Name: this.newusernameInput,
-            }
 
-          this.$axios.put("/users/"+this.$current_user.id, req_body);
-          this.$current_user.id = this.newusernameInput
-          this.profile_username = this.newusernameInput
+        this.currentPage++;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        console.error("Errore nel recuperare le foto:", error);
+      }
+    },
+
+    async validateUsername(username) {
+      const usernameRegex = /^[a-zA-Z0-9]{3,12}$/;
+      return usernameRegex.test(username);
+
+    },
+
+    async toggleChangeUsernameInput() {
+      this.showChangeUsernameInput = !this.showChangeUsernameInput;
+      this.newUsernameInput = '';
+    },
+
+    async changeUsername() {
+
+      if (this.validateUsername(this.newUsernameInput)) {
+        try {
+          console.log(typeof this.newUsernameInput)
+
+          console.log("newusernameinput: "+this.newUsernameInput)
+          this.$axios.put("/users/" + this.$current_user.id, {
+              Username: this.newUsernameInput});
+          this.$current_user.id = this.newUsernameInput
+          this.profile_username = this.newUsernameInput
 
           this.showChangeUsernameInput = false;
-          this.$router.push("/profile/" + this.newusernameInput);
-          }catch (error){
-            console.error ("Update username error: ", error)
-
-          }
-
-        }else{
-          alert("The length of the new username must be between min 3 and max 12 characters")
+          this.$router.push("/profile/" + this.newUsernameInput);
+        } catch (error) {
+          console.error("Update username error: ", error)
 
         }
-        
-      },
 
-      handleScroll() {
-        let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
-        if (nearBottom && !this.loading) {
-          this.loadPhotos(this.currentPage);
-        }
-      },
+      } else {
+        alert("The length of the new username must be between min 3 and max 12 characters")
 
-
+      }
 
     },
 
-
-    mounted() {
-      this.refresh();
-      this.loadPhotos(this.currentPage);
-      window.addEventListener('scroll', this.handleScroll);
+    handleScroll() {
+      let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
+      if (nearBottom && !this.loading) {
+        this.loadPhotos(this.currentPage);
+      }
     },
 
 
-  }
+
+  },
+
+
+  mounted() {
+    this.refresh();
+    this.loadPhotos(this.currentPage);
+    window.addEventListener('scroll', this.handleScroll);
+  },
+
+
+}
 
 </script>
 
@@ -249,7 +248,7 @@ export default {
                 Change Name
               </button>
               <div v-if="showChangeUsernameInput">
-                <input v-model="newUsernameInput" type="text" placeholder="Type new username..."/>
+                <input v-model="newUsernameInput" type="text" placeholder="Type new username..." />
                 <button type="submit" class="btn" @click="changeUsername()">Save</button>
                 <button type="button" class="btn cancel" @click="toggleChangeUsernameInput()">Close</button>
 

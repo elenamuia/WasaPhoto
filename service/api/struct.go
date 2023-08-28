@@ -7,7 +7,7 @@ import (
 )
 
 type Users struct {
-	Name      string `json:"Username"`
+	Name      string `json:"Name"`
 	AuthToken string `json:"AuthToken"`
 }
 
