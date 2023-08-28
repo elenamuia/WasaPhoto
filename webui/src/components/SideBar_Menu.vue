@@ -27,14 +27,16 @@ export default {
 
         },
         closeSearchModal() {
-            console.log("closeSearchModal")
+            
             this.isSearchModalOpen = false;
+            this.searchResults='';
 
         },
 
         openPhotoModal() {
-            console.log(this.isPhotoModalOpen)
+            
             this.isPhotoModalOpen = true;
+            
         },
 
         closePhotoModal() {
@@ -87,8 +89,7 @@ export default {
 
         async searchProfiles() {
 
-            console.log("searcheduser: " + this.searchQuery);
-            console.log("userid: " + this.$current_user.id);
+            
 
             this.$axios.get('/users/' + this.$current_user.id + '/profile/' + this.searchQuery).then(response => {
                 console.log("searchresults:" + response.data.User);
