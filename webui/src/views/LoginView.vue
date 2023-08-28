@@ -28,7 +28,8 @@ export default {
 				});
 
 				this.errormsg = null;
-				this.$current_user.id = this.userid
+				this.$current_user.id = response.data.Name
+				localStorage.setItem('token',response.data.AuthToken)
 				this.$router.push('/mainstream/' + this.userid);
 			} catch (err) {
 				this.errormsg = err.message;

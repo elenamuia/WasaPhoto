@@ -106,7 +106,7 @@ type AppDatabase interface {
 	DeleteProfile(string) (err error)
 	GetPagePhoto(userid string, offset int, perPage int) (photos []Photo, err error)
 	GetProfile(name string) (p Profile, err error)
-	LoginUser(l Login) (name string, isNew bool, err error)
+	LoginUser(l Login) (User, error)
 	CheckAuthToken(AuthToken string) (bool, error)
 	PostPhoto(photo Photo) (Photo, error)
 	PutFollow(follow Follow) error

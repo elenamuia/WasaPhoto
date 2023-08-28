@@ -17,6 +17,14 @@ var user = {
     id: null,
 }
 
+axios.interceptors.request.use(config =>{
+	const token = localStorage.getItem('token');
+	if(token){
+		config.headers.Authorization = `Bearer ${token}`
+	}
+	return config;
+})
+
 const main_back = createApp(Main);
 main_back.config.globalProperties.$axios = axios;
 main_back.config.globalProperties.$current_user = reactive(user);

@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"math/rand"
 )
 
@@ -14,34 +15,27 @@ func RandStringBytes(n int) string {
 	return string(b)
 }
 
-func (db *appdbimpl) LoginUser(l Login) (User string, isNew bool, err error) {
+func (db *appdbimpl) LoginUser(l Login) (user User, err error) {
 
 	var AuthToken = RandStringBytes(15)
 
-	rows, err1 := db.c.Query(`SELECT * from Users where Name = ?`, l.UsernameLog)
+	err1 := db.c.QueryRow(`SELECT * from Users where Name = ?`, l.UsernameLog).Scan(&user.Name, &user.AuthToken)
 
 	if err1 != nil {
-		return "", false, err
-	}
+		if err1 == sql.ErrNoRows {
+			_, err = db.c.Exec(`INSERT into Users (Name, AuthToken) VALUES (?, ?)`,
+				l.UsernameLog, AuthToken)
 
-	defer func() { _ = rows.Close() }()
-	if err = rows.Err(); err != nil {
-		return "", false, err
-	}
+			if err != nil {
 
-	if !rows.Next() {
+				return user, err
+			}
 
-		_, err = db.c.Exec(`INSERT into Users (Name, AuthToken) VALUES (?, ?)`,
-			l.UsernameLog, AuthToken)
-
-		if err != nil {
-
-			return "", true, err
+			return user, nil
 		}
-
-		return l.UsernameLog, true, nil
+	} else {
+		return user, nil
 	}
-
-	return l.UsernameLog, false, nil
+	return user, nil
 
 }
