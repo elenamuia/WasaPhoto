@@ -21,19 +21,19 @@ type Banned struct {
 }
 
 type Comment struct {
-	CommentID      int       `json:"CommentID"`
-	CommentContent string    `json:"CommentContent"`
-	PhotoID        int       `json:"PhotoID"`
-	UserPut        string    `json:"UserPut"`
-	DataPost       time.Time `json:"datapost"`
-	UserRec        string    `json:"UserRec"`
+	CommentID      int    `json:"CommentID"`
+	CommentContent string `json:"CommentContent"`
+	PhotoID        int    `json:"PhotoID"`
+	UserPut        string `json:"UserPut"`
+
+	UserRec string `json:"UserRec"`
 }
 
 type Like struct {
-	LikeID   string    `json:"LikeID"`
-	PhotoID  int       `json:"PhotoID"`
-	Datapost time.Time `json:"Datapost"`
-	UserRec  string    `json:"UserRec"`
+	LikeID  string `json:"LikeID"`
+	PhotoID int    `json:"PhotoID"`
+
+	UserRec string `json:"UserRec"`
 }
 
 type Follow struct {
@@ -79,17 +79,15 @@ func (c *Comment) ToDatabaseComment(userrec string, userputting string, photoid 
 		CommMessage: comcont,
 		UserPut:     userputting,
 		PhotoID:     photoid,
-		Datapost:    c.DataPost,
 		UserRec:     userrec,
 	}
 }
 
 func (l *Like) ToDatabaseLike(userrec string, userput string, photoid int) database.Like {
 	return database.Like{
-		LikeID:   userput,
-		PhotoID:  photoid,
-		UserRec:  userrec,
-		DataPost: l.Datapost,
+		LikeID:  userput,
+		PhotoID: photoid,
+		UserRec: userrec,
 	}
 }
 

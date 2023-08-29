@@ -30,6 +30,8 @@ func (db *appdbimpl) LoginUser(l Login) (user User, err error) {
 
 				return user, err
 			}
+			user.Name = l.UsernameLog
+			user.AuthToken = AuthToken
 
 			return user, nil
 		}

@@ -2,7 +2,7 @@ package database
 
 func (db *appdbimpl) GetListComments(photoid int) (arrayofcom []Comment, err error) {
 
-	rows, err1 := db.c.Query("SELECT PhotoID, UserReceiving, CommentID, CommentMessage, UserPutting FROM Comments WHERE PhotoID = ? ", photoid)
+	rows, err1 := db.c.Query("SELECT * FROM Comments WHERE PhotoID = ? ", photoid)
 	if err1 != nil {
 
 		return arrayofcom, err

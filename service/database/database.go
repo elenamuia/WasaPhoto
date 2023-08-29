@@ -157,7 +157,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 					PhotoID INTEGER PRIMARY KEY AUTOINCREMENT,
 				    User string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 				    Photo string NOT NULL,
-				    DataPost string NOT NULL
+				    DataPost TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 				    
 				);
 
@@ -166,8 +166,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 					    UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
 						CommentMessage string NOT NULL,
-						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
-					    DataPost string NOT NULL
+						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE
+					    
 						
 					);
 
@@ -176,8 +176,6 @@ func New(db *sql.DB) (AppDatabase, error) {
 					UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
 					PhotoID string NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
 					UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
-					DataPost string NOT NULL,
-					
 					PRIMARY KEY (PhotoID, UserPutting)
 					
 				);

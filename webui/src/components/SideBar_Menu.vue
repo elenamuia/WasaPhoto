@@ -101,7 +101,6 @@ export default {
                 } else {
                     this.searchQuery = '';
                     this.errormsg = null;
-
                     this.$router.push('/profile/' + response.data.User);
                 }
             }).catch(err => {
@@ -226,8 +225,8 @@ export default {
                             <h3 style="margin-left: 10px;">Upload Photo</h3>
                             <input class="form-control" type="file" id="fileInput" accept="image/jpeg, image/png"
                                 style="width:fit-content;">
-                            <button type="submit" class="btn" id="submitBut">Upload</button>
-                            <button type="button" class="btn cancel" @click="closePhotoModal()">Close</button>
+                            <button type="submit" class="btn btn-success btn-sm" id="submitBut">Upload</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="closePhotoModal()">Close</button>
                         </form>
                     </div>
                 </div>
