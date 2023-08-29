@@ -51,8 +51,7 @@ paths:
                 properties:
                   id: 
                     $ref: "#/components/schemas/Name"  
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+       
 
   
   /users/{userid}:
@@ -79,7 +78,6 @@ paths:
       responses:
         "201":
           description: Username set
-            
           content:
             application/json:
               schema:
@@ -104,10 +102,7 @@ paths:
       responses:
         "204":
           description: User deleted
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+        
 
   
   /users/{userid}/profile/{searcheduser}":
@@ -122,7 +117,6 @@ paths:
       operationId: getUserProfile
       
       responses:
-        
         "200":
           description: |
             The user has been found
@@ -143,10 +137,7 @@ paths:
                   Name:
                     $ref: "#/components/schemas/Name"
             
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+        
 
 
 
@@ -172,10 +163,8 @@ paths:
                 type: object
                 properties:
                   ArrayofPhotos:
-                    $ref: "#/components/schemas/ArrayofPhotos"
-                      
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+                    $ref: "#/components/schemas/ArrayofPhotos"             
+        
                 
 
 
@@ -207,12 +196,14 @@ paths:
       responses:
         "201":
           description: The user has been correctly banned
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Name"
+
+       
+        
+        
 
     
     delete:
@@ -224,11 +215,7 @@ paths:
       responses:
         "204":
           description: User correctly removed from banned list
-          
-        "404": 
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+        
 
       
 
@@ -256,11 +243,20 @@ paths:
                   $ref: "#/components/schemas/Name"
       responses:
         "201":
-          description: User correctly added to the list of followed users
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+          description: List of followers up to now
+          content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ArrayofFollower:
+                  description: array of followers of a certain user
+                  type: array
+                  minItems: 0
+                  maxItems: 1000 
+                  items:
+                    $ref: "#/components/schemas/Name"
+        
 
     
     delete:
@@ -271,10 +267,7 @@ paths:
       responses:
         "204":
           description: User correctly unfollowed
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+        
 
 
 
@@ -289,7 +282,7 @@ paths:
         Using this command if a certain user wants to delete his/her own profile
       operationId: uploadPhoto
       requestBody:
-        description: COntent of the photo
+        description: Content of the photo
         content:
           application/json:
             schema:
@@ -305,11 +298,8 @@ paths:
                 properties:
                   photo:
                     $ref: "#/components/schemas/Photo"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+        "
 
-
-    
 
 
   /users/{userid}/photos/{photoid}:
@@ -328,16 +318,9 @@ paths:
       responses:
         "204":
           description: Photo deleted
-          
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+        
 
-
-    
- 
-    
+   
     
   /users/{userid}/photos/{photoid}/comments/:
     parameters:
@@ -359,15 +342,15 @@ paths:
               $ref: "#/components/schemas/Comment"
       responses:
         "201":
-          description: Comment correctly added
+          description: Comment that has been correctly added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
           
         "404":
           $ref: "#/components/responses/NotFound"
-        "406":
-          $ref: "#/components/responses/NotAcceptable"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
-
+        
   /users/{userid}/photos/{photoid}/comments/{commentid}:
 
     parameters:
@@ -386,14 +369,13 @@ paths:
       responses:
         "204":
           description: Comment correctly deleted
-        "403":
-          $ref: "#/components/responses/Forbidden"
+        
       
 
   /users/{userid}/photos/{photoid}/like/{likeid}:
     parameters:
     - $ref: "#/components/parameters/photoid"
-    
+    - $ref: "#/components/parameters/userid"
     - $ref: "#/components/parameters/likeid"
 
     put:
@@ -410,9 +392,12 @@ paths:
       operationId: likePhoto
       responses:
         "201":
-          description: The photo has been liked
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+          description: Info about the like that has just been placed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Like"
+        
 
     delete:
       tags: [Photo]
@@ -423,9 +408,7 @@ paths:
       responses:
         "204":
           description: The photo has been correctly unliked
-          
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
+         
 
 
 
@@ -495,8 +478,7 @@ components:
 
 
 
-      
-    
+ 
   schemas:
     Name:
       type: string
