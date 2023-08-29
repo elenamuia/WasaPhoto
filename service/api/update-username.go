@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
+
 	"net/http"
 	"strings"
 
@@ -27,7 +27,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		err2 := json.NewDecoder(r.Body).Decode(&body)
 
 		if err2 != nil {
-			fmt.Println("err2: ", err2)
+
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
