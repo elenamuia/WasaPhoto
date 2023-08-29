@@ -17,6 +17,7 @@ export default {
             comments: [],
             comment_open: false,
             newComment: '',
+            datapost: null,
 
         }
     },
@@ -26,6 +27,7 @@ export default {
     methods: {
 
         async initialize() {
+            this.datapost = this.post.Datapost;
             this.username = this.post.User;
             console.log("username is " + this.username);
             this.photo_id = this.post.ID
@@ -35,6 +37,13 @@ export default {
             } else {
                 this.my_post = false;
             }
+            this.datapost = this.datapost.split("T");
+            let date = this.datapost[0].split("-");
+            let time = this.datapost[1].split(":");
+            time = time[0] + ":" + time[1];
+            date = date[2] + "-" + date[1] + "-" + date[0] + " at " + time;
+
+            this.datapost = date;
 
 
             // Fetch likes
@@ -214,6 +223,12 @@ export default {
 
 
                 </div>
+                <div class="col">
+                    <span class="text-muted v-center" style="font-size: 0.8em, font-style: italic;">
+                        {{ datapost }}
+                    </span>
+
+            </div>
             </div>
         </div>
     </div>
