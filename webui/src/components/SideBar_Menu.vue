@@ -62,7 +62,7 @@ export default {
                 let response = this.$axios.post("/users/" + userid + "/photos/", fd).then(res => res);
                 this.img = response.data;
                 this.closePhotoModal();
-                this.$router.push('/profile/' + this.$current_user.id);
+                this.$router.push('/mainstream/' + this.$current_user.id);
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
                         if (request.status === 200 && request.status.text === "OK") {
@@ -88,8 +88,6 @@ export default {
 
 
         async searchProfiles() {
-
-            
 
             this.$axios.get('/users/' + this.$current_user.id + '/profile/' + this.searchQuery).then(response => {
                 console.log("searchresults:" + response.data.User);
