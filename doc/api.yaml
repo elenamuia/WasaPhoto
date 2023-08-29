@@ -514,16 +514,20 @@ components:
       type: string
       pattern: 'ˆ.*?$'
       format: binary
+      minLength: 0
+      maxLength: 1000000
     Photo:
       type: object
       description: All items describing a posted photo
       properties:
         photo:
           description: |
-            Photo puplished bu a user, which may have comments and likes linked to it
+            Photo published by a user, which may have comments and likes linked to it
           type: string
           pattern: 'ˆ.*?$'
           format: binary
+          minLength: 0
+          maxLength: 100000
         photoid:
           $ref: "#/components/schemas/PhotoId"
         
@@ -604,11 +608,16 @@ components:
           type: string
           description: The code of the error
           pattern: "ˆ.*?$"
+          minLength: 0
+          maxLength: 5
           
         message:
           type: string
           description: The message of the error explaining what is happening
           pattern: "ˆ.*?$"
+          minLength: 0
+          maxLength: 100
+
           
       required:
         - code
