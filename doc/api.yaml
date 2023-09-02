@@ -245,17 +245,17 @@ paths:
         "201":
           description: List of followers up to now
           content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ArrayofFollower:
-                  description: array of followers of a certain user
-                  type: array
-                  minItems: 0
-                  maxItems: 1000 
-                  items:
-                    $ref: "#/components/schemas/Name"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ArrayofFollower:
+                    description: array of followers of a certain user
+                    type: array
+                    minItems: 0
+                    maxItems: 1000 
+                    items:
+                      $ref: "#/components/schemas/Name"
         
 
     
@@ -298,14 +298,15 @@ paths:
                 properties:
                   photo:
                     $ref: "#/components/schemas/Photo"
-        "
+        
 
 
 
   /users/{userid}/photos/{photoid}:
     parameters:
-    - $ref: "#/components/parameters/photoid"
     - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/photoid"
+    
     
     delete:
       tags: [Photo]
@@ -314,7 +315,6 @@ paths:
         With this command a certain user can delete one of his/her photo from 
         the profile
       operationId: deletePhoto
-      
       responses:
         "204":
           description: Photo deleted
