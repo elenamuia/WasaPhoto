@@ -105,7 +105,7 @@ paths:
         
 
   
-  /users/{userid}/profile/{searcheduser}":
+  /users/{userid}/profile/{searcheduser}:
     parameters:
     -  $ref: "#/components/parameters/userid"
     -  $ref: "#/components/parameters/searcheduser"
