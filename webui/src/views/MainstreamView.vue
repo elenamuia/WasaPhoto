@@ -14,13 +14,18 @@ export default {
 		return {
 			posts: [],
 			loading: false,
+			no_post:'',
 		}
 	},
 
 	methods: {
 		async initialize() {
+			this.no_post = '';
 
 			let response = await this.$axios.get("/users/" + this.$current_user.id + "/mainstream/");
+			if (response.data == null){
+				this.no_post = 'There are no posts here yet, please come back later!';
+			}
 			this.posts = response.data;
 			console.log(this.posts)
 		},
@@ -49,7 +54,11 @@ export default {
 <template>
 	<main>
 		<SideBarMenu></SideBarMenu>
+		<div style="margin-left: 450px; margin-top: 30px; font-size: large;">
+			<strong> My Stream:</strong>
+		</div>
 		<div class="col" style="margin-left: 750px; margin-top: 30px;">
+			{{this.no_post}}
 			<Stream_Photo :posts="this.posts" @delete-post="delPost()"></Stream_Photo>
 			<div>
 				<div v-if="loading">
