@@ -202,10 +202,7 @@ paths:
                 $ref: "#/components/schemas/Name"
 
        
-        
-        
 
-    
     delete:
       tags: [User]
       summary: Unban user
@@ -223,8 +220,6 @@ paths:
     parameters:
     - $ref: "#/components/parameters/userid"
     - $ref: "#/components/parameters/followeduser"
-      
-
     
     put:
       tags: [Follow]
@@ -324,8 +319,9 @@ paths:
     
   /users/{userid}/photos/{photoid}/comments/:
     parameters:
-    - $ref: "#/components/parameters/photoid"
     - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/photoid"
+    
     
     
     post:
@@ -374,8 +370,8 @@ paths:
 
   /users/{userid}/photos/{photoid}/like/{likeid}:
     parameters:
-    - $ref: "#/components/parameters/photoid"
     - $ref: "#/components/parameters/userid"
+    - $ref: "#/components/parameters/photoid"
     - $ref: "#/components/parameters/likeid"
 
     put:

@@ -18,7 +18,6 @@ func (rt *_router) checkIfIBanned(w http.ResponseWriter, r *http.Request, ps htt
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		//arrayban, err6 := rt.db.getBanningList(userid)
 		isBanned, err6 := rt.db.CheckIfIBanned(userid, banneduser)
 
 		if err6 != nil {

@@ -23,7 +23,6 @@ func (rt *_router) checkILiked(w http.ResponseWriter, r *http.Request, ps httpro
 	bool, err := rt.db.CheckAuthToken(authToken)
 	if bool {
 
-		//arrayban, err6 := rt.db.getBanningList(userid)
 		hasbanned, err6 := rt.db.CheckILiked(userput, photoid)
 
 		if err6 != nil {
