@@ -1,6 +1,6 @@
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import {RouterView } from 'vue-router'
 import SideBarMenu from '../components/SideBar_Menu.vue'
 import Stream_Photo from '../components/Stream_Photo.vue';
 </script>
