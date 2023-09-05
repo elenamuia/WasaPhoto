@@ -14,7 +14,6 @@ export default {
 	methods: {
         async refresh() {
 			if (this.$current_user.id == null) {
-				console.log("Empty username, redirecting to login")
 				this.$router.push("/");
 			}
         }

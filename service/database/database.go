@@ -62,7 +62,6 @@ type Comment struct {
 	PhotoID     int
 	UserPut     string
 	UserRec     string
-	Datapost    time.Time
 }
 type Banned struct {
 	Banned  string
@@ -94,7 +93,7 @@ type AppDatabase interface {
 	GetListComments(int) ([]Comment, error)
 	GetListLike(int) ([]Like, error)
 	DeletePhoto(int) error
-	AddComment(comment Comment) error
+	AddComment(comment Comment) (int, error)
 	AddLike(like Like) error
 	BanUser(string, string) error
 	CheckIfHasBannedMe(string, string) (bool, error)
@@ -136,47 +135,58 @@ func New(db *sql.DB) (AppDatabase, error) {
 			PRAGMA foreign_keys = ON;
 			CREATE TABLE  IF NOT EXISTS Users (
 			Name string NOT NULL PRIMARY KEY,
-			AuthToken string NOT NULL UNIQUE	
+			AuthToken string NOT NULL UNIQUE
 			) WITHOUT ROWID;
 			
 			CREATE TABLE IF NOT EXISTS Follower (
-				Follower string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
-				Followed string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
-				PRIMARY KEY(Follower, Followed)
+				Follower string NOT NULL,
+				Followed string NOT NULL,
+				PRIMARY KEY(Follower, Followed),
+				FOREIGN KEY (Follower) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+				FOREIGN KEY (Followed) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE
 				
 			) WITHOUT ROWID;
 
 			CREATE TABLE IF NOT EXISTS Banned (
-				Banned string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE, 
-				Banning string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE, 
-				PRIMARY KEY (Banned, Banning)
+				Banned string NOT NULL,
+				Banning string NOT NULL, 
+				PRIMARY KEY (Banned, Banning),
+				FOREIGN KEY (Banned) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+				FOREIGN KEY (Banning) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE
 			) WITHOUT ROWID;
 
 
 			CREATE TABLE IF NOT EXISTS Photo (
 					PhotoID INTEGER PRIMARY KEY AUTOINCREMENT,
-				    User string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+				    User string NOT NULL,
 				    Photo string NOT NULL,
-				    DataPost TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+				    DataPost TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					FOREIGN KEY (User) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE
 				    
 				);
 
 				CREATE TABLE IF NOT EXISTS Comments (
-						PhotoID int NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
-					    UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+						PhotoID int NOT NULL ,
+					    UserReceiving string NOT NULL,
 					    CommentID INTEGER PRIMARY KEY AUTOINCREMENT,
 						CommentMessage string NOT NULL,
-						UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE
+						UserPutting string NOT NULL,
+						FOREIGN KEY (UserReceiving) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+						FOREIGN KEY (UserPutting) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+						FOREIGN KEY (PhotoID) REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE
 					    
 						
 					);
 
 			CREATE TABLE IF NOT EXISTS Like (
 
-					UserPutting string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
-					PhotoID string NOT NULL REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE,
-					UserReceiving string NOT NULL REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+					UserPutting string NOT NULL,
+					PhotoID string NOT NULL,
+					UserReceiving string NOT NULL,
 					PRIMARY KEY (PhotoID, UserPutting)
+					FOREIGN KEY (UserPutting) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+					FOREIGN KEY (UserReceiving) REFERENCES Users(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+					FOREIGN KEY (PhotoID) REFERENCES Photo(PhotoID) ON DELETE CASCADE ON UPDATE CASCADE
 					
 				);
 `

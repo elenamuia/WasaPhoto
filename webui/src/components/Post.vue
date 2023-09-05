@@ -18,6 +18,7 @@ export default {
             comment_open: false,
             newComment: '',
             datapost: null,
+            commentid:null,
 
         }
     },
@@ -107,14 +108,21 @@ export default {
             if (this.newComment.trim() !== '') {
                 const Body = [];
                 Body.push(this.newComment)
-                Body.push(this.$current_user.id)
-                this.$axios.post("/users/" + this.username + "/photos/" + this.photo_id + "/comments/", Body);
+                Body.push(this.$current_user.id);
+                
+                let response = await this.$axios.post("/users/" + this.username + "/photos/" + this.photo_id + "/comments/", Body);
+               
+                this.commentid = response.data;
+
                 this.comments.push({
                     UserPut: this.$current_user.id,
-                    CommMessage: this.newComment
+                    CommMessage: this.newComment,
+                    CommentID: this.commentid
 
                 })
+                console.log(this.comments);
                 this.newComment = '';
+                
             }
 
         },
@@ -149,7 +157,7 @@ export default {
                     <i class="bi-person-circle mx-1" style="font-size: 2em"></i>
 
                     <span class="col font-weight-bold h4">
-                        {{ this.username }}
+                        {{ username }}
                     </span>
 
                 </div>
@@ -165,7 +173,7 @@ export default {
             </div>
 
             <div class="row">
-                <img :src="this.post.PhotoStructure" alt="Foto" class="uploaded-photo" />
+                <img :src="post.PhotoStructure" alt="Foto" class="uploaded-photo" />
             </div>
 
 
@@ -181,7 +189,7 @@ export default {
                                 d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                 fill="none" stroke="red"></path>
                         </svg>
-                        {{ this.num_likes }}
+                        {{num_likes }}
                     </div>
                 </div>
                 <div class="col">
@@ -192,13 +200,14 @@ export default {
                             </svg>
                         </div>
                     </div>
-                    <div v-if="this.comment_open" class="comment-container">
+                    <div v-if="comment_open" class="comment-container">
                         <div class="comments">
                             <div v-for="(comment, index) in comments" :key="index" class="comment">
                                 <div class="comments">
                                     <span class="comment-user"><strong>{{ comment.UserPut }}</strong>:</span>
                                     <span class="comment-text">{{ comment.CommMessage}}</span>
                                     <div v-if="comment.UserPut === this.$current_user.id">
+                                        comm: {{ comment.CommentID}}
                                         <div @click="deleteComment(comment.CommentID)">
                                             <div class="nav-link">
                                                 <svg class="feather">
@@ -225,14 +234,14 @@ export default {
                 </div>
                 <div class="col">
                     <span class="text-muted v-center" style="font-size: 0.8em, font-style: italic;">
-                        {{ datapost }}
+                       {{ datapost }}
                     </span>
 
             </div>
             </div>
         </div>
     </div>
-</template>
+</template> 
 
 <style>
 .v-center {

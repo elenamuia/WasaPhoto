@@ -11,7 +11,7 @@ import SideBar_Menu from './components/SideBar_Menu.vue'
 import './assets/dashboard.css'
 import './assets/main.css'
 
-
+//Vue.config.devtools = true;
 
 var user = {
     id: null,

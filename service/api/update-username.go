@@ -49,7 +49,6 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(username)
 
-		w.WriteHeader(http.StatusNoContent)
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)

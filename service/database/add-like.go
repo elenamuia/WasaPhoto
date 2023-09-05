@@ -1,12 +1,8 @@
 package database
 
-import (
-	"time"
-)
-
 func (db *appdbimpl) AddLike(like Like) error {
-	_, err1 := db.c.Exec(`INSERT INTO LIKE(UserPutting, PhotoID, UserReceiving, Datapost) VALUES (?,?,?,?)`,
-		like.LikeID, like.PhotoID, like.UserRec, time.Now())
+	_, err1 := db.c.Exec(`INSERT INTO LIKE(UserPutting, PhotoID, UserReceiving) VALUES (?,?,?)`,
+		like.LikeID, like.PhotoID, like.UserRec)
 
 	if err1 != nil {
 

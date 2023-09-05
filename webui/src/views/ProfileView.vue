@@ -224,7 +224,7 @@ export default {
 
         <div class="col col-lg-3" style="font-size: large; ">
           <div class="profile-info">
-            <b style="margin-bottom: 10px">{{ this.profile_username }}</b>
+            <b style="margin-bottom: 10px">{{ profile_username }}</b>
 
             <div v-if="has_banned_me">
               No info available, you have been banned by this user!
@@ -245,7 +245,7 @@ export default {
               <div class="row">
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
-                    <div v-if="this.isFollower">
+                    <div v-if="isFollower">
                       <button class="btn btn-outline-primary btn-lg" type="button" @click="Unfollow()">
                         <i class="bi-person-dash-fill"></i>
                         Unfollow
@@ -261,7 +261,7 @@ export default {
                 </div>
                 <div class="col-md-6 mb-2">
                   <Transition name="fade" mode="out-in">
-                    <div v-if="this.isBanned">
+                    <div v-if="isBanned">
                       <button class="btn btn-success btn-lg" type="button" @click="Unban()">
                         <i class="bi-person-check-fill"></i>
                         Unban
@@ -286,24 +286,24 @@ export default {
             <strong>Num Follower:</strong>
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
-            {{ this.n_follower }}
+            {{ n_follower }}
           </div>
           <div class="col col-sm-2" style="font-size: medium;">
             <strong>Num Followed:</strong>
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
-            {{ this.n_followed }}
+            {{ n_followed }}
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
             <strong>Num Post:</strong>
           </div>
           <div class="col col-sm-1" style="font-size: medium;">
-            {{ this.n_posts }}
+            {{ n_posts }}
           </div>
         </div>
       </div>
       <div v-if="!has_banned_me" class="col">
-        <Stream_Photo :posts="this.photos" @delete-post="delPost"></Stream_Photo>
+        <Stream_Photo :posts="photos" @delete-post="delPost"></Stream_Photo>
         <div>
           <div v-if="loading">
             <LoadingSpinner></LoadingSpinner>

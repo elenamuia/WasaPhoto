@@ -39,17 +39,20 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		comment_cont = elements[0]
 		userput = elements[1]
 
-		err5 := rt.db.AddComment(comment.ToDatabaseComment(userrec, userput, photoid, comment_cont))
+		commentid, err5 := rt.db.AddComment(comment.ToDatabaseComment(userrec, userput, photoid, comment_cont))
 		if err5 != nil {
 
 			ctx.Logger.WithError(err5).Error("can't comment the photo")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(commentid)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 }
