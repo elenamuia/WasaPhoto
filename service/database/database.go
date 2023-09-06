@@ -123,6 +123,7 @@ type appdbimpl struct {
 // New returns a new instance of AppDatabase based on the SQLite connection `db`.
 // `db` is required - an error will be returned if `db` is `nil`.
 func New(db *sql.DB) (AppDatabase, error) {
+
 	if db == nil {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
@@ -130,7 +131,9 @@ func New(db *sql.DB) (AppDatabase, error) {
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
+
 	if errors.Is(err, sql.ErrNoRows) {
+
 		sqlStmt := `
 			PRAGMA foreign_keys = ON;
 			CREATE TABLE  IF NOT EXISTS Users (

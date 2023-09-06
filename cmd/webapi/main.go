@@ -63,6 +63,7 @@ func run() error {
 	rand.Seed(globaltime.Now().UnixNano())
 	// Load Configuration and defaults
 	cfg, err := loadConfiguration()
+
 	if err != nil {
 		if errors.Is(err, conf.ErrHelpWanted) {
 			return nil
@@ -88,6 +89,7 @@ func run() error {
 
 	// cfg.DB.Filename dice come accedere al datastore sottostante
 	dbconn, err := sql.Open("sqlite3", cfg.DB.Filename)
+
 	if err != nil {
 		logger.WithError(err).Error("error opening SQLite DB")
 		return fmt.Errorf("opening SQLite: %w", err)
@@ -97,6 +99,7 @@ func run() error {
 		_ = dbconn.Close()
 	}()
 	db, err := database.New(dbconn)
+
 	if err != nil {
 		logger.WithError(err).Error("error creating AppDatabase")
 		return fmt.Errorf("creating AppDatabase: %w", err)
