@@ -54,7 +54,9 @@ export default {
         async postPhoto(userid, event) {
             this.loading = true;
             this.errormsg = null;
+
             const image = document.getElementById("fileInput").files[0];
+            document.getElementById("fileInput").value = "";
             try {
                 console.log(image)
                 let fd = new FormData();
