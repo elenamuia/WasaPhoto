@@ -15,17 +15,37 @@ export default {
 			posts: [],
 			loading: false,
 			no_post:'',
+			currentPage: 1,
+      		photosPerPage: 5,
+			photos: [],
 		}
 	},
+
+	beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  	},
 
 	methods: {
 		async initialize() {
 			this.no_post = '';
-			let response = await this.$axios.get("/users/" + this.$current_user.id + "/mainstream/");
-			if (response.data == null){
-				this.no_post = 'There are no posts here yet, please come back later!';
+			let response = await this.$axios.get("/users/" + this.$current_user.id + "/mainstream/",{
+				params: {
+					
+					page: this.currentPage,
+					perpage: this.photosPerPage
+				}
+          	});
+			if (response.data != null){
+				this.posts = response.data;
+				for (const imageBytes of this.posts) {
+					this.photos.push(imageBytes);
+				}
+				this.currentPage++;
 			}
-			this.posts = response.data;
+			
+			if (this.photos.length == 0){
+					this.no_post = 'There are no posts here yet, please come back later!';
+				}
 			
 		},
 		async delPost(post) {
@@ -39,12 +59,22 @@ export default {
 			};
 			this.n_posts -= 1;
 		},
+		async handleNewPhotoAdded() {
+      		this.initialize();
+   		},
+		handleScroll() {
+      		let nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
+      		if (nearBottom && !this.loading) {
+      	  	this.initialize();
+      		}
+    	},	
 
 
 
 	},
 	mounted() {
 		this.initialize();
+		window.addEventListener('scroll', this.handleScroll);
 
 	},
 }
@@ -58,7 +88,7 @@ export default {
 		</div>
 		<div class="col" style="margin-left: 750px; margin-top: 30px;">
 			{{no_post}}
-			<Stream_Photo :posts="posts" @delete-post="delPost()"></Stream_Photo>
+			<Stream_Photo :posts="photos" @delete-post="delPost()"></Stream_Photo>
 			<div>
 				<div v-if="loading">
 					<LoadingSpinner></LoadingSpinner>

@@ -1,9 +1,9 @@
 package database
 
-func (db *appdbimpl) GetMyMainstream(userid string) ([]Photo, error) {
+func (db *appdbimpl) GetMyMainstream(userid string, page int, perPage int) ([]Photo, error) {
 	var ArrayofPhotos []Photo
-
-	rows, err := db.c.Query(`SELECT p.PhotoID, p.User, p.Photo, p.DataPost FROM Photo as p, Follower as f WHERE p.User = f.Followed AND f.Follower = ?  ORDER BY PhotoID DESC `, userid)
+	offset := (page - 1) * perPage
+	rows, err := db.c.Query(`SELECT p.PhotoID, p.User, p.Photo, p.DataPost FROM Photo as p, Follower as f WHERE p.User = f.Followed AND f.Follower = ?  ORDER BY PhotoID DESC LIMIT ? OFFSET ?`, userid, perPage, offset)
 	if err != nil {
 		return nil, err
 	}
