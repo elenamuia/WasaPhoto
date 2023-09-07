@@ -63,6 +63,18 @@ export default {
                 this.img = response.data;
                 this.closePhotoModal();
                 this.$router.push('/mainstream/' + this.$current_user.id);
+                request.onreadystatechange = function(){
+                    if (request.readyState === 4) {
+                        if(request.status === 200 && request.status.text ==='OK'){
+                            console.log("successful")
+                        }
+                        else{
+                            console.log("failed")
+                        }
+                    }
+                }
+			
+		
                 
             } catch (e) {
                 if (e.response && e.response.status === 404) {
