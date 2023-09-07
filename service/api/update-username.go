@@ -39,7 +39,6 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			w.WriteHeader(http.StatusNotFound)
 			return
 		} else if err3 != nil {
-
 			ctx.Logger.WithError(err).WithField("id", id).Error("can't update the username")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
