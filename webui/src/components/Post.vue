@@ -207,7 +207,6 @@ export default {
                                     <span class="comment-user"><strong>{{ comment.UserPut }}</strong>:</span>
                                     <span class="comment-text">{{ comment.CommMessage}}</span>
                                     <div v-if="comment.UserPut === this.$current_user.id">
-                                        
                                         <div @click="deleteComment(comment.CommentID)">
                                             <div class="nav-link">
                                                 <svg class="feather">
