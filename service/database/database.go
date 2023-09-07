@@ -128,6 +128,11 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
 
+	err2 := db.Ping()
+	if err2 != nil {
+		return nil, fmt.Errorf("error pinging database: %w", err2)
+	}
+
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='database.db';`).Scan(&tableName)
