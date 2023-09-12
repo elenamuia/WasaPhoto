@@ -178,15 +178,20 @@ export default {
           console.log(typeof this.newUsernameInput)
 
           console.log("newusernameinput: "+this.newUsernameInput)
-          this.$axios.put("/users/" + this.$current_user.id, {
+          let response = await this.$axios.put("/users/" + this.$current_user.id, {
               Username: this.newUsernameInput});
-          this.$current_user.id = this.newUsernameInput
-          this.profile_username = this.newUsernameInput
+          this.$current_user.id = response.data
+          this.profile_username = response.data
 
           this.showChangeUsernameInput = false;
           this.$router.push("/profile/" + this.newUsernameInput);
         } catch (error) {
-          console.error("Update username error: ", error)
+          if(error.response && error.response.status === 500){
+            alert("This username is already take, please choose a different one!")
+          }else{
+            console.error("Update username error: ", error)
+          }
+          
 
         }
 
