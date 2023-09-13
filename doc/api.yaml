@@ -238,19 +238,11 @@ paths:
                   $ref: "#/components/schemas/Name"
       responses:
         "201":
-          description: List of followers up to now
+          description: User just followed up to now
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  ArrayofFollower:
-                    description: array of followers of a certain user
-                    type: array
-                    minItems: 0
-                    maxItems: 1000 
-                    items:
-                      $ref: "#/components/schemas/Name"
+                $ref: "#/components/schemas/Name"
         
 
     
@@ -338,11 +330,11 @@ paths:
               $ref: "#/components/schemas/Comment"
       responses:
         "201":
-          description: Comment that has been correctly added
+          description: Id of comment that has been correctly added
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Comment"
+                $ref: "#/components/schemas/CommentId"
           
         "404":
           $ref: "#/components/responses/NotFound"
@@ -551,13 +543,7 @@ components:
           $ref: "#/components/schemas/Name"
         UserRec: 
           $ref: "#/components/schemas/Name"
-        datePost:
-          description: Date of photo posting
-          type: string
-          pattern: 'ˆ.*?$'
-          format: "YYYY-MM-DD"
-          minLength: 0
-          maxLength: 10
+        
     Like:
       description: Info about the added like
       type: object
@@ -568,13 +554,7 @@ components:
           $ref: "#/components/schemas/Name"
         PhotoId:
           $ref: "#/components/schemas/PhotoId"
-        datePost:
-          type: string
-          pattern: 'ˆ.*?$'
-          description: Date of photo posting
-          format: "YYYY-MM-DD"
-          minLength: 0
-          maxLength: 10
+        
             
           
     
@@ -629,12 +609,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Conflict:
-      description: The request conflicts with the current state of the server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    
     BadRequest:
       description: The request cannot be processed because the value already exists in the database
       content:
@@ -647,11 +622,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotAcceptable:
-      description: Operation not acceptable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    
 security:
   - bearerAuth: []

@@ -11,7 +11,6 @@ import (
 
 func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	var bannedUser Banned
 	banned := ps.ByName("banneduser")
 	banning := ps.ByName("userid")
 	BearerToken := r.Header.Get("Authorization")
@@ -20,23 +19,17 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	bool, err := rt.db.CheckAuthToken(authToken)
 
 	if bool {
+		banname, err1 := rt.db.BanUser(banning, banned)
 
-		if banned == banning {
-			ctx.Logger.WithField("banneduser", banned).Error("A user cannot ban himself/herself")
+		if err1 != nil {
+
+			ctx.Logger.WithError(err1).Error("can't ban the user")
 			w.WriteHeader(http.StatusInternalServerError)
-		} else {
-			err1 := rt.db.BanUser(banning, banned)
-
-			if err1 != nil {
-
-				ctx.Logger.WithError(err1).Error("can't ban the user")
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-
-			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode(bannedUser)
+			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(banname)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")

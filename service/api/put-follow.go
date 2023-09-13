@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -18,18 +19,15 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 
 	if bool {
 
-		if followed == follower {
-			ctx.Logger.Error("A user can't follow himself/herself")
-			w.WriteHeader(http.StatusForbidden)
-			return
-		}
-		err2 := rt.db.PutFollow(follow.ToDatabaseFollow(follower, followed))
+		follow, err2 := rt.db.PutFollow(follow.ToDatabaseFollow(follower, followed))
 		if err2 != nil {
 
 			ctx.Logger.WithError(err2).Error("Can't add follower")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(follow)
 
 	} else {
 		ctx.Logger.WithError(err).Error("Uncorrect token")

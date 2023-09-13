@@ -94,8 +94,8 @@ type AppDatabase interface {
 	GetListLike(int) ([]Like, error)
 	DeletePhoto(int) error
 	AddComment(comment Comment) (int, error)
-	AddLike(like Like) error
-	BanUser(string, string) error
+	AddLike(like Like) (Like, error)
+	BanUser(string, string) (string, error)
 	CheckIfHasBannedMe(string, string) (bool, error)
 	CheckIfFollow(string, string) (bool, error)
 	CheckIfIBanned(string, string) (bool, error)
@@ -108,7 +108,7 @@ type AppDatabase interface {
 	LoginUser(l Login) (User, error)
 	CheckAuthToken(AuthToken string) (bool, error)
 	PostPhoto(photo Photo) (Photo, error)
-	PutFollow(follow Follow) error
+	PutFollow(follow Follow) (string, error)
 	UnbanUser(string, string) error
 	GetMyMainstream(string, int, int) (ArrayofPhotos []Photo, err error)
 	CheckILiked(string, int) (bool, error)
