@@ -106,20 +106,26 @@ export default {
         async addComment() {
 
             if (this.newComment.trim() !== '') {
-                const Body = [];
-                Body.push(this.newComment)
-                Body.push(this.$current_user.id);
+                try {
+                    const Body = [];
+                    Body.push(this.newComment)
+                    Body.push(this.$current_user.id);
+                    
+                    let response = await this.$axios.post("/users/" + this.username + "/photos/" + this.photo_id + "/comments/", Body);
                 
-                let response = await this.$axios.post("/users/" + this.username + "/photos/" + this.photo_id + "/comments/", Body);
-               
-                this.commentid = response.data;
+                    this.commentid = response.data;
 
-                this.comments.push({
-                    UserPut: this.$current_user.id,
-                    CommMessage: this.newComment,
-                    CommentID: this.commentid
-
+                    this.comments.push({
+                        UserPut: this.$current_user.id,
+                        CommMessage: this.newComment,
+                        CommentID: this.commentid
+                    
                 })
+                }catch(error){
+                    if(error.response && error.response.status === 404){
+                        console.error("Comment Not Found")
+                    }
+                }
                 console.log(this.comments);
                 this.newComment = '';
                 

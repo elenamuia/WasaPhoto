@@ -188,8 +188,10 @@ export default {
         } catch (error) {
           if(error.response && error.response.status === 500){
             alert("This username is already take, please choose a different one!")
+          }else if (error.response && error.response.status === 400){
+            console.error("Bad Request: ", error)
           }else{
-            console.error("Update username error: ", error)
+            console.log("Error while updating username", error)
           }
           
 

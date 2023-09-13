@@ -50,10 +50,9 @@ type Photo struct {
 }
 
 type Like struct {
-	LikeID   string
-	PhotoID  int
-	DataPost time.Time
-	UserRec  string
+	LikeID  string
+	PhotoID int
+	UserRec string
 }
 
 type Comment struct {
