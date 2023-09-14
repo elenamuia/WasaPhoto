@@ -41,7 +41,7 @@ paths:
                   $ref: "#/components/schemas/Name"
         required: true
       responses:
-        '201':
+        '200':
           description: User log-in action successful
           content:
             application/json:
@@ -275,7 +275,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PhotoContent"
       responses:
-        "201":
+        "200":
           description: Photo added
           content:
             application/json:
@@ -329,7 +329,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Comment"
       responses:
-        "201":
+        "200":
           description: Id of comment that has been correctly added
           content:
             application/json:
